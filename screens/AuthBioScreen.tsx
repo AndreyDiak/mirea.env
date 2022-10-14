@@ -6,9 +6,10 @@ import { Input } from "@rneui/themed";
 import { CheckBox } from "@rneui/themed";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { addDoc, collection, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 import LoginDialog from "../components/LoginDialog";
 import { async } from "@firebase/util";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 type Props = {};
 type AuthBioScreenRouteProp = RouteProp<RootStackParamList, "AuthBio">;
@@ -91,6 +92,7 @@ const AuthBioScreen = (props: Props) => {
     };
 
     const result = await addDoc(collection(db, `users/${isStudent ? 'students' : 'teachers'}/collection`), user)
+    await createUserWithEmailAndPassword(auth, email, password).then(log => console.log(log));
     console.log(result);
     // navigation.navigate('Login')
   };

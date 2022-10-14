@@ -1,11 +1,13 @@
 import { Input } from "@rneui/base";
 import { CheckBox } from "@rneui/themed";
+import { registerVersion } from "firebase/app";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import LoginForm from "../components/LoginForm";
-import { db } from "../firebase";
+import { auth, db } from "../firebase";
 
 type Props = {};
 
@@ -17,18 +19,19 @@ const LoginScreen = (props: Props) => {
   const [isStudent, setIsStudent] = useState<boolean>(true);
   const [error, setError] = useState("");
   const signIn = async () => {
-    const q = query(
-      collection(db, `users/${isStudent ? "students" : "teachers"}/collection`),
-      where("email", "==", login)
-    );
-    const querySnap = await getDocs(q);
+    await signInWithEmailAndPassword(auth, login, password).then(resolve => console.log(resolve))
+
+    // const q = query(
+    //   collection(db, `users/${isStudent ? "students" : "teachers"}/collection`),
+    //   where("email", "==", login)
+    // );
+    // const querySnap = await getDocs(q);
     
-    if (querySnap.docs.length === 0 || querySnap.docs[0].data().password !== password) {
-      setError("Неверный логин или пароль...");
-    } else {
-      console.log('success')
-      
-    }
+    // if (querySnap.docs.length === 0 || querySnap.docs[0].data().password !== password) {
+    //   setError("Неверный логин или пароль...");
+    // } else {
+    //   console.log('success')
+    // }
 
   };
 
@@ -40,7 +43,7 @@ const LoginScreen = (props: Props) => {
     >
       <LoginForm step="auth" handleSubmit={signIn}>
         <View style={tw("")}>
-          <Text style={tw('text-red-400 text-center text ')}>{error}</Text>
+          <Text style={tw('text-red-400 text-center')}>{error}</Text>
           <Input
             placeholder="Почта..."
             value={login}
