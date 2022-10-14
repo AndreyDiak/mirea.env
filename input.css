@@ -1,5 +1,6 @@
 @tailwind utilities;
 
+
 @font-face {
 	font-family: 'Muller ExtraBold DEMO';
 	src: url('./assets/fonts/muller_extrabold_demo.eot'); /* IE 9 Compatibility Mode */

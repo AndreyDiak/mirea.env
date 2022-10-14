@@ -37,7 +37,7 @@ export default function App() {
     }),
   ];
 
-  if (!fontsLoadedInter || !fontsLoadedRoboto) {
+  if (!(fontsLoadedInter && fontsLoadedRoboto)) {
     return null;
   }
 

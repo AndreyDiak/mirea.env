@@ -2,24 +2,41 @@ import { useState } from "react";
 import { View, Text } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import AuthScreen from "../screens/AuthScreen";
 import UserScreen from "../screens/UserScreen";
+import LoginScreen from "../screens/LoginScreen";
+import AuthInfoScreen from "../screens/AuthInfoScreen";
+import AuthBioScreen from "../screens/AuthBioScreen";
 
 type Props = {
-  isAuth: boolean
+  isAuth: boolean;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = ({isAuth} : Props) => {
-
+const RootNavigator = ({ isAuth }: Props) => {
   return !isAuth ? (
     <Stack.Navigator>
       <Stack.Group>
         <Stack.Screen
           options={{ headerShown: false }}
-          name="Auth"
-          component={AuthScreen}
+          name="Login"
+          component={LoginScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+            presentation: "modal",
+          }}
+          name="AuthInfo"
+          component={AuthInfoScreen}
+        />
+        <Stack.Screen
+          options={{
+            headerShown: false,
+            presentation: "modal",
+          }}
+          name="AuthBio"
+          component={AuthBioScreen}
         />
       </Stack.Group>
     </Stack.Navigator>
