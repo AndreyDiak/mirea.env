@@ -2,8 +2,13 @@ type RootStackParamList = {
   Login: undefined;
   AuthInfo: undefined;
   AuthBio: { email: string; password: string };
-  User: undefined;
+  Main: undefined;
 };
+
+type TabStackParamList = {
+  Profile: undefined,
+  Disciplines: undefined
+}
 
 type AuthSteps = "auth" | "info" | "bio";
 type Group = {

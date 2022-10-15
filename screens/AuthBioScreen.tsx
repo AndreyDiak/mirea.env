@@ -124,6 +124,7 @@ const AuthBioScreen = (props: Props) => {
         );
         await addDoc(collection(db, "users/list/collection"), {
           email: user.email,
+          type: isStudent ? 'student' : 'teacher',
           userId: res.user.uid
         });
       }

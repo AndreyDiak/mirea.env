@@ -2,10 +2,11 @@ import { useState } from "react";
 import { View, Text } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import UserScreen from "../screens/UserScreen";
+import UserScreen from "../screens/ProfileScreen";
 import LoginScreen from "../screens/LoginScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
 import AuthBioScreen from "../screens/AuthBioScreen";
+import TabNavigator from "./TabNavigator";
 
 type Props = {
   isAuth: boolean;
@@ -44,7 +45,7 @@ const RootNavigator = ({ isAuth }: Props) => {
   ) : (
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen name="User" component={UserScreen} />
+        <Stack.Screen name='Main' options={{headerShown: false}} component={TabNavigator} />
       </Stack.Group>
     </Stack.Navigator>
   );

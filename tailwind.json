@@ -29,6 +29,26 @@
 			"marginRight": 8
 		}
 	},
+	"mr-12": {
+		"style": {
+			"marginRight": 48
+		}
+	},
+	"mr-8": {
+		"style": {
+			"marginRight": 32
+		}
+	},
+	"mb-10": {
+		"style": {
+			"marginBottom": 40
+		}
+	},
+	"mt-10": {
+		"style": {
+			"marginTop": 40
+		}
+	},
 	"block": {
 		"style": {
 			"display": "block"
@@ -64,6 +84,26 @@
 			"height": "100%"
 		}
 	},
+	"h-12": {
+		"style": {
+			"height": 48
+		}
+	},
+	"h-40": {
+		"style": {
+			"height": 160
+		}
+	},
+	"h-20": {
+		"style": {
+			"height": 80
+		}
+	},
+	"h-10": {
+		"style": {
+			"height": 40
+		}
+	},
 	"w-screen": {
 		"style": {
 			"width": "100vw"
@@ -77,6 +117,36 @@
 	"w-full": {
 		"style": {
 			"width": "100%"
+		}
+	},
+	"w-5/6": {
+		"style": {
+			"width": "83.333333%"
+		}
+	},
+	"w-3/6": {
+		"style": {
+			"width": "50%"
+		}
+	},
+	"w-4/6": {
+		"style": {
+			"width": "66.666667%"
+		}
+	},
+	"w-40": {
+		"style": {
+			"width": 160
+		}
+	},
+	"w-20": {
+		"style": {
+			"width": 80
+		}
+	},
+	"w-10": {
+		"style": {
+			"width": 40
 		}
 	},
 	"flex-row": {
@@ -99,6 +169,11 @@
 			"justifyContent": "center"
 		}
 	},
+	"justify-between": {
+		"style": {
+			"justifyContent": "space-between"
+		}
+	},
 	"rounded-lg": {
 		"style": {
 			"borderTopLeftRadius": 8,
@@ -113,6 +188,14 @@
 			"borderTopRightRadius": 12,
 			"borderBottomRightRadius": 12,
 			"borderBottomLeftRadius": 12
+		}
+	},
+	"rounded-md": {
+		"style": {
+			"borderTopLeftRadius": 6,
+			"borderTopRightRadius": 6,
+			"borderBottomRightRadius": 6,
+			"borderBottomLeftRadius": 6
 		}
 	},
 	"border": {
@@ -155,6 +238,22 @@
 			"paddingLeft": 8
 		}
 	},
+	"p-6": {
+		"style": {
+			"paddingTop": 24,
+			"paddingRight": 24,
+			"paddingBottom": 24,
+			"paddingLeft": 24
+		}
+	},
+	"p-4": {
+		"style": {
+			"paddingTop": 16,
+			"paddingRight": 16,
+			"paddingBottom": 16,
+			"paddingLeft": 16
+		}
+	},
 	"py-1": {
 		"style": {
 			"paddingTop": 4,
@@ -183,6 +282,36 @@
 		"style": {
 			"paddingLeft": 32,
 			"paddingRight": 32
+		}
+	},
+	"py-8": {
+		"style": {
+			"paddingTop": 32,
+			"paddingBottom": 32
+		}
+	},
+	"px-4": {
+		"style": {
+			"paddingLeft": 16,
+			"paddingRight": 16
+		}
+	},
+	"py-10": {
+		"style": {
+			"paddingTop": 40,
+			"paddingBottom": 40
+		}
+	},
+	"py-20": {
+		"style": {
+			"paddingTop": 80,
+			"paddingBottom": 80
+		}
+	},
+	"py-40": {
+		"style": {
+			"paddingTop": 160,
+			"paddingBottom": 160
 		}
 	},
 	"pt-2": {
