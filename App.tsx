@@ -3,22 +3,22 @@ import {
   Roboto_300Light, Roboto_400Regular, Roboto_500Medium, useFonts as UseFontsRoboto
 } from "@expo-google-fonts/roboto";
 import { NavigationContainer } from "@react-navigation/native";
-import { onAuthStateChanged } from "firebase/auth";
-import { useState } from "react";
 import { Provider } from "react-redux";
 import { TailwindProvider } from "tailwind-rn";
-import { auth } from "./firebase";
 import RootNavigator from "./navigator/RootNavigator";
 import { store } from "./store";
 import utilities from "./tailwind.json";
+import {useState} from 'react'
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./firebase";
 
 export default function App() {
 
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<any>(null)
 
-  onAuthStateChanged(auth, user => {
-    if(user) {
-      setUser(user)
+  onAuthStateChanged(auth, resolve => {
+    if(resolve) {
+      setUser(resolve)
       // dispatch(setUser(user))
     } else {
       setUser(null)
@@ -37,7 +37,9 @@ export default function App() {
     }),
   ];
 
-  if (!(fontsLoadedInter && fontsLoadedRoboto)) {
+  
+
+  if (!fontsLoadedInter && !fontsLoadedRoboto) {
     return null;
   }
 
@@ -46,7 +48,7 @@ export default function App() {
     <TailwindProvider utilities={utilities}>
       <NavigationContainer>
         <Provider store={store}>
-          <RootNavigator isAuth={!!user} />
+          <RootNavigator isAuth={!!user}/>
         </Provider>
       </NavigationContainer>
     </TailwindProvider>

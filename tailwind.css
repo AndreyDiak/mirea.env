@@ -14,10 +14,6 @@
   position: relative
 }
 
-.m-0 {
-  margin: 0px
-}
-
 .mt-4 {
   margin-top: 1rem
 }
@@ -94,24 +90,6 @@
   border-width: 1px
 }
 
-.border-b {
-  border-bottom-width: 1px
-}
-
-.border-b-2 {
-  border-bottom-width: 2px
-}
-
-.border-red-400 {
-  --tw-border-opacity: 1;
-  border-color: rgb(248 113 113 / var(--tw-border-opacity))
-}
-
-.border-b-red-400 {
-  --tw-border-opacity: 1;
-  border-bottom-color: rgb(248 113 113 / var(--tw-border-opacity))
-}
-
 .bg-blue-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity))
@@ -134,10 +112,6 @@
 
 .p-2 {
   padding: 0.5rem
-}
-
-.p-0 {
-  padding: 0px
 }
 
 .py-1 {
@@ -187,15 +161,6 @@
   line-height: 2rem
 }
 
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem
-}
-
-.text-\[20px\] {
-  font-size: 20px
-}
-
 .font-bold {
   font-weight: 700
 }
@@ -206,10 +171,6 @@
 
 .capitalize {
   text-transform: capitalize
-}
-
-.italic {
-  font-style: italic
 }
 
 .text-red-100 {

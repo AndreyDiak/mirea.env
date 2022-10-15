@@ -1,13 +1,12 @@
 import { Input } from "@rneui/base";
-import { CheckBox } from "@rneui/themed";
-import { registerVersion } from "firebase/app";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  signInWithEmailAndPassword
+} from "firebase/auth";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import LoginForm from "../components/LoginForm";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 
 type Props = {};
 
@@ -16,23 +15,12 @@ const LoginScreen = (props: Props) => {
 
   const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [isStudent, setIsStudent] = useState<boolean>(true);
+  // const [isStudent, setIsStudent] = useState<boolean>(true);
   const [error, setError] = useState("");
   const signIn = async () => {
-    await signInWithEmailAndPassword(auth, login, password).then(resolve => console.log(resolve))
-
-    // const q = query(
-    //   collection(db, `users/${isStudent ? "students" : "teachers"}/collection`),
-    //   where("email", "==", login)
-    // );
-    // const querySnap = await getDocs(q);
-    
-    // if (querySnap.docs.length === 0 || querySnap.docs[0].data().password !== password) {
-    //   setError("Неверный логин или пароль...");
-    // } else {
-    //   console.log('success')
-    // }
-
+    await signInWithEmailAndPassword(auth, login, password)
+      .then()
+      .catch((err) => setError("Неверный логин или пароль"));
   };
 
   return (
@@ -41,9 +29,8 @@ const LoginScreen = (props: Props) => {
         "w-full h-full bg-slate-100 flex flex-row items-center justify-center"
       )}
     >
-      <LoginForm step="auth" handleSubmit={signIn}>
+      <LoginForm step="auth" handleSubmit={signIn} error={error}>
         <View style={tw("")}>
-          <Text style={tw('text-red-400 text-center')}>{error}</Text>
           <Input
             placeholder="Почта..."
             value={login}
@@ -57,7 +44,7 @@ const LoginScreen = (props: Props) => {
             secureTextEntry
             containerStyle={tw(``)}
           />
-          <CheckBox
+          {/* <CheckBox
             title="Я студент"
             checked={isStudent}
             onPress={() => setIsStudent(true)}
@@ -68,7 +55,7 @@ const LoginScreen = (props: Props) => {
             checked={!isStudent}
             onPress={() => setIsStudent(false)}
             containerStyle={{ padding: 0 }}
-          />
+          /> */}
         </View>
       </LoginForm>
     </View>

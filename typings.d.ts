@@ -11,12 +11,30 @@ type Group = {
   name: string;
 };
 type Discipline = {
-  id: string
+  id: string;
   title: string;
-  teachers: []
+  teachers: [];
+};
+
+interface User {
+  email: string;
+  name: string;
+  female: string;
+  password: string;
+  img: string;
 }
 
-interface User {}
+interface Student extends User {
+  group: string
+  type: 'student'
+}
+
+interface Teacher extends User {
+  disciplines: Discipline[];
+  type: 'teacher'
+}
+
+type SuperUser = Student | Teacher
 
 type LoginScreenNavigatorProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Login">,

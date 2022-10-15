@@ -7,9 +7,10 @@ type Props = {
   step: AuthSteps
   children: JSX.Element;
   handleSubmit: () => void;
+  error: string
 };
 
-const LoginForm = ({ step, children, handleSubmit }: Props) => {
+const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<LoginScreenNavigatorProp>();
   
@@ -39,8 +40,8 @@ const LoginForm = ({ step, children, handleSubmit }: Props) => {
         >
           {step === 'auth' ? 'Авторизация' : 'Регистрация'}
         </Text>
+        {error !== '' && <Text style={tw('text-red-400 text-center')}>{error}</Text>}
         {/* Login + Pass */}
-
         {children}
 
         <TouchableOpacity style={tw("flex flex-row justify-center pt-2")}>

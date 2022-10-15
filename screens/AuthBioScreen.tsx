@@ -1,15 +1,17 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useTailwind } from "tailwind-rn/dist";
-import LoginForm from "../components/LoginForm";
-import { Input } from "@rneui/themed";
-import { CheckBox } from "@rneui/themed";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase";
-import LoginDialog from "../components/LoginDialog";
-import { async } from "@firebase/util";
+import { CheckBox, Input } from "@rneui/themed";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  addDoc,
+  collection, getDocs,
+  query
+} from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import { useTailwind } from "tailwind-rn/dist";
+import LoginDialog from "../components/LoginDialog";
+import LoginForm from "../components/LoginForm";
+import { auth, db } from "../firebase";
 
 type Props = {};
 type AuthBioScreenRouteProp = RouteProp<RootStackParamList, "AuthBio">;
@@ -23,6 +25,7 @@ const AuthBioScreen = (props: Props) => {
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [myDisciplines, setMyDisciplines] = useState<any[]>([]);
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const navigation = useNavigation<AuthBioScreenNavigatorProp>();
 
   useEffect(() => {
@@ -73,28 +76,59 @@ const AuthBioScreen = (props: Props) => {
   const toggleDialog = () => setIsDialogVisible(!isDialogVisible);
 
   const register = async () => {
-    const user = isStudent ? {
-      email: email,
-      name: name,
-      female: female,
-      password: password,
-      group: group,
-      img: '',
-      type: 'student'
-    } : {
-      email: email,
-      name: name,
-      female: female,
-      password: password,
-      disciplines: myDisciplines,
-      img: '',
-      type: 'teacher'
-    };
+    if(name === '') {
+      setError('Введите имя')
+      return
+    }
+    if(female === '') {
+      setError('Введите фамилию')
+      return
+    }
+    if(isStudent && group === '') {
+      setError('Выберите группу')
+      return
+    }
+    if(!isStudent && myDisciplines.length === 0) {
+      setError('Выберите дисциплины')
+      return
+    }
+    let user = isStudent
+      ? {
+          email: email,
+          name: name,
+          female: female,
+          password: password,
+          img: "",
+          group: group,
+          type: "student",
+        }
+      : {
+          email: email,
+          name: name,
+          female: female,
+          password: password,
+          img: "",
+          disciplines: myDisciplines,
+          type: "teacher",
+        };
 
-    const result = await addDoc(collection(db, `users/${isStudent ? 'students' : 'teachers'}/collection`), user)
-    await createUserWithEmailAndPassword(auth, email, password).then(log => console.log(log));
-    console.log(result);
-    // navigation.navigate('Login')
+    await createUserWithEmailAndPassword(auth, email, password).then(
+      async (res) => {
+        console.log(res);
+        await addDoc(
+          collection(db,`users/${isStudent ? "students" : "teachers"}/collection`),
+          {
+            ...user,
+            userId: res.user.uid,
+          }
+        );
+        await addDoc(collection(db, "users/list/collection"), {
+          email: user.email,
+          userId: res.user.uid
+        });
+      }
+    );
+        
   };
 
   return (
@@ -103,7 +137,7 @@ const AuthBioScreen = (props: Props) => {
         "w-full h-full bg-slate-100 flex flex-row items-center justify-center"
       )}
     >
-      <LoginForm handleSubmit={register} step="bio">
+      <LoginForm handleSubmit={register} step="bio" error={error}>
         <View style={tw("")}>
           <LoginDialog
             isStudent={isStudent}

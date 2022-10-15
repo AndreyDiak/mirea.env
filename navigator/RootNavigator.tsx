@@ -14,6 +14,7 @@ type Props = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = ({ isAuth }: Props) => {
+  
   return !isAuth ? (
     <Stack.Navigator>
       <Stack.Group>
