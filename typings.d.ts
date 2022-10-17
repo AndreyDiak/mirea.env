@@ -3,6 +3,7 @@ type RootStackParamList = {
   AuthInfo: undefined;
   AuthBio: { email: string; password: string };
   Main: undefined;
+  Discipline: { discipline: {id: string, title: string }}
 };
 
 type TabStackParamList = {
@@ -18,7 +19,6 @@ type Group = {
 type Discipline = {
   id: string;
   title: string;
-  teachers: [];
 };
 
 interface User {
@@ -27,6 +27,7 @@ interface User {
   female: string;
   password: string;
   img: string;
+  userId: string;
 }
 
 interface Student extends User {
@@ -53,5 +54,15 @@ type AuthInfoScreenNavigatorProp = CompositeNavigationProp<
 
 type AuthBioScreenNavigatorProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "AuthBio">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+type DisciplineScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Discipline">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+type DisciplinesScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Disciplines">,
   NativeStackNavigationProp<RootStackParamList>
 >;

@@ -2,6 +2,7 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, EmailAuthProvider } from 'firebase/auth'
+import { getStorage } from "firebase/storage";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -24,7 +25,8 @@ const app = !getApps().length
 
 const db = getFirestore();
 const auth = getAuth(app);
+const storage = getStorage()
 
 const emailProvider = new EmailAuthProvider();
 
-export { db, auth, emailProvider }
+export { db, auth, storage, emailProvider }

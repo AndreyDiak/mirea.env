@@ -28,8 +28,8 @@ const AuthInfoScreen = (props: Props) => {
   const register = async () => {
     // creating a query to DB
     const q = query(
-      collection(db, "users/list/collection"),
-      where("email", "==", email)
+      collection(db, "users"),
+      where("email", "==", email.toLowerCase() )
     );
     // getting snapshot from DB
     const querySnap = await getDocs(q);

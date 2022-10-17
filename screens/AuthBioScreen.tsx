@@ -15,6 +15,7 @@ import { auth, db } from "../firebase";
 
 type Props = {};
 type AuthBioScreenRouteProp = RouteProp<RootStackParamList, "AuthBio">;
+
 const AuthBioScreen = (props: Props) => {
   const tw = useTailwind();
   const [name, setName] = useState<string>("");
@@ -94,7 +95,7 @@ const AuthBioScreen = (props: Props) => {
     }
     let user = isStudent
       ? {
-          email: email,
+          email: email.toLowerCase(),
           name: name,
           female: female,
           password: password,
@@ -103,7 +104,7 @@ const AuthBioScreen = (props: Props) => {
           type: "student",
         }
       : {
-          email: email,
+          email: email.toLowerCase(),
           name: name,
           female: female,
           password: password,
@@ -114,19 +115,14 @@ const AuthBioScreen = (props: Props) => {
 
     await createUserWithEmailAndPassword(auth, email, password).then(
       async (res) => {
-        console.log(res);
+        console.log('user created!')
         await addDoc(
-          collection(db,`users/${isStudent ? "students" : "teachers"}/collection`),
+          collection(db,'users'),
           {
             ...user,
             userId: res.user.uid,
           }
         );
-        await addDoc(collection(db, "users/list/collection"), {
-          email: user.email,
-          type: isStudent ? 'student' : 'teacher',
-          userId: res.user.uid
-        });
       }
     );
         

@@ -18,7 +18,7 @@ const LoginScreen = (props: Props) => {
   // const [isStudent, setIsStudent] = useState<boolean>(true);
   const [error, setError] = useState("");
   const signIn = async () => {
-    await signInWithEmailAndPassword(auth, login, password)
+    await signInWithEmailAndPassword(auth, login.toLowerCase(), password)
       .then()
       .catch((err) => setError("Неверный логин или пароль"));
   };
