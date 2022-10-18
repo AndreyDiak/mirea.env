@@ -1,30 +1,28 @@
-import { Card, Input, Skeleton } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
+import { Card, Skeleton } from "@rneui/themed";
 import * as ImagePicker from "expo-image-picker";
 import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import UserAvatar from "../components/UserAvatar";
-import { getUser, setUser } from "../features/userSlice";
+import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
-import { useUserData } from "../hooks/useUserData";
 type Props = {};
 
 const ProfileScreen = (props: Props) => {
   const tw = useTailwind();
-  const dispatch = useDispatch();
-  const user = useSelector(getUser);
+  const navigation = useNavigation();
+  const user = useSelector(getUser) as Student | Teacher;
 
-  const [isEditMode, setIsEditMode] = useState(false);
   const [profileImage, setProfileImage] = useState<null | string>(null);
-  const [profileImageBase64, setProfilImageBase64] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [newName, setNewName] = useState<string | undefined>(user?.name);
-  const [newFemale, setNewFemale] = useState<string | undefined>(user?.female);
-  const [error, setError] = useState<string>("");
+  // const [isLoading, setIsLoading] = useState(false);
+  // const [newName, setNewName] = useState<string | undefined>(user?.name);
+  // const [newFemale, setNewFemale] = useState<string | undefined>(user?.female);
+  // const [error, setError] = useState<string>("");
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -37,6 +35,41 @@ const ProfileScreen = (props: Props) => {
       setProfileImage(result.uri);
     }
   };
+
+  useEffect(() => {
+    const updatePhoto =  async () => {
+      if (profileImage) {
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = () => {
+            resolve(xhr.response);
+          };
+          xhr.onerror = (e) => {
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", profileImage, true);
+          xhr.send(null);
+        });
+
+        const imageRef = ref(storage, `users/${user.userId}/image`);
+        // @ts-ignore
+        await uploadBytes(imageRef, blob)
+          .then(async (snapshot) => {
+            const downloadUrl = await getDownloadURL(imageRef);
+            await updateDoc(doc(db, "users", user.userId), {
+              img: downloadUrl,
+            }).then(() => console.log("photo updated!"));
+          })
+          .catch((err) => {
+            setIsLoading(false);
+          });
+        // @ts-ignore
+        blob.close();
+      }
+    };
+    updatePhoto();
+  }, [profileImage]);
 
   if (user === null) {
     return (
@@ -65,86 +98,75 @@ const ProfileScreen = (props: Props) => {
     );
   }
 
-  const saveNewData = async () => {
-    if (newName && newFemale) {
-      setIsLoading(true);
-      await updateDoc(doc(db, "users", user.userId), {
-        name: newName,
-        female: newFemale,
-      }).then(async (snap) => {
-        if (profileImage) {
-          const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-              resolve(xhr.response);
-            };
-            xhr.onerror = (e) => {
-              console.log(e);
-              reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", profileImage, true);
-            xhr.send(null);
-          });
+  // const saveNewData = async () => {
+  //   if (newName && newFemale) {
+  //     if (newName !== user.name || newFemale !== user.female) {
+  //       setIsLoading(true);
 
-          const imageRef = ref(storage, `users/${user.userId}/image`);
-          // @ts-ignore
-          await uploadBytes(imageRef, blob)
-            .then(async (snapshot) => {
-              const downloadUrl = await getDownloadURL(imageRef);
-              await updateDoc(doc(db, "users", user.userId), {
-                img: downloadUrl,
-              });
-            })
-            .catch((err) => {
-              setIsLoading(false);
-            });
-          // @ts-ignore
-          blob.close();
-        }
-        // dispatch(setUser(useUserData(user.email)));
-        console.log("Имя и фамилия обновлены!");
-      });
-      // getUserData(user.email);
-      setIsEditMode(false);
-      setIsLoading(false);
-    } else {
-      setError("Заполните поля!");
-    }
-  };
+  //       await updateDoc(doc(db, "users", user.userId), {
+  //         name: newName,
+  //         female: newFemale,
+  //       }).then(async (snap) => {
+  //         if (profileImage) {
+  //           // Костыль для загрузки фотографии...
+  //         }
+  //       });
 
-  // console.log(user);+
+  //       setIsEditMode(false);
+  //       setIsLoading(false);
+  //     } else {
+  //       setIsEditMode(false);
+  //     }
+  //   } else {
+  //     setError("Заполните поля!");
+  //   }
+  // };
 
   return (
     <View style={tw("flex flex-col h-full relative")}>
       {/* Avatar + email */}
       <View
         style={tw(
-          "flex px-8 pt-10 pb-6 flex-row items-center justify-between bg-slate-200"
+          "px-8 pt-12 pb-4 bg-slate-200"
         )}
       >
-        <View style={tw("flex flex-col")}>
-          {user.img !== "" || profileImage ? (
-            <UserAvatar source={profileImage || user.img} />
-          ) : (
-            <UserAvatar title={user.name[0]} />
-          )}
-          {isEditMode && (
-            <Text style={tw("underline -ml-5")} onPress={pickImage}>
-              Изменить фото
+        <View style={tw('flex flex-row items-center justify-between')}>
+          <View>
+            {user.img !== "" || profileImage ? (
+              <UserAvatar source={profileImage || user.img} />
+            ) : (
+              <UserAvatar title={user.name[0]} />
+            )}
+          </View>
+          <View>
+            <Text
+              style={[
+                tw("text-gray-800 text-xl font-semibold"),
+                {
+                  fontFamily: "Roboto_400Regular",
+                },
+              ]}
+            >
+              {user.email}
             </Text>
-          )}
+          </View>
         </View>
-        <View>
-          <Text style={tw("text-gray-800 text-lg")}>{user.email}</Text>
-        </View>
+        <Text style={tw("underline")} onPress={pickImage}>
+          Загрузить
+        </Text>
       </View>
       {/* Name + Type */}
       <View style={tw("p-6")}>
         <Text style={tw("text-center text-lg")}>Личные данные</Text>
+
         <Card containerStyle={tw("rounded-sm")}>
-          {!isEditMode ? (
-            <View style={tw("flex flex-row items-center justify-between")}>
+          <View>
+            {/* Name + Female */}
+            <View
+              style={tw(
+                "flex flex-row items-center justify-between flex-wrap mb-4"
+              )}
+            >
               <View>
                 <View>
                   <Text style={tw("text-lg text-gray-800")}>{user.name}</Text>
@@ -153,6 +175,7 @@ const ProfileScreen = (props: Props) => {
                   <Text style={tw("text-lg text-gray-800")}>{user.female}</Text>
                 </View>
               </View>
+              {/* Group or Disciplines */}
               <View>
                 {user.type === "student" ? (
                   <View>
@@ -172,33 +195,20 @@ const ProfileScreen = (props: Props) => {
                 )}
               </View>
             </View>
-          ) : (
-            <View>
-              {error && (
-                <Text style={tw("text-center text-red-400")}>{error}</Text>
-              )}
-              <View>
-                <Text>Имя</Text>
-                <Input
-                  value={newName}
-                  inputStyle={tw("")}
-                  onChangeText={setNewName}
-                />
-              </View>
-              <View>
-                <Text>Фамилия</Text>
-                <Input
-                  value={newFemale}
-                  inputStyle={tw("")}
-                  onChangeText={setNewFemale}
-                />
-              </View>
+
+            <Card.Divider />
+
+            <View style={tw("")}>
+              <Text>Уровень доступа </Text>
+              <Text style={tw("text-lg font-bold mt-1")}>
+                {user.type === "student" ? "Студент" : "Преподаватель"}
+              </Text>
             </View>
-          )}
+          </View>
         </Card>
       </View>
       {/* Add info... */}
-      <View>
+      {/* <View>
         <View>
           {!isEditMode ? (
             <Text
@@ -218,22 +228,22 @@ const ProfileScreen = (props: Props) => {
             </Text>
           )}
         </View>
-      </View>
+      </View> */}
       {/* Sign out */}
-      {!isEditMode && (
-        <View
-          style={tw("flex flex-row justify-center absolute bottom-10 w-full")}
+
+      <View
+        style={tw("flex flex-row justify-center absolute bottom-10 w-full")}
+      >
+        <Text
+          style={tw("text-blue-400 px-2 py-1 rounded-md text-lg underline")}
+          onPress={() => {
+            console.log("logout");
+            signOut(auth);
+          }}
         >
-          <Text
-            style={tw(
-              "bg-blue-400 px-2 py-1 text-white font-semibold rounded-md text-lg"
-            )}
-            onPress={() => signOut(auth)}
-          >
-            Выйти из аккаунта
-          </Text>
-        </View>
-      )}
+          Выйти из аккаунта
+        </Text>
+      </View>
     </View>
   );
 };

@@ -2,12 +2,10 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 
-type Props = {
-  email?: string;
-};
-
 export const useUserData = (email: string) => {
+
   const [user, setUser] = useState<any>(null);
+
   useEffect(() => {
     const getUser = async () => {
       if (email) {
@@ -21,9 +19,8 @@ export const useUserData = (email: string) => {
       }
     };
     getUser();
+    console.log(user);
   }, []);
-
-  console.log(user);
 
   return user;
 };

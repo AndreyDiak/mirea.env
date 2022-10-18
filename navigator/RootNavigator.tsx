@@ -1,8 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { setUser } from "../features/userSlice";
-import { useUserData } from "../hooks/useUserData";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getUser, setUser } from "../features/userSlice";
+import { auth, db } from "../firebase";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
 import DisciplineScreen from "../screens/DisciplineScreen";
@@ -10,18 +12,44 @@ import LoginScreen from "../screens/LoginScreen";
 import TabNavigator from "./TabNavigator";
 
 type Props = {
-  user: any
+  user: any;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const RootNavigator = ({ user }: Props) => {
-  const dispatch = useDispatch();
-  const initialUser = useUserData(user?.email)
+const RootNavigator = () => {
+  // user которого мы получаем от сервиса авторизации...
+  const [initialUser, setInitialUser] = useState<any>(null);
 
+  const user = useSelector(getUser);
+  const dispatch = useDispatch();
+
+  // авторизация с сервиса...
+  onAuthStateChanged(auth, async (resolve) => {
+    if (resolve) {
+      setInitialUser(resolve);
+    } else {
+      setInitialUser(null);
+    }
+  });
+  // на основе данных с сервиса получаем данные с БД
   useEffect(() => {
-    dispatch(setUser(initialUser));
-  }, [user])
+    const getUser = async () => {
+      if (initialUser) {
+        const q = query(collection(db, "users"), where("email", "==", initialUser.email));
+        const querySnap = await getDocs(q);
+        // Teacher | Student type...
+        const user: any = {
+          ...querySnap.docs[0].data(),
+          userId: querySnap.docs[0].id,
+        };
+        dispatch(setUser(user));
+      } else {
+        dispatch(setUser(null));
+      }
+    };
+    getUser();
+  }, [initialUser]);
 
   return !user ? (
     <Stack.Navigator>
