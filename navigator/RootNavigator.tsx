@@ -3,7 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, setUser } from "../features/userSlice";
+import { getUser, setNotifications, setUser } from "../features/userSlice";
 import { auth, db } from "../firebase";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
@@ -44,8 +44,18 @@ const RootNavigator = () => {
           userId: querySnap.docs[0].id,
         };
         dispatch(setUser(user));
+
+        const notificationsQuery = query(collection(db, 'notifications'), where('userId', '==', user.userId));
+        const queryNotificationSnap = await getDocs(notificationsQuery);
+        // @ts-ignore there a correct type of array
+        const notifications: Notification[] = queryNotificationSnap.docs.map(notification => ({
+          ...notification.data(),
+          notificationId: notification.id
+        }))
+        dispatch(setNotifications(notifications))
       } else {
         dispatch(setUser(null));
+        dispatch(setNotifications([]))
       }
     };
     getUser();

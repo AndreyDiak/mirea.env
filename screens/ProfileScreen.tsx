@@ -15,7 +15,7 @@ type Props = {};
 
 const ProfileScreen = (props: Props) => {
   const tw = useTailwind();
-  const navigation = useNavigation();
+  const navigation = useNavigation<ProfileScreenNavigatorProp>();
   const user = useSelector(getUser) as Student | Teacher;
 
   const [profileImage, setProfileImage] = useState<null | string>(null);
@@ -25,51 +25,87 @@ const ProfileScreen = (props: Props) => {
   // const [error, setError] = useState<string>("");
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [3, 3],
       quality: 1,
-    });
-    if (!result.cancelled) {
-      setProfileImage(result.uri);
-    }
+    }).then(
+      async image => {
+        if(!image.cancelled) {
+          setProfileImage(image.uri);
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = () => {
+              resolve(xhr.response);
+            };
+            xhr.onerror = (e) => {
+              reject(new TypeError("Network request failed"));
+            };
+            xhr.responseType = "blob";
+            xhr.open("GET", image.uri, true);
+            xhr.send(null);
+          });
+
+          const imageRef = ref(storage, `users/${user.userId}/image`);
+          // @ts-ignore
+          await uploadBytes(imageRef, blob)
+            .then(async (snapshot) => {
+              const downloadUrl = await getDownloadURL(imageRef);
+              await updateDoc(doc(db, "users", user.userId), {
+                img: downloadUrl,
+              }).then(() => console.log("photo updated!"));
+            })
+            .catch((err) => {
+              // setIsLoading(false);
+            });
+          // @ts-ignore
+          blob.close();
+
+        }
+      }
+    )
+
+    // if (!result.cancelled) {
+    //   setProfileImage(result.uri);
+    // }
+
   };
 
-  useEffect(() => {
-    const updatePhoto =  async () => {
-      if (profileImage) {
-        const blob = await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest();
-          xhr.onload = () => {
-            resolve(xhr.response);
-          };
-          xhr.onerror = (e) => {
-            reject(new TypeError("Network request failed"));
-          };
-          xhr.responseType = "blob";
-          xhr.open("GET", profileImage, true);
-          xhr.send(null);
-        });
+  // useEffect(() => {
+  //   const updatePhoto =  async () => {
+  //     if (profileImage) {
+  //       const blob = await new Promise((resolve, reject) => {
+  //         const xhr = new XMLHttpRequest();
+  //         xhr.onload = () => {
+  //           resolve(xhr.response);
+  //         };
+  //         xhr.onerror = (e) => {
+  //           reject(new TypeError("Network request failed"));
+  //         };
+  //         xhr.responseType = "blob";
+  //         xhr.open("GET", profileImage, true);
+  //         xhr.send(null);
+  //       });
 
-        const imageRef = ref(storage, `users/${user.userId}/image`);
-        // @ts-ignore
-        await uploadBytes(imageRef, blob)
-          .then(async (snapshot) => {
-            const downloadUrl = await getDownloadURL(imageRef);
-            await updateDoc(doc(db, "users", user.userId), {
-              img: downloadUrl,
-            }).then(() => console.log("photo updated!"));
-          })
-          .catch((err) => {
-            setIsLoading(false);
-          });
-        // @ts-ignore
-        blob.close();
-      }
-    };
-    updatePhoto();
-  }, [profileImage]);
+  //       const imageRef = ref(storage, `users/${user.userId}/image`);
+  //       // @ts-ignore
+  //       await uploadBytes(imageRef, blob)
+  //         .then(async (snapshot) => {
+  //           const downloadUrl = await getDownloadURL(imageRef);
+  //           await updateDoc(doc(db, "users", user.userId), {
+  //             img: downloadUrl,
+  //           }).then(() => console.log("photo updated!"));
+  //         })
+  //         .catch((err) => {
+  //           // setIsLoading(false);
+  //         });
+  //       // @ts-ignore
+  //       blob.close();
+  //     }
+  //   };
+  //   updatePhoto();
+  // }, [profileImage]);
 
   if (user === null) {
     return (
@@ -97,30 +133,6 @@ const ProfileScreen = (props: Props) => {
       </View>
     );
   }
-
-  // const saveNewData = async () => {
-  //   if (newName && newFemale) {
-  //     if (newName !== user.name || newFemale !== user.female) {
-  //       setIsLoading(true);
-
-  //       await updateDoc(doc(db, "users", user.userId), {
-  //         name: newName,
-  //         female: newFemale,
-  //       }).then(async (snap) => {
-  //         if (profileImage) {
-  //           // Костыль для загрузки фотографии...
-  //         }
-  //       });
-
-  //       setIsEditMode(false);
-  //       setIsLoading(false);
-  //     } else {
-  //       setIsEditMode(false);
-  //     }
-  //   } else {
-  //     setError("Заполните поля!");
-  //   }
-  // };
 
   return (
     <View style={tw("flex flex-col h-full relative")}>
@@ -186,7 +198,7 @@ const ProfileScreen = (props: Props) => {
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
                     <Text style={tw("text-[18px] font-bold")}>
-                      <Text style={tw("text-blue-400")}>
+                      <Text style={tw("text-blue-400")} onPress={() => navigation.navigate('Discipline')}>
                         ({user.disciplines.length}){" "}
                       </Text>
                       предмета
@@ -198,37 +210,27 @@ const ProfileScreen = (props: Props) => {
 
             <Card.Divider />
 
-            <View style={tw("")}>
+            <View style={tw("mb-4")}>
               <Text>Уровень доступа </Text>
               <Text style={tw("text-lg font-bold mt-1")}>
                 {user.type === "student" ? "Студент" : "Преподаватель"}
               </Text>
             </View>
+
+            <Card.Divider />
+
+
+            <View>
+              <Text style={tw('text-blue-400 text-center')} onPress={() => {
+                // Открывает диалоговое окно, где можно написать отзыв...
+              }}>
+                Оставить отзыв
+              </Text>
+            </View>
+
           </View>
         </Card>
       </View>
-      {/* Add info... */}
-      {/* <View>
-        <View>
-          {!isEditMode ? (
-            <Text
-              onPress={() => setIsEditMode(true)}
-              style={tw("text-blue-400 underline text-center")}
-            >
-              Редактировать профиль
-            </Text>
-          ) : (
-            <Text
-              onPress={() => {
-                saveNewData();
-              }}
-              style={tw("text-blue-400 underline text-center")}
-            >
-              {!isLoading ? "Сохранить данные" : "Загрузка..."}
-            </Text>
-          )}
-        </View>
-      </View> */}
       {/* Sign out */}
 
       <View

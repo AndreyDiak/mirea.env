@@ -1,26 +1,19 @@
-type RootStackParamList = {
-  Login: undefined;
-  AuthInfo: undefined;
-  AuthBio: { email: string; password: string };
-  Main: undefined;
-  Discipline: { discipline: {id: string, title: string }}
-};
-
-type TabStackParamList = {
-  Profile: undefined,
-  Disciplines: undefined
-}
-
-type AuthSteps = "auth" | "info" | "bio";
 type Group = {
   id: string;
   name: string;
 };
+
 type Discipline = {
   id: string;
   title: string;
 };
 
+interface Notification {
+  isChecked: boolean;
+  text: string;
+  title: string;
+  userId: string;
+}
 interface User {
   email: string;
   name: string;
@@ -42,6 +35,23 @@ interface Teacher extends User {
 
 type SuperUser = Student | Teacher
 
+type RootStackParamList = {
+  Login: undefined;
+  AuthInfo: undefined;
+  AuthBio: { email: string; password: string };
+  Main: undefined;
+  Discipline: { discipline: {id: string, title: string }}
+};
+
+type TabStackParamList = {
+  Profile: undefined,
+  Disciplines: undefined,
+  Timetable: undefined;
+  Notifications: undefined;
+}
+
+type AuthSteps = "auth" | "info" | "bio";
+
 type LoginScreenNavigatorProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Login">,
   NativeStackNavigationProp<RootStackParamList>
@@ -62,7 +72,7 @@ type DisciplineScreenNavigatorProp = CompositeNavigationProp<
   NativeStackNavigationProp<RootStackParamList>
 >;
 
-type DisciplinesScreenNavigatorProp = CompositeNavigationProp<
-  BottomTabNavigationProp<TabStackParamList, "Disciplines">,
+type ProfileScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Profile">,
   NativeStackNavigationProp<RootStackParamList>
 >;
