@@ -2,8 +2,7 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
 
-export const useUserData = (email: string) => {
-
+export const useUserData = (email: string | null) => {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
@@ -19,7 +18,6 @@ export const useUserData = (email: string) => {
       }
     };
     getUser();
-    console.log(user);
   }, []);
 
   return user;

@@ -1,10 +1,18 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getUser, setNotifications, setUser } from "../features/userSlice";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setNotifications, setUser } from "../features/userSlice";
 import { auth, db } from "../firebase";
+import { useNotifications } from "../hooks/useNotifications";
+import { useUserData } from "../hooks/useUserData";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
 import DisciplineScreen from "../screens/DisciplineScreen";
@@ -21,7 +29,6 @@ const RootNavigator = () => {
   // user которого мы получаем от сервиса авторизации...
   const [initialUser, setInitialUser] = useState<any>(null);
 
-  const user = useSelector(getUser);
   const dispatch = useDispatch();
 
   // авторизация с сервиса...
@@ -32,11 +39,33 @@ const RootNavigator = () => {
       setInitialUser(null);
     }
   });
-  // на основе данных с сервиса получаем данные с БД
+
+  if (initialUser) {
+    const notificationsQuery = query(
+      collection(db, "notifications"),
+      where("userEmail", "==", initialUser.email),
+      where("isChecked", "==", false)
+    );
+
+    const unsubscribe = onSnapshot(notificationsQuery, (snapshot) => {
+      let notifications: any = [];
+
+      notifications = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        notificationId: doc.id,
+      }));
+      dispatch(setNotifications(notifications));
+    });
+  }
+
+  //на основе данных с сервиса получаем данные с БД
   useEffect(() => {
     const getUser = async () => {
       if (initialUser) {
-        const q = query(collection(db, "users"), where("email", "==", initialUser.email));
+        const q = query(
+          collection(db, "users"),
+          where("email", "==", initialUser.email)
+        );
         const querySnap = await getDocs(q);
         // Teacher | Student type...
         const user: any = {
@@ -44,24 +73,15 @@ const RootNavigator = () => {
           userId: querySnap.docs[0].id,
         };
         dispatch(setUser(user));
-
-        const notificationsQuery = query(collection(db, 'notifications'), where('userId', '==', user.userId));
-        const queryNotificationSnap = await getDocs(notificationsQuery);
-        // @ts-ignore there a correct type of array
-        const notifications: Notification[] = queryNotificationSnap.docs.map(notification => ({
-          ...notification.data(),
-          notificationId: notification.id
-        }))
-        dispatch(setNotifications(notifications))
       } else {
         dispatch(setUser(null));
-        dispatch(setNotifications([]))
+        dispatch(setNotifications([]));
       }
     };
     getUser();
   }, [initialUser]);
 
-  return !user ? (
+  return !initialUser ? (
     <Stack.Navigator>
       <Stack.Group>
         <Stack.Screen

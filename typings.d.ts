@@ -3,16 +3,28 @@ type Group = {
   name: string;
 };
 
-type Discipline = {
+interface Discipline {
   id: string;
   title: string;
 };
 
+interface Material {
+  title: string;
+  text: string;
+  source: string[];
+}
+
+interface NewDocument {
+  name: string;
+  uri: string;
+  type: string | undefined
+};
 interface Notification {
   isChecked: boolean;
   text: string;
   title: string;
   userId: string;
+  notificationId: string;
 }
 interface User {
   email: string;
@@ -24,31 +36,31 @@ interface User {
 }
 
 interface Student extends User {
-  group: string
-  type: 'student'
+  group: string;
+  type: "student";
 }
 
 interface Teacher extends User {
   disciplines: Discipline[];
-  type: 'teacher'
+  type: "teacher";
 }
 
-type SuperUser = Student | Teacher
+type SuperUser = Student | Teacher;
 
 type RootStackParamList = {
   Login: undefined;
   AuthInfo: undefined;
   AuthBio: { email: string; password: string };
   Main: undefined;
-  Discipline: { discipline: {id: string, title: string }}
+  Discipline: { discipline: { id: string; title: string } };
 };
 
 type TabStackParamList = {
-  Profile: undefined,
-  Disciplines: undefined,
+  Profile: undefined;
+  Disciplines: undefined;
   Timetable: undefined;
   Notifications: undefined;
-}
+};
 
 type AuthSteps = "auth" | "info" | "bio";
 

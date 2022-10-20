@@ -17,7 +17,7 @@ const ProfileScreen = (props: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigatorProp>();
   const user = useSelector(getUser) as Student | Teacher;
-
+  // console.log(user);
   const [profileImage, setProfileImage] = useState<null | string>(null);
   // const [isLoading, setIsLoading] = useState(false);
   // const [newName, setNewName] = useState<string | undefined>(user?.name);

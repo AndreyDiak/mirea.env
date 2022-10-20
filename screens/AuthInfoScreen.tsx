@@ -27,6 +27,12 @@ const AuthInfoScreen = (props: Props) => {
 
   const register = async () => {
     // creating a query to DB
+
+    if(email == '') {
+      setError('Введите почту')
+      return;
+    }
+
     const q = query(
       collection(db, "users"),
       where("email", "==", email.toLowerCase() )

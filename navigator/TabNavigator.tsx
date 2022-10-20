@@ -1,5 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
+import { useSelector } from "react-redux";
+import { getNotifications } from "../features/userSlice";
 import DisciplinesScreen from "../screens/DisciplinesScreen";
 import NotificationsScreen from "../screens/NotificationsScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -7,6 +9,7 @@ import TimeTableScreen from "../screens/TimeTableScreen";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 const TabNavigator = () => {
+  const notifications = useSelector(getNotifications);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -63,11 +66,19 @@ const TabNavigator = () => {
         options={{ headerShown: false }}
         component={TimeTableScreen}
       />
-      <Tab.Screen
-        name="Notifications"
-        options={{ headerShown: false, tabBarBadge: 0 }}
-        component={NotificationsScreen}
-      />
+      {notifications.length ? (
+        <Tab.Screen
+          name="Notifications"
+          options={{ headerShown: false, tabBarBadge: notifications.length }}
+          component={NotificationsScreen}
+        />
+      ) : (
+        <Tab.Screen
+          name="Notifications"
+          options={{ headerShown: false }}
+          component={NotificationsScreen}
+        />
+      )}
       <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}
