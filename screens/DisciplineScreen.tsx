@@ -6,9 +6,12 @@ import {
   addDoc,
   collection,
   doc,
+  getDoc,
+  getDocs,
   onSnapshot,
   query,
   updateDoc,
+  where,
 } from "firebase/firestore";
 import { db, storage } from "../firebase";
 import { useSelector } from "react-redux";
@@ -16,6 +19,7 @@ import { getUser } from "../features/userSlice";
 import { Card, Icon, Input } from "@rneui/themed";
 import * as DocumentPicker from "expo-document-picker";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { async } from "@firebase/util";
 type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -24,10 +28,11 @@ const DisciplineScreen = (props: Props) => {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [documents, setDocuments] = useState<NewDocument[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formTitle, setFormTitle] = useState("");
   const [formText, setFormText] = useState("");
 
-  console.log('rerender');
+  console.log("rerender1");
 
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
@@ -42,17 +47,43 @@ const DisciplineScreen = (props: Props) => {
     });
   }, [discipline]);
 
-  // const disciplineQuery = query(
-  //   collection(db, `disciplines/${discipline.id}/materials`)
-  // );
-  // const unsubscribe = onSnapshot(disciplineQuery, (snapshot) => {
-  //   let materials: any = [];
-  //   materials = snapshot.docs.map((doc) => ({
-  //     ...doc.data(),
-  //     materialId: doc.id,
-  //   }));
-  //   setMaterials(materials);
-  // });
+  const materialsQuery = query(
+    collection(db, `disciplines/${discipline.id}/materials`)
+  );
+
+  const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
+    let materialsCopy: any = [];
+    snapshot.forEach((doc) => {
+      materialsCopy.push({
+        ...doc.data(),
+        materialId: doc.id,
+      });
+    });
+    if (materials.length !== materialsCopy.length) {
+      materialsCopy = materialsCopy.map(async (material: any) => {
+        console.log(material)
+        const q = query(
+          collection(
+            db,
+            `disciplines/${discipline.id}/materials/${material.materialId}/sources`
+          )
+        );
+        const querySnap = await getDocs(q);
+        const documents = querySnap.docs.map((m) => ({
+          ...m.data(),
+          docId: m.id,
+        }))
+
+        return {
+          ...material,
+          documents
+        };
+      });
+      console.log('hello')
+      console.log(materialsCopy);
+      setMaterials(materialsCopy);
+    }
+  });
 
   const addDocument = async () => {
     await DocumentPicker.getDocumentAsync({
@@ -73,55 +104,61 @@ const DisciplineScreen = (props: Props) => {
   };
 
   const submitForm = async () => {
-    console.log("upload started");
+    setIsLoading(true);
     await addDoc(collection(db, `disciplines/${discipline.id}/materials`), {
       title: formTitle,
       text: formText,
     }).then(async (snap) => {
-      console.log("skeleton created");
       if (documents.length) {
-        console.log("lets go upload documents!");
-        documents.map(async (document) => {
-          await updateDoc(
-            doc(db, `disciplines/${discipline.id}/materials/${snap.id}`),
+        documents.map(async (document, index) => {
+          await addDoc(
+            collection(
+              db,
+              `disciplines/${discipline.id}/materials/${snap.id}/sources`
+            ),
             {
-              source: {
-                title: document.name,
-              },
+              title: document.name,
             }
-          );
-          console.log("created doc title!");
-          const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-              resolve(xhr.response);
-            };
-            xhr.onerror = (e) => {
-              reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", document.uri, true);
-            xhr.send(null);
-          });
+          ).then(async (newDoc) => {
+            const blob = await new Promise((resolve, reject) => {
+              const xhr = new XMLHttpRequest();
+              xhr.onload = () => {
+                resolve(xhr.response);
+              };
+              xhr.onerror = (e) => {
+                reject(new TypeError("Network request failed"));
+              };
+              xhr.responseType = "blob";
+              xhr.open("GET", document.uri, true);
+              xhr.send(null);
+            });
 
-          const docRef = ref(
-            storage,
-            `materials/${discipline.id}/${document.name}`
-          );
-          // @ts-ignore
-          await uploadBytes(docRef, blob).then(async (snapshot) => {
-            const downloadUrl = await getDownloadURL(docRef);
-            await updateDoc(
-              doc(db, `disciplines/${discipline.id}/materials/${snap.id}`),
-              {
-                source: {
-                  doc: [downloadUrl],
-                },
-              }
-            ).then(() => console.log("docs updated!"));
+            const docRef = ref(
+              storage,
+              `materials/${discipline.id}/${document.name}`
+            );
+
+            // @ts-ignore
+            await uploadBytes(docRef, blob).then(async (snapshot) => {
+              const downloadUrl = await getDownloadURL(docRef);
+
+              await updateDoc(
+                doc(
+                  db,
+                  `disciplines/${discipline.id}/materials/${snap.id}/sources/${newDoc.id}`
+                ),
+                {
+                  document: downloadUrl,
+                }
+              ).then(() => console.log("docs added!"));
+            });
           });
         });
       }
+      setIsLoading(false);
+      setDocuments([]);
+      setFormText("");
+      setFormTitle("");
     });
   };
 
@@ -200,10 +237,12 @@ const DisciplineScreen = (props: Props) => {
               <Text
                 onPress={submitForm}
                 style={tw(
-                  "bg-blue-400 text-white font-semibold px-4 py-2 rounded-md "
+                  `${
+                    !isLoading ? "bg-blue-400" : "bg-gray-400"
+                  } text-white font-semibold px-4 py-2 rounded-md`
                 )}
               >
-                Загрузить
+                {!isLoading ? "Загрузить" : "Загрузка..."}
               </Text>
             </View>
           </Card>
