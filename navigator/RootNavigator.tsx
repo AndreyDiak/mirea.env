@@ -15,6 +15,8 @@ import { useNotifications } from "../hooks/useNotifications";
 import { useUserData } from "../hooks/useUserData";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
+import ChatScreen from "../screens/ChatScreen";
+import ChatsScreen from "../screens/ChatsScreen";
 import DisciplineScreen from "../screens/DisciplineScreen";
 import LoginScreen from "../screens/LoginScreen";
 import TabNavigator from "./TabNavigator";
@@ -118,6 +120,10 @@ const RootNavigator = () => {
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Discipline" component={DisciplineScreen} />
+      </Stack.Group>
+      <Stack.Group>
+        <Stack.Screen name="Chats" component={ChatsScreen} />
+        <Stack.Screen name="Chat" component={ChatScreen} />
       </Stack.Group>
     </Stack.Navigator>
   );

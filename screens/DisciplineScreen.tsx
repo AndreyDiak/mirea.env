@@ -1,25 +1,21 @@
-import { View, Text, Linking } from "react-native";
-import React, { useLayoutEffect, useRef, useState, useMemo } from "react";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { useTailwind } from "tailwind-rn/dist";
+import { Card, Icon, Input } from "@rneui/themed";
+import * as DocumentPicker from "expo-document-picker";
 import {
   addDoc,
   collection,
   doc,
-  getDoc,
   getDocs,
-  onSnapshot,
   query,
   updateDoc,
-  where,
 } from "firebase/firestore";
-import { db, storage } from "../firebase";
-import { useSelector } from "react-redux";
-import { getUser } from "../features/userSlice";
-import { Card, Icon, Input } from "@rneui/themed";
-import * as DocumentPicker from "expo-document-picker";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { async } from "@firebase/util";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Linking, Text, View } from "react-native";
+import { useSelector } from "react-redux";
+import { useTailwind } from "tailwind-rn/dist";
+import { getUser } from "../features/userSlice";
+import { db, storage } from "../firebase";
 type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -31,8 +27,6 @@ const DisciplineScreen = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [formTitle, setFormTitle] = useState("");
   const [formText, setFormText] = useState("");
-
-  console.log("rerender1");
 
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
@@ -47,43 +41,53 @@ const DisciplineScreen = (props: Props) => {
     });
   }, [discipline]);
 
-  const materialsQuery = query(
-    collection(db, `disciplines/${discipline.id}/materials`)
-  );
+  useEffect(() => {
+    const getMaterials = async () => {
+      const materialsQuery = query(
+        collection(db, `disciplines/${discipline.id}/materials`)
+      );
+      const materialsSnap = await getDocs(materialsQuery);
 
-  const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
-    let materialsCopy: any = [];
-    snapshot.forEach((doc) => {
-      materialsCopy.push({
-        ...doc.data(),
-        materialId: doc.id,
-      });
-    });
-    if (materials.length !== materialsCopy.length) {
-      materialsCopy = materialsCopy.map(async (material: any) => {
-        console.log(material)
-        const q = query(
-          collection(
-            db,
-            `disciplines/${discipline.id}/materials/${material.materialId}/sources`
-          )
-        );
-        const querySnap = await getDocs(q);
-        const documents = querySnap.docs.map((m) => ({
-          ...m.data(),
-          docId: m.id,
-        }))
+      const materials = await Promise.all(
+        materialsSnap.docs.map(async (material) => {
+          const docQ = query(
+            collection(
+              db,
+              `disciplines/${discipline.id}/materials/${material.id}/sources`
+            )
+          );
+          const docSnap = await getDocs(docQ);
+          return {
+            ...material.data(),
+            documents: docSnap.docs.map((doc) => ({
+              ...doc.data(),
+              documentId: doc.id,
+            })),
+            materialId: material.id,
+          };
+        })
+      );
+      console.log(materials);
+      setMaterials(materials as Material[]);
+    };
+    getMaterials();
+  }, []);
 
-        return {
-          ...material,
-          documents
-        };
-      });
-      console.log('hello')
-      console.log(materialsCopy);
-      setMaterials(materialsCopy);
-    }
-  });
+  // const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
+  //   let materialsCopy: any = [];
+  //   snapshot.forEach((doc) => {
+  //     materialsCopy.push({
+  //       ...doc.data(),
+  //       materialId: doc.id,
+  //     });
+  //   });
+  //   console.log(materialsCopy);
+  //   if (materials.length !== materialsCopy.length) {
+  //     setMaterials(materialsCopy);
+  //   }
+  // });
+
+  // const documentsQuery = query(collection);
 
   const addDocument = async () => {
     await DocumentPicker.getDocumentAsync({
@@ -157,6 +161,7 @@ const DisciplineScreen = (props: Props) => {
       }
       setIsLoading(false);
       setDocuments([]);
+      setIsFormVisible(false);
       setFormText("");
       setFormTitle("");
     });
@@ -191,22 +196,26 @@ const DisciplineScreen = (props: Props) => {
               label="Тема"
               placeholder="Введите название темы..."
               inputStyle={tw("text-sm")}
-              value={formText}
-              onChangeText={setFormText}
+              value={formTitle}
+              onChangeText={setFormTitle}
             />
             <Input
               label="Описание"
               placeholder="Введите описание..."
               inputStyle={tw("text-sm p-0 m-0")}
-              value={formTitle}
-              onChangeText={setFormTitle}
+              value={formText}
+              onChangeText={setFormText}
             />
-            <Card.Divider />
-            <Card.Title>Список материалов...</Card.Title>
+            {documents.length > 0 && (
+              <>
+                <Card.Divider />
+                <Card.Title>Список материалов...</Card.Title>
+              </>
+            )}
             {documents.map((document, index) => (
               <View
                 key={document.uri}
-                style={tw("flex flex-row justify-between items-center")}
+                style={tw("flex flex-row justify-between items-center mb-2")}
               >
                 <Text style={tw("text-xs mb-2 w-5/6")}>{document.name}</Text>
                 <Text
@@ -250,13 +259,31 @@ const DisciplineScreen = (props: Props) => {
       )}
       {materials.length ? (
         materials.map((material) => (
-          <Card>
-            <Card.Title>{material.title}</Card.Title>
+          <Card key={material.materialId}>
+            <Card.Title style={tw("font-bold text-lg")}>
+              {material.title}
+            </Card.Title>
             <Card.Divider />
-            <Text>{material.text}</Text>
-            {/* <Text onPress={async () => await Linking.openURL(material.source)}>
-              Документ
-            </Text> */}
+            <Text style={tw("mb-4")}>{material.text}</Text>
+
+            {!!material.documents.length && (
+              <>
+                <Card.Divider />
+                <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
+                {material.documents.map((document) => (
+                  <View key={document.documentId}>
+                    <Text
+                      style={tw("mb-2 font-semibold underline text-blue-400")}
+                      onPress={async () =>
+                        await Linking.openURL(document.document)
+                      }
+                    >
+                      {document.title}
+                    </Text>
+                  </View>
+                ))}
+              </>
+            )}
           </Card>
         ))
       ) : (

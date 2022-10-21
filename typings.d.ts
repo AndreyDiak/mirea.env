@@ -6,19 +6,24 @@ type Group = {
 interface Discipline {
   id: string;
   title: string;
-};
+}
 
 interface Material {
   title: string;
   text: string;
-  source: string[];
+  materialId: string;
+  documents: {
+    title: string;
+    document: string;
+    documentId: string;
+  }[];
 }
 
 interface NewDocument {
   name: string;
   uri: string;
-  type: string | undefined
-};
+  type: string | undefined;
+}
 interface Notification {
   isChecked: boolean;
   text: string;
@@ -52,7 +57,19 @@ type RootStackParamList = {
   AuthInfo: undefined;
   AuthBio: { email: string; password: string };
   Main: undefined;
-  Discipline: { discipline: { id: string; title: string } };
+  Discipline: {
+    discipline: Discipline;
+  };
+  Chats: {
+    discipline: Discipline;
+  };
+  Chat: {
+    discipline: Discipline;
+    group: {
+      groupId: string
+      groupTitle: string
+    }
+  };
 };
 
 type TabStackParamList = {
@@ -86,5 +103,15 @@ type DisciplineScreenNavigatorProp = CompositeNavigationProp<
 
 type ProfileScreenNavigatorProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Profile">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+type ChatsScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Chats">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+type ChatScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Chat">,
   NativeStackNavigationProp<RootStackParamList>
 >;
