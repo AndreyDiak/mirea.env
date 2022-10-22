@@ -19,6 +19,19 @@ interface Material {
   }[];
 }
 
+interface Message {
+  message: string;
+  timestamp: {
+    seconds: number;
+    nanoseconds: number
+  };
+  displayName: string;
+  email: string;
+  type: string;
+  photoUrl: string;
+  messageId: string;
+}
+
 interface NewDocument {
   name: string;
   uri: string;
@@ -65,10 +78,8 @@ type RootStackParamList = {
   };
   Chat: {
     discipline: Discipline;
-    group: {
-      groupId: string
-      groupTitle: string
-    }
+    groupId: string;
+    chatId: string;
   };
 };
 

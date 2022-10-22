@@ -14,8 +14,72 @@
   position: relative
 }
 
+.right-2 {
+  right: 0.5rem
+}
+
+.left-2 {
+  left: 0.5rem
+}
+
 .bottom-10 {
   bottom: 2.5rem
+}
+
+.top-10 {
+  top: 2.5rem
+}
+
+.top-5 {
+  top: 1.25rem
+}
+
+.-right-2 {
+  right: -0.5rem
+}
+
+.right-0 {
+  right: 0px
+}
+
+.-right-10 {
+  right: -2.5rem
+}
+
+.-bottom-5 {
+  bottom: -1.25rem
+}
+
+.-left-10 {
+  left: -2.5rem
+}
+
+.-right-5 {
+  right: -1.25rem
+}
+
+.-left-5 {
+  left: -1.25rem
+}
+
+.-left-2 {
+  left: -0.5rem
+}
+
+.-left-4 {
+  left: -1rem
+}
+
+.-left-1 {
+  left: -0.25rem
+}
+
+.-right-7 {
+  right: -1.75rem
+}
+
+.-left-3 {
+  left: -0.75rem
 }
 
 .m-0 {
@@ -38,12 +102,12 @@
   margin-bottom: 0.25rem
 }
 
-.mb-2 {
-  margin-bottom: 0.5rem
-}
-
 .mb-4 {
   margin-bottom: 1rem
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem
 }
 
 .mt-10 {
@@ -86,6 +150,10 @@
   height: 100%
 }
 
+.h-12 {
+  height: 3rem
+}
+
 .h-20 {
   height: 5rem
 }
@@ -106,6 +174,10 @@
   width: 100%
 }
 
+.w-40 {
+  width: 10rem
+}
+
 .w-5\/6 {
   width: 83.333333%
 }
@@ -122,6 +194,10 @@
   width: 2.5rem
 }
 
+.flex-1 {
+  flex: 1 1 0%
+}
+
 .flex-row {
   flex-direction: row
 }
@@ -136,6 +212,14 @@
 
 .items-center {
   align-items: center
+}
+
+.justify-start {
+  justify-content: flex-start
+}
+
+.justify-end {
+  justify-content: flex-end
 }
 
 .justify-center {
@@ -204,6 +288,10 @@
   padding: 0.5rem
 }
 
+.p-4 {
+  padding: 1rem
+}
+
 .p-6 {
   padding: 1.5rem
 }
@@ -247,8 +335,26 @@
   padding-bottom: 2rem
 }
 
+.py-6 {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem
+}
+
 .pt-2 {
   padding-top: 0.5rem
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem
+}
+
+.pt-4 {
+  padding-top: 1rem
 }
 
 .pt-12 {
@@ -267,6 +373,10 @@
   text-align: right
 }
 
+.text-end {
+  text-align: end
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem
@@ -281,14 +391,14 @@
   line-height: 2rem
 }
 
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem
-}
-
 .text-xs {
   font-size: 0.75rem;
   line-height: 1rem
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem
 }
 
 .text-xl {
@@ -344,6 +454,11 @@
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity))
+}
+
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity))
 }
 
 .text-gray-800 {

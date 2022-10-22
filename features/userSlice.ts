@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export interface CounterState {
-  user: null | Student | Teacher
+  user: SuperUser | null
   notifiications: Notification[]
 }
 

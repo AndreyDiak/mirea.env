@@ -54,7 +54,7 @@ const DisciplinesScreen = (props: Props) => {
       </View>
       <ScrollView>
         {disciplines && disciplines.map((discipline) => (
-          <DisciplineCard key={discipline.id} discipline={discipline} type={user?.type} />
+          <DisciplineCard key={discipline.id} discipline={discipline} />
         ))}
       </ScrollView>
     </View>

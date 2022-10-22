@@ -6,9 +6,10 @@ import { Avatar } from "@rneui/themed";
 type Props = {
   title?: string;
   source?: string;
+  size?: string;
 };
 
-const UserAvatar = ({ title, source }: Props) => {
+const UserAvatar = ({ title, source, size }: Props) => {
   const tw = useTailwind();
 
   // console.log(source);
@@ -16,7 +17,7 @@ const UserAvatar = ({ title, source }: Props) => {
   return (
     <Avatar
       title={title}
-      size="medium"
+      size={size || 'medium'}
       source={{uri: source}}
       rounded
       avatarStyle={tw("")}

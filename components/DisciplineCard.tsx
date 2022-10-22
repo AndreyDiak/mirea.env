@@ -1,17 +1,59 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import React from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+import { getUser } from "../features/userSlice";
+import { db } from "../firebase";
 
 type Props = {
   discipline: Discipline;
-  type: "student" | "teacher" | undefined;
 };
 
-const DisciplineCard = ({ discipline, type }: Props) => {
+const DisciplineCard = ({ discipline }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
+  const user = useSelector(getUser);
+
+  const [chatId, setChatId] = useState("");
+  const [groupId, setGroupId] = useState("");
+
+  useEffect(() => {
+    const getChatInfo = async () => {
+      if (user?.type === "student") {
+        console.log("rerender");
+        const groupQ = query(
+          collection(db, "groups"),
+          where("name", "==", user.group)
+        );
+        const groupSnap = await getDocs(groupQ);
+        const groupId = groupSnap.docs[0].id;
+
+        setGroupId(groupId);
+        const q = query(
+          collection(db, "chats"),
+          where("disciplineId", "==", discipline.id),
+          where("groupId", "==", groupId)
+        );
+        const snap = await getDocs(q);
+        console.log("disciplineId: " + discipline.id);
+        if (snap.docs.length > 0) {
+          const chatId = snap.docs[0].id;
+
+          console.log('===============')
+          console.log("groupId: " + groupId);
+          console.log('disciplineTitle: ' + discipline.title)
+          console.log("chatId: " + chatId);
+          console.log("===============");
+
+          setChatId(chatId);
+        }
+      }
+    };
+    getChatInfo();
+  }, []);
 
   return (
     <Card>
@@ -31,8 +73,12 @@ const DisciplineCard = ({ discipline, type }: Props) => {
           <Text
             style={tw("font-bold text-gray-600 mr-2")}
             onPress={() =>
-              type === "student"
-                ? navigation.navigate("Chat")
+              user?.type === "student"
+                ? navigation.navigate("Chat", {
+                    discipline,
+                    groupId,
+                    chatId,
+                  })
                 : navigation.navigate("Chats", { discipline })
             }
           >
