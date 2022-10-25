@@ -4,7 +4,7 @@ import * as ImagePicker from "expo-image-picker";
 import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
@@ -13,16 +13,11 @@ import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
 type Props = {};
 
-const ProfileScreen = (props: Props) => {
+const ProfileScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigatorProp>();
   const user = useSelector(getUser) as Student | Teacher;
-  // console.log(user);
   const [profileImage, setProfileImage] = useState<null | string>(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [newName, setNewName] = useState<string | undefined>(user?.name);
-  // const [newFemale, setNewFemale] = useState<string | undefined>(user?.female);
-  // const [error, setError] = useState<string>("");
 
   const pickImage = async () => {
     await ImagePicker.launchImageLibraryAsync({

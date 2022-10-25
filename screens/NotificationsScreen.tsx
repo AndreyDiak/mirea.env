@@ -18,7 +18,6 @@ const NotificationsScreen = (props: Props) => {
   // console.log(notifications);
   
   const submitNotification = async (notificationId: string) => {
-    console.log(notificationId);
     const notificationRef = doc(db, "notifications", notificationId);
     await updateDoc(notificationRef, {
       isChecked: true,

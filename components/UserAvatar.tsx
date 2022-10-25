@@ -12,11 +12,10 @@ type Props = {
 const UserAvatar = ({ title, source, size }: Props) => {
   const tw = useTailwind();
 
-  // console.log(source);
-
   return (
     <Avatar
       title={title}
+      // @ts-ignore
       size={size || 'medium'}
       source={{uri: source}}
       rounded

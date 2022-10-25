@@ -9,26 +9,34 @@ import {
   orderBy,
   query,
   serverTimestamp,
-  Timestamp
 } from "firebase/firestore";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
-  Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput,
-  TouchableOpacity, View
+  FlatList,
+  Keyboard,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import UserAvatar from "../components/UserAvatar";
+import Message from "../components/Message";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
-import moment from 'moment'
+
 type Props = {};
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
+
 const ChatScreen = (props: Props) => {
   const [title, setTitle] = useState("Загрузка...");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
-
+  const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
+  const flatListRef = useRef();
   const user = useSelector(getUser);
   const tw = useTailwind();
 
@@ -37,6 +45,7 @@ const ChatScreen = (props: Props) => {
   } = useRoute<ChatScreenRouteProp>();
   const navigation = useNavigation<ChatScreenNavigatorProp>();
 
+  // set groupTitle
   useEffect(() => {
     const getGroupTitle = async () => {
       const q = doc(db, "groups", groupId);
@@ -48,6 +57,7 @@ const ChatScreen = (props: Props) => {
     getGroupTitle();
   }, []);
 
+  // set pageHeader
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: title,
@@ -55,6 +65,7 @@ const ChatScreen = (props: Props) => {
     });
   }, [title]);
 
+  // sendMessage function
   const sendMessage = async () => {
     await addDoc(collection(db, `chats/${chatId}/messages`), {
       message: message,
@@ -68,90 +79,76 @@ const ChatScreen = (props: Props) => {
       setMessage("");
     });
   };
-  console.log(user?.type + " ->");
-  console.log(chatId);
-  console.log(discipline);
+
+  //scrollToBottom function
+  const scrollToBottom = () => {
+    // @ts-ignore all exists...
+    flatListRef.current.scrollToEnd({ animating: true });
+    setIsScrollToBottomVisible(false);
+  };
+
+  // subscribe to recieve messages...
   const q = query(
     collection(db, `chats/${chatId}/messages`),
     orderBy("timestamp")
   );
-
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const snapMessages = snapshot.docs.map((message) => ({
       ...message.data(),
       messageId: message.id,
     }));
-    if (messages.length !== snapMessages.length)
+    if (messages.length !== snapMessages.length) {
       setMessages(snapMessages as Message[]);
+      setIsScrollToBottomVisible(true);
+    }
   });
 
   return (
-    <SafeAreaView style={tw("")}>
-      <KeyboardAvoidingView style={tw("flex flex-col h-full p-4")}>
-        <ScrollView style={tw("mb-4")}>
-          {messages.length > 0 ? (
-            messages.map((msg) => {
-              console.log(msg.timestamp.toDate());
-              return (
-                <View
-                  style={tw(
-                    `w-full flex flex-row p-4 ${
-                      msg.email === user?.email ? "justify-end" : "justify-start"
-                    }`
-                  )}
-                >
-                  <View
-                    key={msg.messageId}
-                    style={tw(
-                      `${
-                        msg.email === user?.email ? "bg-white" : "bg-blue-400"
-                      } rounded-md mb-2 px-6 py-4 relative`
-                    )}
-                  >
-                    <Text
-                      style={tw(
-                        `${
-                          msg.email === user?.email
-                            ? "right-2 text-gray-400"
-                            : "left-2 text-gray-200"
-                        } absolute text-xs `
-                      )}
-                    >
-                      {msg.email === user?.email
-                        ? "Вы"
-                        : msg.type === "student"
-                        ? "студент"
-                        : "преподаватель"}
-                    </Text>
-                    <Text
-                      style={tw(
-                        `${
-                          msg.email === user?.email
-                            ? "text-gray-600"
-                            : "text-white"
-                        } font-semibold text-sm text-center mb-2`
-                      )}
-                    >
-                      {msg.message}
-                    </Text>
-                    <View> 
-                      <Text style={tw(`text-xs ${msg.email === user?.email ? '' : 'text-right text-gray-800'}`)}>{moment(msg.timestamp.toDate()).format('LT')}</Text>
-                    </View>
-                    <View style={tw(`absolute -bottom-5 ${msg.email === user?.email ? '-right-7' : '-left-3'}`)}>
-                      <UserAvatar source={msg.photoUrl} size={'small'}/>
-                    </View>
-                  </View>
-                </View>
-              )
-            })
-          ) : (
-            <View>
-              <Text>no messages...</Text>
-            </View>
+    <SafeAreaView style={tw("relative bg-gray-100")}>
+      {isScrollToBottomVisible && (
+        <TouchableOpacity
+          onPress={scrollToBottom}
+          style={tw(
+            "bg-white w-16 h-16 flex items-center justify-center rounded-full absolute right-5 bottom-20 z-10"
           )}
-        </ScrollView>
+        >
+          <Icon
+            name="keyboard-arrow-down"
+            type="material"
+            color={"#60a5fa"}
+            size={40}
+          />
+        </TouchableOpacity>
+      )}
+      <KeyboardAvoidingView style={tw("flex flex-col h-full p-2")}>
+        {messages.length > 0 ? (
+          <FlatList 
+            // @ts-ignore some ref issues..
+            ref={flatListRef}
+            style={tw("w-full")}
+            data={messages}
+            scrollEnabled
+            onScrollEndDrag={() => {
+              if (!isScrollToBottomVisible) {
+                setIsScrollToBottomVisible(true);
+              }
+            }}
+            onEndReached={() => setIsScrollToBottomVisible(false)}
+            showsVerticalScrollIndicator={false}
+            // initialScrollIndex={messages.length - 3}
+            renderItem={(item) => (
+              <Message message={item.item} email={user?.email as string} />
+            )}
+          />
+        ) : (
+          <View>
+            <Text>no messages...</Text>
+          </View>
+        )}
+
         <View style={tw("flex flex-row items-center")}>
           <TextInput
+            onFocus={() => setIsScrollToBottomVisible(false)}
             style={tw("bg-white flex-1 mr-4 rounded-md p-2 h-12")}
             placeholder="Введите текст..."
             value={message}

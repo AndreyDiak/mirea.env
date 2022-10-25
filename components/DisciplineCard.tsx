@@ -23,7 +23,6 @@ const DisciplineCard = ({ discipline }: Props) => {
   useEffect(() => {
     const getChatInfo = async () => {
       if (user?.type === "student") {
-        console.log("rerender");
         const groupQ = query(
           collection(db, "groups"),
           where("name", "==", user.group)
@@ -38,16 +37,8 @@ const DisciplineCard = ({ discipline }: Props) => {
           where("groupId", "==", groupId)
         );
         const snap = await getDocs(q);
-        console.log("disciplineId: " + discipline.id);
         if (snap.docs.length > 0) {
           const chatId = snap.docs[0].id;
-
-          console.log('===============')
-          console.log("groupId: " + groupId);
-          console.log('disciplineTitle: ' + discipline.title)
-          console.log("chatId: " + chatId);
-          console.log("===============");
-
           setChatId(chatId);
         }
       }

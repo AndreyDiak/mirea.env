@@ -29,69 +29,9 @@
 			"left": 8
 		}
 	},
-	"bottom-10": {
-		"style": {
-			"bottom": 40
-		}
-	},
-	"top-10": {
-		"style": {
-			"top": 40
-		}
-	},
-	"top-5": {
-		"style": {
-			"top": 20
-		}
-	},
-	"-right-2": {
-		"style": {
-			"right": -8
-		}
-	},
-	"right-0": {
-		"style": {
-			"right": 0
-		}
-	},
-	"-right-10": {
-		"style": {
-			"right": -40
-		}
-	},
 	"-bottom-5": {
 		"style": {
 			"bottom": -20
-		}
-	},
-	"-left-10": {
-		"style": {
-			"left": -40
-		}
-	},
-	"-right-5": {
-		"style": {
-			"right": -20
-		}
-	},
-	"-left-5": {
-		"style": {
-			"left": -20
-		}
-	},
-	"-left-2": {
-		"style": {
-			"left": -8
-		}
-	},
-	"-left-4": {
-		"style": {
-			"left": -16
-		}
-	},
-	"-left-1": {
-		"style": {
-			"left": -4
 		}
 	},
 	"-right-7": {
@@ -102,6 +42,31 @@
 	"-left-3": {
 		"style": {
 			"left": -12
+		}
+	},
+	"bottom-10": {
+		"style": {
+			"bottom": 40
+		}
+	},
+	"right-10": {
+		"style": {
+			"right": 40
+		}
+	},
+	"bottom-20": {
+		"style": {
+			"bottom": 80
+		}
+	},
+	"right-5": {
+		"style": {
+			"right": 20
+		}
+	},
+	"z-10": {
+		"style": {
+			"zIndex": 10
 		}
 	},
 	"m-0": {
@@ -132,14 +97,14 @@
 			"marginBottom": 4
 		}
 	},
-	"mb-4": {
-		"style": {
-			"marginBottom": 16
-		}
-	},
 	"mb-2": {
 		"style": {
 			"marginBottom": 8
+		}
+	},
+	"mb-4": {
+		"style": {
+			"marginBottom": 16
 		}
 	},
 	"mt-10": {
@@ -212,6 +177,11 @@
 			"height": 40
 		}
 	},
+	"h-16": {
+		"style": {
+			"height": 64
+		}
+	},
 	"w-4/5": {
 		"style": {
 			"width": "80%"
@@ -220,11 +190,6 @@
 	"w-full": {
 		"style": {
 			"width": "100%"
-		}
-	},
-	"w-40": {
-		"style": {
-			"width": 160
 		}
 	},
 	"w-5/6": {
@@ -245,6 +210,16 @@
 	"w-10": {
 		"style": {
 			"width": 40
+		}
+	},
+	"w-12": {
+		"style": {
+			"width": 48
+		}
+	},
+	"w-16": {
+		"style": {
+			"width": 64
 		}
 	},
 	"flex-1": {
@@ -334,12 +309,29 @@
 			"borderBottomLeftRadius": 2
 		}
 	},
+	"rounded-full": {
+		"style": {
+			"borderTopLeftRadius": 9999,
+			"borderTopRightRadius": 9999,
+			"borderBottomRightRadius": 9999,
+			"borderBottomLeftRadius": 9999
+		}
+	},
 	"border": {
 		"style": {
 			"borderTopWidth": 1,
 			"borderRightWidth": 1,
 			"borderBottomWidth": 1,
 			"borderLeftWidth": 1
+		}
+	},
+	"border-blue-400": {
+		"style": {
+			"--tw-border-opacity": 1,
+			"borderTopColor": "rgb(96 165 250 / var(--tw-border-opacity))",
+			"borderRightColor": "rgb(96 165 250 / var(--tw-border-opacity))",
+			"borderBottomColor": "rgb(96 165 250 / var(--tw-border-opacity))",
+			"borderLeftColor": "rgb(96 165 250 / var(--tw-border-opacity))"
 		}
 	},
 	"bg-blue-500": {
@@ -376,6 +368,24 @@
 		"style": {
 			"--tw-bg-opacity": 1,
 			"backgroundColor": "rgb(226 232 240 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-gray-200": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(229 231 235 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-red-100": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(254 226 226 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-gray-100": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(243 244 246 / var(--tw-bg-opacity))"
 		}
 	},
 	"p-2": {
@@ -446,37 +456,21 @@
 			"paddingRight": 16
 		}
 	},
-	"py-8": {
-		"style": {
-			"paddingTop": 32,
-			"paddingBottom": 32
-		}
-	},
-	"py-6": {
-		"style": {
-			"paddingTop": 24,
-			"paddingBottom": 24
-		}
-	},
 	"px-6": {
 		"style": {
 			"paddingLeft": 24,
 			"paddingRight": 24
 		}
 	},
+	"py-8": {
+		"style": {
+			"paddingTop": 32,
+			"paddingBottom": 32
+		}
+	},
 	"pt-2": {
 		"style": {
 			"paddingTop": 8
-		}
-	},
-	"pb-2": {
-		"style": {
-			"paddingBottom": 8
-		}
-	},
-	"pt-4": {
-		"style": {
-			"paddingTop": 16
 		}
 	},
 	"pt-12": {
@@ -489,6 +483,16 @@
 			"paddingBottom": 16
 		}
 	},
+	"pt-4": {
+		"style": {
+			"paddingTop": 16
+		}
+	},
+	"pb-2": {
+		"style": {
+			"paddingBottom": 8
+		}
+	},
 	"text-center": {
 		"style": {
 			"textAlign": "center"
@@ -497,11 +501,6 @@
 	"text-right": {
 		"style": {
 			"textAlign": "right"
-		}
-	},
-	"text-end": {
-		"style": {
-			"textAlign": "end"
 		}
 	},
 	"text-lg": {
