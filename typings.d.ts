@@ -12,6 +12,7 @@ interface Material {
   title: string;
   text: string;
   materialId: string;
+  owner: string;
   documents: {
     title: string;
     document: string;

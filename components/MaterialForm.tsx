@@ -12,6 +12,8 @@ import { db, storage } from "../firebase";
 import * as DocumentPicker from "expo-document-picker";
 import { Card, Icon, Input } from "@rneui/themed";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/userSlice";
 
 type Props = {
   disciplineId: string;
@@ -25,8 +27,12 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
   const [formTitle, setFormTitle] = useState("");
   const [formText, setFormText] = useState("");
   const [documents, setDocuments] = useState<NewDocument[]>([]);
+  const [error, setError] = useState('');
+
+  const user = useSelector(getUser);
 
   const addDocument = async () => {
+
     await DocumentPicker.getDocumentAsync({
       multiple: true,
       copyToCacheDirectory: false,
@@ -45,10 +51,17 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
   };
 
   const submitForm = async () => {
+
+    if(!formText || !formTitle) {
+      setError('Заполните все поля!')
+      return 
+    }
+
     setIsLoading(true);
     await addDoc(collection(db, "materials"), {
       title: formTitle,
       text: formText,
+      owner: user?.userId,
       disciplineId: disciplineId,
       timestamp: serverTimestamp(),
     }).then(async (snap) => {
@@ -57,6 +70,7 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           await addDoc(collection(db, `materials/${snap.id}/sources`), {
             title: document.name,
           }).then(async (newDoc) => {
+
             const blob = await new Promise((resolve, reject) => {
               const xhr = new XMLHttpRequest();
               xhr.onload = () => {
@@ -114,6 +128,7 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           value={formText}
           onChangeText={setFormText}
         />
+        {error && <Text style={tw('text-red-400 text-center mb-4')}>{error}</Text>}
         {documents.length > 0 && (
           <>
             <Card.Divider />

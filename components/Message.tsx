@@ -6,18 +6,18 @@ import UserAvatar from "./UserAvatar";
 
 type Props = {
   message: Message;
-  email: string
+  email: string;
+  nextMessageEmail: string | null;
 };
 
-const Message = ({ message, email }: Props) => {
-
+const Message = ({ message, email, nextMessageEmail }: Props) => {
   const tw = useTailwind();
 
   return (
     <View
       style={[
         tw(
-          `flex flex-row p-4 ${
+          `flex flex-row px-4 ${
             message.email === email ? "justify-end" : "justify-start"
           }`
         ),
@@ -35,9 +35,10 @@ const Message = ({ message, email }: Props) => {
       <View
         key={message.messageId}
         style={tw(
-          `${
-            message.email === email ? "bg-white" : "bg-blue-400"
-          } rounded-md mb-2 px-6 pt-4 pb-2 relative`
+          `rounded-md px-4 pt-3 pb-2 relative
+          ${nextMessageEmail === message.email ? 'mb-1' : 'mb-6'}
+          ${message.email === email ? "bg-white pr-6" : "bg-blue-400 pl-6"}
+          `
         )}
       >
         <Text
@@ -55,19 +56,20 @@ const Message = ({ message, email }: Props) => {
             ? "студент"
             : "преподаватель"}
         </Text>
-        <Text
-          style={tw(
-            `${
-              message.email === email ? "text-gray-600" : "text-white"
-            } font-semibold text-sm text-center mb-2`
-          )}
-        >
-          {message.message}
-        </Text>
-        <View>
+        <View style={tw("flex flex-row items-end w-full")}>
+          <Text
+            style={[tw(
+              `${message.email === email ? "text-gray-600" : "text-white"} 
+              font-semibold text-sm mr-2`
+            ), {maxWidth: '85%'}
+            ]}
+          >
+            {message.message}
+          </Text>
+
           <Text
             style={tw(
-              `text-xs ${
+              `text-xs -mb-1 ${
                 message.email === email ? "" : "text-right text-gray-800"
               }`
             )}
@@ -77,15 +79,16 @@ const Message = ({ message, email }: Props) => {
               : "..."}
           </Text>
         </View>
-        <View
-          style={tw(
-            `absolute -bottom-5 ${
-              message.email === email ? "-right-7" : "-left-3"
-            }`
-          )}
-        >
-          <UserAvatar source={message.photoUrl} size={"small"} />
-        </View>
+        {nextMessageEmail !== message.email && (
+          <View
+            style={tw(
+              `absolute -bottom-5 
+            ${message.email === email ? "-right-7" : "-left-3"}`
+            )}
+          >
+            <UserAvatar source={message.photoUrl} size={"small"} />
+          </View>
+        )}
       </View>
     </View>
   );

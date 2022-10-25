@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Text, View, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getUser } from "../features/userSlice";
@@ -51,32 +51,31 @@ const DisciplineCard = ({ discipline }: Props) => {
       <Card.Title style={tw("font-bold")}>{discipline.title}</Card.Title>
       <Card.Divider />
       <View style={tw("flex flex-row justify-between")}>
-        <View style={tw("flex flex-row items-center")}>
-          <Text
-            style={tw("text-blue-400 underline font-bold mr-2")}
-            onPress={() => navigation.navigate("Discipline", { discipline })}
-          >
+        <TouchableOpacity
+          style={tw("flex flex-row items-center")}
+          onPress={() => navigation.navigate("Discipline", { discipline })}
+        >
+          <Text style={tw("text-blue-400 underline font-bold mr-2")}>
             Материалы
           </Text>
           <Icon name="inventory" type="material" color={"#60a5fa"} />
-        </View>
-        <View style={tw("flex flex-row items-center")}>
-          <Text
-            style={tw("font-bold text-gray-600 mr-2")}
-            onPress={() =>
-              user?.type === "student"
-                ? navigation.navigate("Chat", {
-                    discipline,
-                    groupId,
-                    chatId,
-                  })
-                : navigation.navigate("Chats", { discipline })
-            }
-          >
-            Перейти в чат
-          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={tw("flex flex-row items-center")}
+          onPress={() =>
+            user?.type === "student"
+              ? navigation.navigate("Chat", {
+                  discipline,
+                  groupId,
+                  chatId,
+                })
+              : navigation.navigate("Chats", { discipline })
+          }
+        >
+          <Text style={tw("font-bold text-gray-600 mr-2")}>Перейти в чат</Text>
           <Icon name="textsms" type="material" color={"#4b5563"} />
-        </View>
+        </TouchableOpacity>
       </View>
     </Card>
   );

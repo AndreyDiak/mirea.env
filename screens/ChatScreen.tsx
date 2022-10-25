@@ -122,7 +122,7 @@ const ChatScreen = (props: Props) => {
       )}
       <KeyboardAvoidingView style={tw("flex flex-col h-full p-2")}>
         {messages.length > 0 ? (
-          <FlatList 
+          <FlatList
             // @ts-ignore some ref issues..
             ref={flatListRef}
             style={tw("w-full")}
@@ -137,7 +137,12 @@ const ChatScreen = (props: Props) => {
             showsVerticalScrollIndicator={false}
             // initialScrollIndex={messages.length - 3}
             renderItem={(item) => (
-              <Message message={item.item} email={user?.email as string} />
+              <Message
+                key={item.index}
+                message={item.item}
+                email={user?.email as string}
+                nextMessageEmail={!!messages[item.index + 1] ? messages[item.index + 1].email : null}
+              />
             )}
           />
         ) : (

@@ -27,6 +27,7 @@ const ProfileScreen = () => {
       quality: 1,
     }).then(
       async image => {
+        console.log(image);
         if(!image.cancelled) {
           setProfileImage(image.uri);
           const blob = await new Promise((resolve, reject) => {

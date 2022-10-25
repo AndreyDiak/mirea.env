@@ -1,14 +1,11 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import {
-  collection, getDocs,
-  orderBy,
-  query, where
-} from "firebase/firestore";
+import { collection, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Linking, ScrollView, Text, View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+import Material from "../components/Material";
 import MaterialForm from "../components/MaterialForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
@@ -19,7 +16,7 @@ type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 const DisciplineScreen = (props: Props) => {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  
+
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
   const user = useSelector(getUser);
@@ -33,36 +30,60 @@ const DisciplineScreen = (props: Props) => {
     });
   }, [discipline]);
 
-  useEffect(() => {
-    const getMaterials = async () => {
-      const materialsQuery = query(
-        collection(db, 'materials'), where('disciplineId', '==', discipline.id), orderBy('timestamp')
+  const materialsQuery = query(
+    collection(db, "materials"),
+    where("disciplineId", "==", discipline.id),
+    orderBy("timestamp")
+  );
+  const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
+    const snapMaterials = await Promise.all(snapshot.docs.map(async (material) => {
+      const docQ = query(
+        collection(db, `materials/${material.id}/sources`)
       );
-      const materialsSnap = await getDocs(materialsQuery);
+      const docSnap = await getDocs(docQ);
+      return {
+        ...material.data(),
+        documents: docSnap.docs.map((doc) => ({
+          ...doc.data(),
+          documentId: doc.id,
+        })),
+        materialId: material.id,
+      }
+    }))
+    if(materials.length !== snapMaterials.length) {
+      setMaterials(snapMaterials as Material[]);
+    }
+  });
 
-      const materials = await Promise.all(
-        materialsSnap.docs.map(async (material) => {
-          const docQ = query(
-            collection(
-              db,
-              `materials/${material.id}/sources`
-            )
-          );
-          const docSnap = await getDocs(docQ);
-          return {
-            ...material.data(),
-            documents: docSnap.docs.map((doc) => ({
-              ...doc.data(),
-              documentId: doc.id,
-            })),
-            materialId: material.id,
-          };
-        })
-      );
-      setMaterials(materials as Material[]);
-    };
-    getMaterials();
-  }, []);
+  // useEffect(() => {
+  //   const getMaterials = async () => {
+  //     const materialsQuery = query(
+  //       collection(db, "materials"),
+  //       where("disciplineId", "==", discipline.id),
+  //       orderBy("timestamp")
+  //     );
+  //     const materialsSnap = await getDocs(materialsQuery);
+
+  //     const materials = await Promise.all(
+  //       materialsSnap.docs.map(async (material) => {
+  //         const docQ = query(
+  //           collection(db, `materials/${material.id}/sources`)
+  //         );
+  //         const docSnap = await getDocs(docQ);
+  //         return {
+  //           ...material.data(),
+  //           documents: docSnap.docs.map((doc) => ({
+  //             ...doc.data(),
+  //             documentId: doc.id,
+  //           })),
+  //           materialId: material.id,
+  //         };
+  //       })
+  //     );
+  //     setMaterials(materials as Material[]);
+  //   };
+  //   getMaterials();
+  // }, []);
 
   return (
     <View style={tw("p-6 flex flex-col")}>
@@ -87,58 +108,36 @@ const DisciplineScreen = (props: Props) => {
         </View>
       )}
       {isFormVisible && (
-        <MaterialForm disciplineId={discipline.id} setIsFormVisible={setIsFormVisible} />
+        <MaterialForm
+          disciplineId={discipline.id}
+          setIsFormVisible={setIsFormVisible}
+        />
       )}
-      {materials.length ? (
-        <>
-          <FlatList 
-            data={materials}
+      <View style={tw("")}>
+        {materials.length ? (
+          <FlatList
+            style={tw("")}
+            data={materials.reverse()}
+            scrollEnabled
+            showsVerticalScrollIndicator={false}
             renderItem={(item) => {
-              return (
-                <Text></Text>
-              )
+              return <Material material={item.item} userId={user?.userId} />;
             }}
           />
-
-        </>
-        // <ScrollView style={tw('py-4')}>
-        //   {/* {materials.map((material) => (
-        //   <Card key={material.materialId}>
-        //     <Card.Title style={tw("font-bold text-lg")}>
-        //       {material.title}
-        //     </Card.Title>
-        //     <Card.Divider />
-        //     <Text style={tw("mb-4")}>{material.text}</Text>
-
-        //     {!!material.documents.length && (
-        //       <>
-        //         <Card.Divider />
-        //         <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
-        //         {material.documents.map((document) => (
-        //           <View key={document.documentId}>
-        //             <Text
-        //               style={tw("mb-2 font-semibold underline text-blue-400")}
-        //               onPress={async () =>
-        //                 await Linking.openURL(document.document)
-        //               }
-        //             >
-        //               {document.title}
-        //             </Text>
-        //           </View>
-        //         ))}
-        //       </>
-        //     )}
-        //   </Card>
-        // ))} */}
-        // </ScrollView>
-      ) : (
-        <View style={tw("w-full h-full flex items-center justify-center")}>
-          <View>
-            <Text style={tw("mb-2 text-lg")}>Тут пока нет материалов...</Text>
-            <Icon name="inventory" type="material" color="#60a5fa" size={30} />
+        ) : (
+          <View style={tw("w-full h-full flex items-center justify-center")}>
+            <View>
+              <Text style={tw("mb-2 text-lg")}>Тут пока нет материалов...</Text>
+              <Icon
+                name="inventory"
+                type="material"
+                color="#60a5fa"
+                size={30}
+              />
+            </View>
           </View>
-        </View>
-      )}
+        )}
+      </View>
     </View>
   );
 };
