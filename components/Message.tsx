@@ -36,7 +36,7 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
         key={message.messageId}
         style={tw(
           `rounded-md px-4 pt-3 pb-2 relative
-          ${nextMessageEmail === message.email ? 'mb-1' : 'mb-6'}
+          ${nextMessageEmail === message.email ? 'mb-2' : 'mb-6'}
           ${message.email === email ? "bg-white pr-6" : "bg-blue-400 pl-6"}
           `
         )}

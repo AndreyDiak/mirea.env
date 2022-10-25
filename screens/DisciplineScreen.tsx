@@ -1,6 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import { collection, getDocs, onSnapshot, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Linking, ScrollView, Text, View, FlatList } from "react-native";
 import { useSelector } from "react-redux";
@@ -20,6 +27,7 @@ const DisciplineScreen = (props: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
   const user = useSelector(getUser);
+
   const {
     params: { discipline },
   } = useRoute<DisciplineScreenRouteProp>();
@@ -36,54 +44,37 @@ const DisciplineScreen = (props: Props) => {
     orderBy("timestamp")
   );
   const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
-    const snapMaterials = await Promise.all(snapshot.docs.map(async (material) => {
-      const docQ = query(
-        collection(db, `materials/${material.id}/sources`)
-      );
-      const docSnap = await getDocs(docQ);
-      return {
-        ...material.data(),
-        documents: docSnap.docs.map((doc) => ({
-          ...doc.data(),
-          documentId: doc.id,
-        })),
-        materialId: material.id,
-      }
-    }))
-    if(materials.length !== snapMaterials.length) {
+    const snapMaterials = await Promise.all(
+      snapshot.docs.map(async (material) => {
+        // добавляем documents в материал...
+        const docQ = query(collection(db, `materials/${material.id}/sources`));
+        const docSnap = await getDocs(docQ);
+        // добавляем comments к материалу...
+        const commentsQuery = query(
+          collection(db, "comments"),
+          where("materialId", "==", material.id),
+          orderBy("timestamp")
+        );
+        const commentSnap = await getDocs(commentsQuery);
+        return {
+          ...material.data(),
+          documents: docSnap.docs.map((doc) => ({
+            ...doc.data(),
+            documentId: doc.id,
+          })),
+          comments: commentSnap.docs.map((comment) => ({
+            ...comment.data(),
+            commentId: comment.id,
+          })),
+          materialId: material.id,
+        };
+      })
+    );
+
+    if (materials.length !== snapMaterials.length) {
       setMaterials(snapMaterials as Material[]);
     }
   });
-
-  // useEffect(() => {
-  //   const getMaterials = async () => {
-  //     const materialsQuery = query(
-  //       collection(db, "materials"),
-  //       where("disciplineId", "==", discipline.id),
-  //       orderBy("timestamp")
-  //     );
-  //     const materialsSnap = await getDocs(materialsQuery);
-
-  //     const materials = await Promise.all(
-  //       materialsSnap.docs.map(async (material) => {
-  //         const docQ = query(
-  //           collection(db, `materials/${material.id}/sources`)
-  //         );
-  //         const docSnap = await getDocs(docQ);
-  //         return {
-  //           ...material.data(),
-  //           documents: docSnap.docs.map((doc) => ({
-  //             ...doc.data(),
-  //             documentId: doc.id,
-  //           })),
-  //           materialId: material.id,
-  //         };
-  //       })
-  //     );
-  //     setMaterials(materials as Material[]);
-  //   };
-  //   getMaterials();
-  // }, []);
 
   return (
     <View style={tw("p-6 flex flex-col")}>

@@ -62,6 +62,7 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
       title: formTitle,
       text: formText,
       owner: user?.userId,
+      likes: 0,
       disciplineId: disciplineId,
       timestamp: serverTimestamp(),
     }).then(async (snap) => {

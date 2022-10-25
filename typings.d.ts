@@ -12,6 +12,8 @@ interface Material {
   title: string;
   text: string;
   materialId: string;
+  likes: number;
+  comments: Comment[];
   owner: string;
   documents: {
     title: string;
@@ -31,6 +33,13 @@ interface Message {
   type: string;
   photoUrl: string;
   messageId: string;
+}
+
+interface Comment {
+  email: string;
+  text: string;
+  materialId: string
+  commentId: string;
 }
 
 interface NewDocument {
@@ -77,6 +86,9 @@ type RootStackParamList = {
   Chats: {
     discipline: Discipline;
   };
+  Comments: {
+    material: Material
+  }
   Chat: {
     discipline: Discipline;
     groupId: string;
@@ -125,5 +137,10 @@ type ChatsScreenNavigatorProp = CompositeNavigationProp<
 
 type ChatScreenNavigatorProp = CompositeNavigationProp<
   BottomTabNavigationProp<TabStackParamList, "Chat">,
+  NativeStackNavigationProp<RootStackParamList>
+>;
+
+type CommentsScreenNavigatorProp = CompositeNavigationProp<
+  BottomTabNavigationProp<TabStackParamList, "Comments">,
   NativeStackNavigationProp<RootStackParamList>
 >;

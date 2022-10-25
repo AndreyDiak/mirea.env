@@ -5,18 +5,17 @@ import {
   getDocs,
   onSnapshot,
   query,
-  where,
+  where
 } from "firebase/firestore";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotifications, setUser } from "../features/userSlice";
 import { auth, db } from "../firebase";
-import { useNotifications } from "../hooks/useNotifications";
-import { useUserData } from "../hooks/useUserData";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
 import ChatScreen from "../screens/ChatScreen";
 import ChatsScreen from "../screens/ChatsScreen";
+import CommentsScreen from "../screens/CommentsScreen";
 import DisciplineScreen from "../screens/DisciplineScreen";
 import LoginScreen from "../screens/LoginScreen";
 import TabNavigator from "./TabNavigator";
@@ -120,6 +119,7 @@ const RootNavigator = () => {
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Discipline" component={DisciplineScreen} />
+        <Stack.Screen name='Comments' component={CommentsScreen} />
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Chats" component={ChatsScreen} />
