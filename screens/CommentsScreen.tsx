@@ -1,10 +1,26 @@
-import { View, Text, FlatList, TextInput, TouchableOpacity, Keyboard } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+} from "react-native";
 import React, { useLayoutEffect, useState, useRef } from "react";
 import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
 import { Card, Icon, Input } from "@rneui/themed";
 import Comment from "../components/Comment";
 import { useTailwind } from "tailwind-rn/dist";
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
@@ -20,11 +36,11 @@ const CommentsScreen = (props: Props) => {
     params: { material },
   } = useRoute<CommentsScreenRouteProp>();
 
-  const tw = useTailwind()
-  const [commentText, setCommentText] = useState('');
-  const [comments, setComments] = useState<Comment[]>(material.comments)
+  const tw = useTailwind();
+  const [commentText, setCommentText] = useState("");
+  const [comments, setComments] = useState<Comment[]>(material.comments);
 
-  const flatListRef = useRef()
+  const flatListRef = useRef();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,64 +53,67 @@ const CommentsScreen = (props: Props) => {
     where("materialId", "==", material.materialId),
     orderBy("timestamp")
   );
-  
+
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    const commentsSnap = snapshot.docs.map(comment => ({
+    const commentsSnap = snapshot.docs.map((comment) => ({
       ...comment.data(),
-      commentId: comment.id
+      commentId: comment.id,
     }));
-    if(comments.length !== commentsSnap.length) {
+    if (comments.length !== commentsSnap.length) {
       setComments(commentsSnap as Comment[]);
     }
-  })
-
+  });
 
   const addComment = async () => {
-    if(commentText.length === 0) {
+    if (commentText.length === 0) {
       return;
     }
     Keyboard.dismiss();
-    await addDoc(collection(db, 'comments'), {
+    await addDoc(collection(db, "comments"), {
       email: user?.email,
       text: commentText,
       timestamp: serverTimestamp(),
-      materialId: material.materialId
-    }).then(res => {
-      setCommentText('');
+      materialId: material.materialId,
+    }).then((res) => {
+      setCommentText("");
       // @ts-ignore workable ref
       flatListRef.current.scrollToEnd({ animating: true });
-    })
-  }
+    });
+  };
 
   return (
-    <View style={tw('flex flex-col h-full w-full py-4')}>
-      <Card containerStyle={tw('my-0')}>
+    <View style={tw("flex flex-col h-full w-full py-4")}>
+      <Card containerStyle={tw("my-0")}>
         <Card.Title>{material.title}</Card.Title>
         <Text>{material.text}</Text>
       </Card>
-      <Text style={tw('text-lg text-center my-4')}>Комментарии {' '}({comments.length})</Text>
+      <Text style={tw("text-lg text-center my-4")}>
+        Комментарии ({comments.length})
+      </Text>
       <FlatList
         // @ts-ignore workable ref
         ref={flatListRef}
         data={comments}
-        style={tw('w-10/12 mx-auto my-2')}
+        style={tw("w-10/12 mx-auto my-2")}
         showsVerticalScrollIndicator={false}
-        renderItem={(item) => <Comment key={item.index} comment={item.item} isLast={item.index === comments.length - 1}/>}
+        renderItem={(item) => (
+          <Comment
+            key={item.index}
+            comment={item.item}
+            index={item.index}
+            isLast={item.index === comments.length - 1}
+          />
+        )}
       />
-      <View style={tw('flex flex-row items-center justify-center px-2')}>
-        <TextInput 
+      <View style={tw("flex flex-row items-center justify-center px-2")}>
+        <TextInput
           placeholder="Введите комментарий..."
           value={commentText}
           onChangeText={setCommentText}
-          style={tw('bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg')}
+          style={tw("bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg")}
         />
         <TouchableOpacity onPress={addComment}>
-          <Icon 
-            name="send"
-            type="material"
-            color='#60a5fa'
-            size={30}
-          />
+          <Icon name="send" type="material" color="#60a5fa" size={30} />
         </TouchableOpacity>
       </View>
     </View>

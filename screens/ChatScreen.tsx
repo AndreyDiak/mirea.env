@@ -105,7 +105,7 @@ const ChatScreen = (props: Props) => {
 
   return (
     <SafeAreaView style={tw("relative bg-gray-100")}>
-      {isScrollToBottomVisible && (
+      {isScrollToBottomVisible && messages.length > 0 && (
         <TouchableOpacity
           onPress={scrollToBottom}
           style={tw(
@@ -141,13 +141,27 @@ const ChatScreen = (props: Props) => {
                 key={item.index}
                 message={item.item}
                 email={user?.email as string}
-                nextMessageEmail={!!messages[item.index + 1] ? messages[item.index + 1].email : null}
+                nextMessageEmail={
+                  !!messages[item.index + 1]
+                    ? messages[item.index + 1].email
+                    : null
+                }
               />
             )}
           />
         ) : (
-          <View>
-            <Text>no messages...</Text>
+          <View style={tw("flex flex-row items-center justify-center flex-1")}>
+            <View>
+              <Text style={tw("text-center text-lg")}>
+                Напишите первое сообщение в этом чате!
+            </Text>
+            <Icon
+              name="chat-bubble-outline"
+              type="material"
+              color="#60a5fa"
+              size={30}
+            />
+            </View>
           </View>
         )}
 

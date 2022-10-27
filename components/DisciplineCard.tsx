@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
@@ -40,6 +40,15 @@ const DisciplineCard = ({ discipline }: Props) => {
         if (snap.docs.length > 0) {
           const chatId = snap.docs[0].id;
           setChatId(chatId);
+        } else {
+          // создаем новый чат...
+          await addDoc(collection(db, 'chats'), {
+            disciplineId: discipline.id,
+            groupId: groupId
+          }).then(res => {
+            // console.log(res)
+            setChatId(res.id);
+          })
         }
       }
     };

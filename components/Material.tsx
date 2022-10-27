@@ -52,8 +52,8 @@ const Material = ({ material, userId }: Props) => {
         </View>
       )}
       <Card.Divider />
-      <View style={tw("flex flex-row justify-between items-center mb-2")}>
-        <TouchableOpacity style={tw("flex flex-row")} onPress={like}>
+      <View style={tw("flex flex-row justify-end items-center mb-2")}>
+        {/* <TouchableOpacity style={tw("flex flex-row")} onPress={like}>
           <Icon
             name="favorite-border"
             type="material"
@@ -61,7 +61,7 @@ const Material = ({ material, userId }: Props) => {
             color={"gray"}
           />
           <Text style={tw("text-gray-600 ml-2")}>{material.likes} Likes</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <TouchableOpacity onPress={() => navigation.navigate('Comments', {material})}>
           <Text>{material.comments.length} Comments</Text>
         </TouchableOpacity>
