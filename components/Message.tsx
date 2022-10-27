@@ -36,7 +36,7 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
         key={message.messageId}
         style={tw(
           `rounded-md px-4 pt-3 pb-2 relative
-          ${nextMessageEmail === message.email ? 'mb-2' : 'mb-6'}
+          ${nextMessageEmail === message.email ? "mb-2" : "mb-6"}
           ${message.email === email ? "bg-white pr-6" : "bg-blue-400 pl-6"}
           `
         )}
@@ -58,10 +58,12 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
         </Text>
         <View style={tw("flex flex-row items-end w-full")}>
           <Text
-            style={[tw(
-              `${message.email === email ? "text-gray-600" : "text-white"} 
+            style={[
+              tw(
+                `${message.email === email ? "text-gray-600" : "text-white"} 
               font-semibold text-sm mr-2`
-            ), {maxWidth: '85%'}
+              ),
+              { maxWidth: "85%" },
             ]}
           >
             {message.message}
@@ -86,7 +88,11 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
             ${message.email === email ? "-right-7" : "-left-3"}`
             )}
           >
-            <UserAvatar source={message.photoUrl} size={"small"} />
+            <UserAvatar
+              title={message.displayName[0]}
+              source={message.photoUrl}
+              size={"small"}
+            />
           </View>
         )}
       </View>

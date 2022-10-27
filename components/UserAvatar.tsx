@@ -12,12 +12,22 @@ type Props = {
 const UserAvatar = ({ title, source, size }: Props) => {
   const tw = useTailwind();
 
-  return (
+  return !!source ? (
+    <Avatar
+      // @ts-ignore
+      size={size || "medium"}
+      source={{ uri: source }}
+      rounded
+      avatarStyle={tw("")}
+      overlayContainerStyle={tw("bg-blue-400")}
+      titleStyle={tw("text-white")}
+      containerStyle={tw("mr-4 mb-1")}
+    />
+  ) : (
     <Avatar
       title={title}
       // @ts-ignore
-      size={size || 'medium'}
-      source={{uri: source}}
+      size={size || "medium"}
       rounded
       avatarStyle={tw("")}
       overlayContainerStyle={tw("bg-blue-400")}
