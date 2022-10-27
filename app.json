@@ -24,11 +24,23 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.raymix_free.mireaenv"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-camera"]
+    "plugins": [
+      "expo-camera"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "eed7fd29-46a2-4227-b4ab-8c502a1f0de0"
+      }
+    }
   }
 }
