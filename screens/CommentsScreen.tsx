@@ -1,29 +1,23 @@
-import {
-  View,
-  Text,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-  Keyboard,
-} from "react-native";
-import React, { useLayoutEffect, useState, useRef } from "react";
-import { useNavigation, RouteProp, useRoute } from "@react-navigation/native";
-import { Card, Icon, Input } from "@rneui/themed";
-import Comment from "../components/Comment";
-import { useTailwind } from "tailwind-rn/dist";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { Card, Icon } from "@rneui/themed";
 import {
   addDoc,
-  collection,
-  doc,
-  onSnapshot,
+  collection, onSnapshot,
   orderBy,
   query,
   serverTimestamp,
-  where,
+  where
 } from "firebase/firestore";
-import { db } from "../firebase";
+import React, { useLayoutEffect, useRef, useState } from "react";
+import {
+  FlatList, Keyboard, Text, TextInput,
+  TouchableOpacity, View
+} from "react-native";
 import { useSelector } from "react-redux";
+import { useTailwind } from "tailwind-rn/dist";
+import Comment from "../components/Comment";
 import { getUser } from "../features/userSlice";
+import { db } from "../firebase";
 
 type Props = {};
 

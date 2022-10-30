@@ -120,7 +120,7 @@ const AuthBioScreen = (props: Props) => {
           collection(db,'users'),
           {
             ...user,
-            userId: res.user.uid,
+            // userId: res.user.uid,
           }
         );
       }

@@ -60,8 +60,11 @@ const ChatScreen = (props: Props) => {
   // set pageHeader
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: title,
-      headerColor: "#60a5fa",
+      title: (
+        <View>
+          <Text>Hellow</Text>
+        </View>
+      ),
     });
   }, [title]);
 
@@ -152,15 +155,15 @@ const ChatScreen = (props: Props) => {
         ) : (
           <View style={tw("flex flex-row items-center justify-center flex-1")}>
             <View>
-              <Text style={tw("text-center text-lg")}>
+              <Text style={tw("text-center text-lg w-5/6 mx-auto")}>
                 Напишите первое сообщение в этом чате!
-            </Text>
-            <Icon
-              name="chat-bubble-outline"
-              type="material"
-              color="#60a5fa"
-              size={30}
-            />
+              </Text>
+              <Icon
+                name="chat-bubble-outline"
+                type="material"
+                color="#60a5fa"
+                size={30}
+              />
             </View>
           </View>
         )}

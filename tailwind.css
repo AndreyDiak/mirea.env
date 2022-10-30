@@ -328,6 +328,21 @@
   background-color: rgb(226 232 240 / var(--tw-bg-opacity))
 }
 
+.bg-blue-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity))
+}
+
+.bg-red-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity))
+}
+
+.bg-green-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(187 247 208 / var(--tw-bg-opacity))
+}
+
 .p-4 {
   padding: 1rem
 }
@@ -382,6 +397,11 @@
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem
+}
+
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px
 }
 
 .pt-2 {

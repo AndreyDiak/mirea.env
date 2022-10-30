@@ -1,6 +1,7 @@
+import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React from "react";
-import { Text, View } from "react-native";
+import React, { useLayoutEffect } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import UserAvatar from "./UserAvatar";
 
@@ -13,8 +14,26 @@ type Props = {
 const Message = ({ message, email, nextMessageEmail }: Props) => {
   const tw = useTailwind();
 
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRigth: () => <View><Text>hello</Text></View>
+    })
+  })
+
+  const onMessagePress = () => {
+    console.log('short')
+  }
+
+  const onMessageLongPress = () => {
+    console.log('long')
+  }
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={onMessagePress}
+      onLongPress={onMessageLongPress}
       style={[
         tw(
           `flex flex-row px-4 ${
@@ -96,7 +115,7 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
           </View>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

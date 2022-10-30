@@ -1,15 +1,18 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Card, Icon } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import {
   collection,
   getDocs,
   onSnapshot,
   orderBy,
   query,
-  where,
+  where
 } from "firebase/firestore";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Linking, ScrollView, Text, View, FlatList } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  FlatList, Text, TouchableOpacity, View
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import Material from "../components/Material";
@@ -77,18 +80,16 @@ const DisciplineScreen = (props: Props) => {
     }
   });
 
-  
-
   return (
-    <View style={tw("p-6 flex flex-col")}>
+    <SafeAreaView style={tw("flex flex-col px-4")}>
       {user?.type === "teacher" && (
-        <View>
-          <Text
-            style={tw("text-right")}
+        <View style={tw('')}>
+          <TouchableOpacity
+            style={tw("flex flex-row justify-end")}
             onPress={() => setIsFormVisible(!isFormVisible)}
           >
             <View style={tw("flex flex-row items-center")}>
-              <Text style={tw("text-blue-400 text-right")}>
+              <Text style={tw("text-blue-400")}>
                 {isFormVisible ? "Закрыть" : "Добавить материалы"}
               </Text>
               <Icon
@@ -98,16 +99,16 @@ const DisciplineScreen = (props: Props) => {
                 size={25}
               />
             </View>
-          </Text>
+          </TouchableOpacity>
+          {isFormVisible && (
+            <MaterialForm
+              disciplineId={discipline.id}
+              setIsFormVisible={setIsFormVisible}
+            />
+          )}
         </View>
       )}
-      {isFormVisible && (
-        <MaterialForm
-          disciplineId={discipline.id}
-          setIsFormVisible={setIsFormVisible}
-        />
-      )}
-      <View style={tw("")}>
+      <View>
         {materials.length ? (
           <FlatList
             style={tw("")}
@@ -115,7 +116,7 @@ const DisciplineScreen = (props: Props) => {
             scrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={(item) => {
-              return <Material material={item.item} userId={user?.userId} />;
+              return <Material material={item.item} userId={user?.userId} userType={user?.type} />;
             }}
           />
         ) : (
@@ -132,7 +133,7 @@ const DisciplineScreen = (props: Props) => {
           </View>
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

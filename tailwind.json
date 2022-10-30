@@ -434,6 +434,24 @@
 			"backgroundColor": "rgb(226 232 240 / var(--tw-bg-opacity))"
 		}
 	},
+	"bg-blue-200": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(191 219 254 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-red-200": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(254 202 202 / var(--tw-bg-opacity))"
+		}
+	},
+	"bg-green-200": {
+		"style": {
+			"--tw-bg-opacity": 1,
+			"backgroundColor": "rgb(187 247 208 / var(--tw-bg-opacity))"
+		}
+	},
 	"p-4": {
 		"style": {
 			"paddingTop": 16,
@@ -512,6 +530,12 @@
 		"style": {
 			"paddingTop": 32,
 			"paddingBottom": 32
+		}
+	},
+	"py-0": {
+		"style": {
+			"paddingTop": 0,
+			"paddingBottom": 0
 		}
 	},
 	"pt-2": {
