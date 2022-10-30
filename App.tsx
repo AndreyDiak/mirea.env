@@ -1,8 +1,15 @@
-import { Inter_900Black, useFonts as useFontsInter } from "@expo-google-fonts/inter";
 import {
-  Roboto_300Light, Roboto_400Regular, Roboto_500Medium, useFonts as UseFontsRoboto
+  Inter_900Black,
+  useFonts as useFontsInter,
+} from "@expo-google-fonts/inter";
+import {
+  Roboto_300Light,
+  Roboto_400Regular,
+  Roboto_500Medium,
+  useFonts as UseFontsRoboto,
 } from "@expo-google-fonts/roboto";
 import { NavigationContainer } from "@react-navigation/native";
+import { ToastProvider } from "react-native-toast-notifications";
 import { Provider } from "react-redux";
 import { TailwindProvider } from "tailwind-rn";
 import RootNavigator from "./navigator/RootNavigator";
@@ -10,7 +17,6 @@ import { store } from "./store";
 import utilities from "./tailwind.json";
 
 export default function App() {
-
   let [fontsLoadedInter, fontsLoadedRoboto] = [
     useFontsInter({
       Inter_900Black,
@@ -18,7 +24,7 @@ export default function App() {
     UseFontsRoboto({
       Roboto_400Regular,
       Roboto_500Medium,
-      Roboto_300Light
+      Roboto_300Light,
     }),
   ];
 
@@ -29,11 +35,13 @@ export default function App() {
   return (
     //@ts-ignore TaiwindProvider Type Defenition...
     <TailwindProvider utilities={utilities}>
-      <NavigationContainer>
-        <Provider store={store}>
-          <RootNavigator />
-        </Provider>
-      </NavigationContainer>
+      {/* <ToastProvider> */}
+        <NavigationContainer>
+          <Provider store={store}>
+            <RootNavigator />
+          </Provider>
+        </NavigationContainer>
+      {/* </ToastProvider> */}
     </TailwindProvider>
   );
 }

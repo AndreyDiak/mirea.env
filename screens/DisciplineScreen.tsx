@@ -43,6 +43,7 @@ const DisciplineScreen = (props: Props) => {
     where("disciplineId", "==", discipline.id),
     orderBy("timestamp")
   );
+
   const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
     const snapMaterials = await Promise.all(
       snapshot.docs.map(async (material) => {
@@ -75,6 +76,8 @@ const DisciplineScreen = (props: Props) => {
       setMaterials(snapMaterials as Material[]);
     }
   });
+
+  
 
   return (
     <View style={tw("p-6 flex flex-col")}>

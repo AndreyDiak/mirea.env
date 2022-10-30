@@ -1,14 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import {
-  deleteDoc,
-  doc, updateDoc
-} from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import React from "react";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../firebase";
-
+import { ToastAndroid } from 'react-native'
 type Props = {
   material: Material;
   userId: string | undefined;
@@ -17,16 +14,21 @@ type Props = {
 const Material = ({ material, userId }: Props) => {
   const tw = useTailwind();
 
-  const navigation = useNavigation<DisciplineScreenNavigatorProp>()
+  // const toast = useToast()
+
+  const navigation = useNavigation<DisciplineScreenNavigatorProp>();
 
   const deleteMaterial = async () => {
     await deleteDoc(doc(db, `materials/${material.materialId}`));
   };
 
   const like = async () => {
-    await updateDoc(doc(db, `materials/${material.materialId}`), {
-      likes: material.likes + 1,
-    });
+    ToastAndroid.show('Добавлено в избранные')
+    // toast.show('Hello')
+    console.log('hello')
+    // await updateDoc(doc(db, `materials/${material.materialId}`), {
+    //   likes: material.likes + 1,
+    // });
   };
 
   return (
@@ -52,18 +54,26 @@ const Material = ({ material, userId }: Props) => {
         </View>
       )}
       <Card.Divider />
+      {/* Icons / Favorites / Comments / Share */}
       <View style={tw("flex flex-row justify-end items-center mb-2")}>
-        {/* <TouchableOpacity style={tw("flex flex-row")} onPress={like}>
+        {/* Add to Favorites... */}
+        <TouchableOpacity style={tw("mr-2")} onPress={like}>
           <Icon
             name="favorite-border"
             type="material"
-            size={20}
+            size={25}
             color={"gray"}
           />
-          <Text style={tw("text-gray-600 ml-2")}>{material.likes} Likes</Text>
-        </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => navigation.navigate('Comments', {material})}>
-          <Text>{material.comments.length} Comments</Text>
+        </TouchableOpacity>
+        {/* Open comments... */}
+        <TouchableOpacity
+        style={tw('mr-2')}
+          onPress={() => navigation.navigate("Comments", { material })}
+        >
+          <Icon name="comment" type="material" size={25} color="gray" />
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <Icon name="reply" type="material" size={25} color="gray" />
         </TouchableOpacity>
       </View>
       {material.owner === userId && (
