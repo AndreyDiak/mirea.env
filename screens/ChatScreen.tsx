@@ -11,6 +11,8 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+
+
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   FlatList,
@@ -27,6 +29,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import Message from "../components/Message";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
+import ChatTitle from "../components/ChatTitle";
 
 type Props = {};
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
@@ -35,7 +38,9 @@ const ChatScreen = (props: Props) => {
   const [title, setTitle] = useState("Загрузка...");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState(false);
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const flatListRef = useRef();
   const user = useSelector(getUser);
   const tw = useTailwind();
@@ -60,13 +65,16 @@ const ChatScreen = (props: Props) => {
   // set pageHeader
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: (
-        <View>
-          <Text>Hellow</Text>
-        </View>
-      ),
+      headerTitle: () =>
+        !isHeaderMenuVisible ? (
+          <View>
+            <Text>{title}</Text>
+          </View>
+        ) : (
+          <ChatTitle message={selectedMessage as Message} onClose={onTitleClose}/>
+        ),
     });
-  }, [title]);
+  }, [title, isHeaderMenuVisible, selectedMessage]);
 
   // sendMessage function
   const sendMessage = async () => {
@@ -106,9 +114,22 @@ const ChatScreen = (props: Props) => {
     }
   });
 
+  const onTitleClose = () => {
+    setIsHeaderMenuVisible(false);
+    setSelectedMessage(null);
+  }
+
+  const onMessagePress = (message: Message) => {};
+
+  const onMessageLongPress = (message: Message) => {
+    setIsHeaderMenuVisible(true);
+    setSelectedMessage(message);
+    console.log("long");
+  };
+
   return (
-    <SafeAreaView style={tw("relative bg-gray-100")}>
-      {isScrollToBottomVisible && messages.length > 0 && (
+    <SafeAreaView style={tw("relative")}>
+      {isScrollToBottomVisible && messages.length > 10 && (
         <TouchableOpacity
           onPress={scrollToBottom}
           style={tw(
@@ -123,7 +144,7 @@ const ChatScreen = (props: Props) => {
           />
         </TouchableOpacity>
       )}
-      <KeyboardAvoidingView style={tw("flex flex-col h-full p-2")}>
+      <KeyboardAvoidingView style={tw("flex flex-col h-full")}>
         {messages.length > 0 ? (
           <FlatList
             // @ts-ignore some ref issues..
@@ -140,16 +161,24 @@ const ChatScreen = (props: Props) => {
             showsVerticalScrollIndicator={false}
             // initialScrollIndex={messages.length - 3}
             renderItem={(item) => (
-              <Message
-                key={item.index}
-                message={item.item}
-                email={user?.email as string}
-                nextMessageEmail={
-                  !!messages[item.index + 1]
-                    ? messages[item.index + 1].email
-                    : null
-                }
-              />
+              <TouchableOpacity
+                onPress={() => onMessagePress(item.item)}
+                onLongPress={() => onMessageLongPress(item.item)}
+              >
+                <Message
+                  key={item.index}
+                  message={item.item}
+                  email={user?.email as string}
+                  nextMessageEmail={
+                    !!messages[item.index + 1]
+                      ? messages[item.index + 1].email
+                      : null
+                  }
+                  isBacklight={
+                    item.item.messageId === selectedMessage?.messageId
+                  }
+                />
+              </TouchableOpacity>
             )}
           />
         ) : (
@@ -168,7 +197,8 @@ const ChatScreen = (props: Props) => {
           </View>
         )}
 
-        <View style={tw("flex flex-row items-center")}>
+        <View style={tw("flex flex-row items-center px-2")}>
+          {/* Reply message or Reply Post from discipline... */}
           <TextInput
             onFocus={() => setIsScrollToBottomVisible(false)}
             style={tw("bg-white flex-1 mr-4 rounded-md p-2 h-12")}

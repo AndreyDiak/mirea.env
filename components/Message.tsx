@@ -9,46 +9,21 @@ type Props = {
   message: Message;
   email: string;
   nextMessageEmail: string | null;
+  isBacklight: boolean;
 };
 
-const Message = ({ message, email, nextMessageEmail }: Props) => {
+const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
   const tw = useTailwind();
 
-  const navigation = useNavigation();
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRigth: () => <View><Text>hello</Text></View>
-    })
-  })
-
-  const onMessagePress = () => {
-    console.log('short')
-  }
-
-  const onMessageLongPress = () => {
-    console.log('long')
-  }
-
   return (
-    <TouchableOpacity
-      onPress={onMessagePress}
-      onLongPress={onMessageLongPress}
+    <View
       style={[
         tw(
-          `flex flex-row px-4 ${
+          `flex flex-row px-6 ${
             message.email === email ? "justify-end" : "justify-start"
-          }`
+          }
+          ${isBacklight ? 'bg-blue-100' : ''}`
         ),
-        {
-          shadowRadius: 10,
-          shadowColor: "red",
-          shadowOffset: {
-            height: 10,
-            width: 10,
-          },
-          shadowOpacity: 1,
-        },
       ]}
     >
       <View
@@ -115,7 +90,7 @@ const Message = ({ message, email, nextMessageEmail }: Props) => {
           </View>
         )}
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

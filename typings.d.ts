@@ -88,7 +88,10 @@ type RootStackParamList = {
   };
   Comments: {
     material: Material
-  }
+  },
+  Chats: {
+    discipline: Discipline
+  },
   Chat: {
     discipline: Discipline;
     groupId: string;
