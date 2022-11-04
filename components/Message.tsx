@@ -1,19 +1,48 @@
 import { useNavigation } from "@react-navigation/native";
+import { doc, getDoc, query } from "firebase/firestore";
 import moment from "moment";
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import { db } from "../firebase";
 import UserAvatar from "./UserAvatar";
 
 type Props = {
   message: Message;
   email: string;
+  chatId: string;
   nextMessageEmail: string | null;
   isBacklight: boolean;
+  setBacklighMessage: () => void;
 };
 
-const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
+const Message = ({
+  message,
+  email,
+  nextMessageEmail,
+  isBacklight,
+  chatId,
+  setBacklighMessage
+}: Props) => {
   const tw = useTailwind();
+
+  const [replyingMessage, setReplyingMessage] = useState<Message | null>(null);
+
+  useEffect(() => {
+    const getReplyingMessage = async () => {
+      if (!!message.replyingMessage) {
+        const replyingMessageSnap = await getDoc(
+          doc(db, `chats/${chatId}/messages/${message.replyingMessage}`)
+        );
+        const replyingMessage = {
+          ...replyingMessageSnap.data(),
+          messageId: replyingMessageSnap.id,
+        };
+        setReplyingMessage(replyingMessage as Message);
+      }
+    };
+    getReplyingMessage();
+  }, []);
 
   return (
     <View
@@ -22,7 +51,7 @@ const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
           `flex flex-row px-6 ${
             message.email === email ? "justify-end" : "justify-start"
           }
-          ${isBacklight ? 'bg-blue-100' : ''}`
+          ${isBacklight ? "bg-blue-100" : ""}`
         ),
       ]}
     >
@@ -35,6 +64,21 @@ const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
           `
         )}
       >
+        {/* Replying message... */}
+        {!!replyingMessage && (
+          <TouchableOpacity onPress={setBacklighMessage}>
+            <View style={tw("flex flex-row")}>
+              <View style={tw("w-0.5 h-full bg-gray-400 mr-2")}></View>
+              <View>
+                <Text>{replyingMessage.displayName}</Text>
+                <Text style={tw("text-gray-400")}>
+                  {replyingMessage.message}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+        {/* Message Owner... */}
         <Text
           style={tw(
             `${
@@ -50,6 +94,7 @@ const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
             ? "студент"
             : "преподаватель"}
         </Text>
+        {/* Message Text... */}
         <View style={tw("flex flex-row items-end w-full")}>
           <Text
             style={[
@@ -62,7 +107,7 @@ const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
           >
             {message.message}
           </Text>
-
+          {/* Message Date... */}
           <Text
             style={tw(
               `text-xs -mb-1 ${
@@ -75,6 +120,7 @@ const Message = ({ message, email, nextMessageEmail, isBacklight }: Props) => {
               : "..."}
           </Text>
         </View>
+        {/* Message Owner Avatar... */}
         {nextMessageEmail !== message.email && (
           <View
             style={tw(

@@ -33,6 +33,7 @@ interface Message {
   type: string;
   photoUrl: string;
   messageId: string;
+  replyingMessage: string | null;
 }
 
 interface Comment {

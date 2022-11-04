@@ -19,8 +19,7 @@ const DisciplineCard = ({ discipline }: Props) => {
 
   const [chatId, setChatId] = useState("");
   const [groupId, setGroupId] = useState("");
-
-
+  
   useEffect(() => {
     const getChatInfo = async () => {
       if (user?.type === "student") {

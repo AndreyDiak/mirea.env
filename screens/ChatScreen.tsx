@@ -1,45 +1,43 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import {
-  addDoc,
   collection,
   doc,
   getDoc,
   onSnapshot,
   orderBy,
   query,
-  serverTimestamp,
 } from "firebase/firestore";
-
-
 
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   FlatList,
-  Keyboard,
   KeyboardAvoidingView,
   SafeAreaView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+import ChatTitle from "../components/ChatTitle";
 import Message from "../components/Message";
+import MessageForm from "../components/MessageForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
-import ChatTitle from "../components/ChatTitle";
 
-type Props = {};
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
-const ChatScreen = (props: Props) => {
+const ChatScreen = () => {
   const [title, setTitle] = useState("Загрузка...");
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
+  const [isReplyingOnMessage, setIsReplyingOnMessage] = useState(false);
+
   const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState(false);
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
+
+  const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
+
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const flatListRef = useRef();
   const user = useSelector(getUser);
@@ -65,37 +63,43 @@ const ChatScreen = (props: Props) => {
   // set pageHeader
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerClose: () => <Text>Close</Text>,
       headerTitle: () =>
         !isHeaderMenuVisible ? (
           <View>
-            <Text>{title}</Text>
+            <Text style={tw("text-xl font-semibold")}>{title}</Text>
           </View>
         ) : (
-          <ChatTitle message={selectedMessage as Message} onClose={onTitleClose}/>
+          <ChatTitle
+            message={selectedMessage as Message}
+            onClose={onTitleClose}
+            replyOnMessage={() => {
+              setIsReplyingOnMessage(true);
+              setIsHeaderMenuVisible(false);
+            }}
+          />
         ),
     });
   }, [title, isHeaderMenuVisible, selectedMessage]);
-
-  // sendMessage function
-  const sendMessage = async () => {
-    await addDoc(collection(db, `chats/${chatId}/messages`), {
-      message: message,
-      timestamp: serverTimestamp(),
-      displayName: user?.name,
-      email: user?.email,
-      type: user?.type,
-      photoUrl: user?.img,
-    }).then(async (res) => {
-      Keyboard.dismiss();
-      setMessage("");
-    });
-  };
 
   //scrollToBottom function
   const scrollToBottom = () => {
     // @ts-ignore all exists...
     flatListRef.current.scrollToEnd({ animating: true });
     setIsScrollToBottomVisible(false);
+    setBackligntMessage(null);
+  };
+
+  const scrollToIndex = (activeMessageIndex: string | null) => {
+    if (activeMessageIndex) {
+      // @ts-ignore all exists...
+      flatListRef.current.scrollToIndex({
+        animating: true,
+        index: messages.findIndex(
+          (msg) => msg.messageId === activeMessageIndex
+        ),
+      });
+    }
   };
 
   // subscribe to recieve messages...
@@ -114,17 +118,18 @@ const ChatScreen = (props: Props) => {
     }
   });
 
+  // closingTitle function...
   const onTitleClose = () => {
     setIsHeaderMenuVisible(false);
     setSelectedMessage(null);
-  }
+  };
 
+  // onMessagePress function...
   const onMessagePress = (message: Message) => {};
-
+  // onMessageLongPress function...
   const onMessageLongPress = (message: Message) => {
     setIsHeaderMenuVisible(true);
     setSelectedMessage(message);
-    console.log("long");
   };
 
   return (
@@ -175,8 +180,14 @@ const ChatScreen = (props: Props) => {
                       : null
                   }
                   isBacklight={
-                    item.item.messageId === selectedMessage?.messageId
+                    item.item.messageId === selectedMessage?.messageId ||
+                    item.item.messageId === backligthMessage
                   }
+                  chatId={chatId}
+                  setBacklighMessage={() => {
+                    setBackligntMessage(item.item.replyingMessage);
+                    scrollToIndex(item.item.replyingMessage);
+                  }}
                 />
               </TouchableOpacity>
             )}
@@ -196,20 +207,15 @@ const ChatScreen = (props: Props) => {
             </View>
           </View>
         )}
-
-        <View style={tw("flex flex-row items-center px-2")}>
-          {/* Reply message or Reply Post from discipline... */}
-          <TextInput
-            onFocus={() => setIsScrollToBottomVisible(false)}
-            style={tw("bg-white flex-1 mr-4 rounded-md p-2 h-12")}
-            placeholder="Введите текст..."
-            value={message}
-            onChangeText={setMessage}
-          />
-          <TouchableOpacity onPress={sendMessage}>
-            <Icon name="send" type="material" color="#60a5fa" size={25} />
-          </TouchableOpacity>
-        </View>
+        {/* Message Form */}
+        <MessageForm
+          setIsReplyingOnMessage={setIsReplyingOnMessage}
+          setIsScrollToBottomVisible={setIsScrollToBottomVisible}
+          setActiveMessage={setSelectedMessage}
+          isReplyingOnMessage={isReplyingOnMessage}
+          activeMessage={selectedMessage}
+          chatId={chatId}
+        />
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
