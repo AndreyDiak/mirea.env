@@ -1,7 +1,5 @@
 import { Input } from "@rneui/base";
-import {
-  signInWithEmailAndPassword
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
@@ -44,18 +42,6 @@ const LoginScreen = (props: Props) => {
             secureTextEntry
             containerStyle={tw(``)}
           />
-          {/* <CheckBox
-            title="Я студент"
-            checked={isStudent}
-            onPress={() => setIsStudent(true)}
-            containerStyle={{ padding: 0 }}
-          />
-          <CheckBox
-            title="Я преподаватель"
-            checked={!isStudent}
-            onPress={() => setIsStudent(false)}
-            containerStyle={{ padding: 0 }}
-          /> */}
         </View>
       </LoginForm>
     </View>

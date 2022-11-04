@@ -7,6 +7,7 @@ import { useNotifications } from "../hooks/useNotifications";
 import { Card, Icon } from "@rneui/themed";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { returnHexCode } from "../utils/returnHexCode";
 
 type Props = {};
 
@@ -58,7 +59,7 @@ const NotificationsScreen = (props: Props) => {
             <Icon
               name="sentiment-very-dissatisfied"
               type="material"
-              color="#60a5fa"
+              color={returnHexCode(user?.theme as AppTheme)}
               size={30}
             />
           </View>

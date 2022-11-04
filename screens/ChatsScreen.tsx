@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
@@ -12,6 +12,8 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { Card } from "@rneui/themed";
+import { useSelector } from "react-redux";
+import { getUser } from "../features/userSlice";
 
 type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
@@ -21,7 +23,7 @@ const ChatsScreen = (props: Props) => {
 
   const navigation = useNavigation<ChatsScreenNavigatorProp>();
   const [chats, setChats] = useState<any[]>([]);
-
+  const user = useSelector(getUser);
   const {
     params: { discipline },
   } = useRoute<ChatsScreenRouteProp>();
@@ -65,7 +67,7 @@ const ChatsScreen = (props: Props) => {
   return (
     <View>
       <View>
-        <Text style={tw('text-center text-lg pt-2')}>Доступные чаты</Text>
+        <Text style={tw("text-center text-lg pt-2")}>Доступные чаты</Text>
       </View>
       <FlatList
         data={chats}
@@ -76,8 +78,7 @@ const ChatsScreen = (props: Props) => {
                 Группа:{" "}
                 <Text style={tw("font-bold")}>{item.item.groupInfo.name}</Text>
               </Text>
-              <Text
-                style={tw("text-blue-400 underline")}
+              <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Chat", {
                     discipline,
@@ -86,8 +87,12 @@ const ChatsScreen = (props: Props) => {
                   })
                 }
               >
-                Перейти
-              </Text>
+                <Text
+                  style={tw(`text-${user?.theme as AppTheme}-400 underline`)}
+                >
+                  Перейти
+                </Text>
+              </TouchableOpacity>
             </View>
           </Card>
         )}

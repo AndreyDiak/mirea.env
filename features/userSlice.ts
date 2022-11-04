@@ -21,6 +21,13 @@ export const counterSlice = createSlice({
     },
     setNotifications: (state, action: PayloadAction<Notification[]>) => {
       state.notifiications = action.payload
+    },
+    setTheme: (state, action: PayloadAction<AppTheme>) => {
+      // @ts-ignore
+      state.user = {
+        ...state.user,
+        theme: action.payload
+      }
     }
   },
 })
@@ -29,6 +36,6 @@ export const getUser = (state : RootState) => state.userPage.user;
 export const getNotifications = (state: RootState) => state.userPage.notifiications;
 
 // Action creators are generated for each case reducer function
-export const { setUser, setNotifications } = counterSlice.actions
+export const { setUser, setNotifications, setTheme } = counterSlice.actions
 
 export default counterSlice.reducer

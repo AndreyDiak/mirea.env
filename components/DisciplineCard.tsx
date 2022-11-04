@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
+import { returnHexCode } from "../utils/returnHexCode";
 
 type Props = {
   discipline: Discipline;
@@ -64,10 +65,10 @@ const DisciplineCard = ({ discipline }: Props) => {
           style={tw("flex flex-row items-center")}
           onPress={() => navigation.navigate("Discipline", { discipline })}
         >
-          <Text style={tw("text-blue-400 underline font-bold mr-2")}>
+          <Text style={tw(`text-${user?.theme as AppTheme}-400 underline font-bold mr-2`)}>
             Материалы
           </Text>
-          <Icon name="inventory" type="material" color={"#60a5fa"} />
+          <Icon name="inventory" type="material" color={returnHexCode(user?.theme as AppTheme)} />
         </TouchableOpacity>
 
         <TouchableOpacity

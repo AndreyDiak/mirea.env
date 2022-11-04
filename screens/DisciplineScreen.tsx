@@ -19,6 +19,7 @@ import Material from "../components/Material";
 import MaterialForm from "../components/MaterialForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
+import { returnHexCode } from "../utils/returnHexCode";
 type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -126,7 +127,7 @@ const DisciplineScreen = (props: Props) => {
               <Icon
                 name="inventory"
                 type="material"
-                color="#60a5fa"
+                color={returnHexCode(user?.theme as AppTheme)}
                 size={30}
               />
             </View>

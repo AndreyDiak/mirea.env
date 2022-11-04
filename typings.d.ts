@@ -1,4 +1,6 @@
-type Group = {
+type AppTheme = 'blue' | 'violet' | 'emerald' | 'rose';
+
+interface Group {
   id: string;
   name: string;
 };
@@ -61,6 +63,7 @@ interface User {
   female: string;
   password: string;
   img: string;
+  theme: AppTheme;
   userId: string;
 }
 

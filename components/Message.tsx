@@ -11,6 +11,7 @@ type Props = {
   message: Message;
   email: string;
   chatId: string;
+  theme: AppTheme;
   nextMessageEmail: string | null;
   isBacklight: boolean;
   setBacklighMessage: () => void;
@@ -22,7 +23,8 @@ const Message = ({
   nextMessageEmail,
   isBacklight,
   chatId,
-  setBacklighMessage
+  theme,
+  setBacklighMessage,
 }: Props) => {
   const tw = useTailwind();
 
@@ -51,27 +53,47 @@ const Message = ({
           `flex flex-row px-6 ${
             message.email === email ? "justify-end" : "justify-start"
           }
-          ${isBacklight ? "bg-blue-100" : ""}`
+          ${isBacklight ? `bg-${theme}-100` : ""}`
         ),
       ]}
     >
       <View
         key={message.messageId}
         style={tw(
-          `rounded-md px-4 pt-3 pb-2 relative
-          ${nextMessageEmail === message.email ? "mb-2" : "mb-6"}
-          ${message.email === email ? "bg-white pr-6" : "bg-blue-400 pl-6"}
+          `rounded-lg px-3 pt-3 pb-2 relative
+          ${
+            nextMessageEmail === message.email
+              ? "mb-2"
+              : `mb-6 ${message.email === email ? "pr-6" : "pl-6"}`
+          }
+          ${message.email === email ? "bg-white" : `bg-${theme}-400`}
           `
         )}
       >
         {/* Replying message... */}
         {!!replyingMessage && (
           <TouchableOpacity onPress={setBacklighMessage}>
-            <View style={tw("flex flex-row")}>
-              <View style={tw("w-0.5 h-full bg-gray-400 mr-2")}></View>
+            <View style={tw("flex flex-row pt-1")}>
+              <View style={tw(`w-0.5 h-full bg-${theme}-800 mr-2`)}></View>
               <View>
-                <Text>{replyingMessage.displayName}</Text>
-                <Text style={tw("text-gray-400")}>
+                <Text
+                  style={tw(
+                    `font-semibold ${
+                      message.email === email ? "text-gray-800" : "text-white"
+                    }`
+                  )}
+                >
+                  {replyingMessage.displayName}
+                </Text>
+                <Text
+                  style={tw(
+                    `${
+                      message.email === email
+                        ? "text-gray-400"
+                        : "text-gray-100"
+                    }`
+                  )}
+                >
                   {replyingMessage.message}
                 </Text>
               </View>

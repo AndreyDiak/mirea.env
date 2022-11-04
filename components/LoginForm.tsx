@@ -4,16 +4,16 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 type Props = {
-  step: AuthSteps
+  step: AuthSteps;
   children: JSX.Element;
   handleSubmit: () => void;
-  error: string
+  error: string;
 };
 
 const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<LoginScreenNavigatorProp>();
-  
+
   return (
     <View style={tw("bg-white w-4/5 rounded-lg p-2")}>
       {/* Logo */}
@@ -38,32 +38,45 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
             },
           ]}
         >
-          {step === 'auth' ? 'Авторизация' : 'Регистрация'}
+          {step === "auth" ? "Авторизация" : "Регистрация"}
         </Text>
-        {error !== '' && <Text style={tw('text-red-400 text-center')}>{error}</Text>}
+        {error !== "" && (
+          <Text style={tw("text-red-400 text-center")}>{error}</Text>
+        )}
         {/* Login + Pass */}
         {children}
 
-        <TouchableOpacity style={tw("flex flex-row justify-center pt-2")}>
+        <TouchableOpacity
+          style={tw("flex flex-row justify-center pt-2")}
+          onPress={handleSubmit}
+        >
           <Text
             style={tw(
               "bg-blue-500 rounded-xl py-2 px-8 text-white font-bold text-2xl"
             )}
-            onPress={handleSubmit}
           >
-            {step === 'auth' ? 'Войти' : step === 'info' ? 'Продолжить' : 'Регистрация'}
+            {step === "auth"
+              ? "Войти"
+              : step === "info"
+              ? "Продолжить"
+              : "Регистрация"}
           </Text>
         </TouchableOpacity>
         <View style={tw("flex flex-row justify-center mt-4")}>
           <Text style={tw("text-gray-400 mr-2")}>
-            {step === 'auth' ? 'Нет аккаунта?' : "Есть аккаунт?"}
+            {step === "auth" ? "Нет аккаунта?" : "Есть аккаунт?"}
           </Text>
-          <Text
-            style={tw("text-blue-400 underline")}
-            onPress={() => step === 'auth' ? navigation.navigate('AuthInfo') : navigation.navigate('Login')}
+          <TouchableOpacity
+            onPress={() =>
+              step === "auth"
+                ? navigation.navigate("AuthInfo")
+                : navigation.navigate("Login")
+            }
           >
-            {step === 'auth' ? 'Регистрация' : 'Авторизация'}
-          </Text>
+            <Text style={tw("text-blue-400 underline")}>
+              {step === "auth" ? "Регистрация" : "Авторизация"}
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

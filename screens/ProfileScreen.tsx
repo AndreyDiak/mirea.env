@@ -5,9 +5,10 @@ import { signOut } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+import ThemeCard from "../components/ThemeCard";
 import UserAvatar from "../components/UserAvatar";
 import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
@@ -25,83 +26,39 @@ const ProfileScreen = () => {
       allowsEditing: true,
       aspect: [3, 3],
       quality: 1,
-    }).then(
-      async image => {
-        console.log(image);
-        if(!image.cancelled) {
-          setProfileImage(image.uri);
-          const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-              resolve(xhr.response);
-            };
-            xhr.onerror = (e) => {
-              reject(new TypeError("Network request failed"));
-            };
-            xhr.responseType = "blob";
-            xhr.open("GET", image.uri, true);
-            xhr.send(null);
+    }).then(async (image) => {
+      if (!image.cancelled) {
+        setProfileImage(image.uri);
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest();
+          xhr.onload = () => {
+            resolve(xhr.response);
+          };
+          xhr.onerror = (e) => {
+            reject(new TypeError("Network request failed"));
+          };
+          xhr.responseType = "blob";
+          xhr.open("GET", image.uri, true);
+          xhr.send(null);
+        });
+
+        const imageRef = ref(storage, `users/${user.userId}/image`);
+        // @ts-ignore
+        await uploadBytes(imageRef, blob)
+          .then(async (snapshot) => {
+            const downloadUrl = await getDownloadURL(imageRef);
+            await updateDoc(doc(db, "users", user.userId), {
+              img: downloadUrl,
+            }).then(() => console.log("photo updated!"));
+          })
+          .catch((err) => {
+            // setIsLoading(false);
           });
-
-          const imageRef = ref(storage, `users/${user.userId}/image`);
-          // @ts-ignore
-          await uploadBytes(imageRef, blob)
-            .then(async (snapshot) => {
-              const downloadUrl = await getDownloadURL(imageRef);
-              await updateDoc(doc(db, "users", user.userId), {
-                img: downloadUrl,
-              }).then(() => console.log("photo updated!"));
-            })
-            .catch((err) => {
-              // setIsLoading(false);
-            });
-          // @ts-ignore
-          blob.close();
-
-        }
+        // @ts-ignore
+        blob.close();
       }
-    )
-
-    // if (!result.cancelled) {
-    //   setProfileImage(result.uri);
-    // }
-
+    });
   };
-
-  // useEffect(() => {
-  //   const updatePhoto =  async () => {
-  //     if (profileImage) {
-  //       const blob = await new Promise((resolve, reject) => {
-  //         const xhr = new XMLHttpRequest();
-  //         xhr.onload = () => {
-  //           resolve(xhr.response);
-  //         };
-  //         xhr.onerror = (e) => {
-  //           reject(new TypeError("Network request failed"));
-  //         };
-  //         xhr.responseType = "blob";
-  //         xhr.open("GET", profileImage, true);
-  //         xhr.send(null);
-  //       });
-
-  //       const imageRef = ref(storage, `users/${user.userId}/image`);
-  //       // @ts-ignore
-  //       await uploadBytes(imageRef, blob)
-  //         .then(async (snapshot) => {
-  //           const downloadUrl = await getDownloadURL(imageRef);
-  //           await updateDoc(doc(db, "users", user.userId), {
-  //             img: downloadUrl,
-  //           }).then(() => console.log("photo updated!"));
-  //         })
-  //         .catch((err) => {
-  //           // setIsLoading(false);
-  //         });
-  //       // @ts-ignore
-  //       blob.close();
-  //     }
-  //   };
-  //   updatePhoto();
-  // }, [profileImage]);
 
   if (user === null) {
     return (
@@ -133,12 +90,8 @@ const ProfileScreen = () => {
   return (
     <View style={tw("flex flex-col h-full relative")}>
       {/* Avatar + email */}
-      <View
-        style={tw(
-          "px-8 pt-12 pb-4 bg-slate-200"
-        )}
-      >
-        <View style={tw('flex flex-row items-center justify-between')}>
+      <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
+        <View style={tw("flex flex-row items-center justify-between")}>
           <View>
             {user.img !== "" || profileImage ? (
               <UserAvatar source={profileImage || user.img} />
@@ -194,7 +147,10 @@ const ProfileScreen = () => {
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
                     <Text style={tw("text-[18px] font-bold")}>
-                      <Text style={tw("text-blue-400")} onPress={() => navigation.navigate('Discipline')}>
+                      <Text
+                        style={tw(`text-${user.theme}-400`)}
+                        onPress={() => navigation.navigate("Discipline")}
+                      >
                         ({user.disciplines.length}){" "}
                       </Text>
                       предмета
@@ -205,7 +161,32 @@ const ProfileScreen = () => {
             </View>
 
             <Card.Divider />
+            {/* User theme */}
+            <View style={tw("mb-2")}>
+              <View
+                style={tw("pb-4 flex flex-row items-center justify-between")}
+              >
+                <Text>Ваша тема</Text>
+                <View>
+                  <ThemeCard isBordered={false} theme={user.theme} />
+                </View>
+              </View>
 
+              <Card.Divider />
+              <View style={tw("mb-4")}>
+                <Text style={tw("text-center mb-2")}>Выбрать тему</Text>
+                <View style={tw("flex flex-row justify-center -mr-4")}>
+                  <ThemeCard isBordered theme="blue" />
+                  <ThemeCard isBordered theme="emerald" />
+                  <ThemeCard isBordered theme="rose" />
+                  <ThemeCard isBordered theme="violet" />
+                </View>
+              </View>
+            </View>
+
+            <Card.Divider />
+
+            {/* User type */}
             <View style={tw("mb-4")}>
               <Text>Уровень доступа </Text>
               <Text style={tw("text-lg font-bold mt-1")}>
@@ -215,33 +196,39 @@ const ProfileScreen = () => {
 
             <Card.Divider />
 
-
-            <View>
-              <Text style={tw('text-blue-400 text-center')} onPress={() => {
+            {/* Feedback */}
+            <TouchableOpacity
+              onPress={() => {
                 // Открывает диалоговое окно, где можно написать отзыв...
-              }}>
+                console.log("hey");
+              }}
+            >
+              <Text style={tw(`text-${user.theme}-400 text-center`)}>
                 Оставить отзыв
               </Text>
-            </View>
-
+            </TouchableOpacity>
           </View>
         </Card>
       </View>
       {/* Sign out */}
 
-      <View
+      <TouchableOpacity
         style={tw("flex flex-row justify-center absolute bottom-10 w-full")}
+        onPress={() => {
+          console.log("logout");
+          signOut(auth);
+        }}
       >
         <Text
-          style={tw("text-blue-400 px-2 py-1 rounded-md text-lg underline")}
-          onPress={() => {
-            console.log("logout");
-            signOut(auth);
-          }}
+          style={tw(
+            `text-${
+              user.theme as AppTheme
+            }-400 px-2 py-1 rounded-md text-lg underline`
+          )}
         >
           Выйти из аккаунта
         </Text>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

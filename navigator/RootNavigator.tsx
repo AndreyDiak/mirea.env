@@ -41,24 +41,6 @@ const RootNavigator = () => {
     }
   });
 
-  // if (initialUser) {
-  //   const notificationsQuery = query(
-  //     collection(db, "notifications"),
-  //     where("userEmail", "==", initialUser.email),
-  //     where("isChecked", "==", false)
-  //   );
-
-  //   const unsubscribe = onSnapshot(notificationsQuery, (snapshot) => {
-  //     let notifications: any = [];
-
-  //     notifications = snapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       notificationId: doc.id,
-  //     }));
-  //     dispatch(setNotifications(notifications));
-  //   });
-  // }
-
   //на основе данных с сервиса получаем данные с БД
   useEffect(() => {
     const getUser = async () => {
@@ -81,6 +63,8 @@ const RootNavigator = () => {
     };
     getUser();
   }, [initialUser]);
+
+  
 
   return !initialUser ? (
     <Stack.Navigator>
