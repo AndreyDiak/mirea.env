@@ -90,13 +90,13 @@ const DisciplineScreen = (props: Props) => {
             onPress={() => setIsFormVisible(!isFormVisible)}
           >
             <View style={tw("flex flex-row items-center")}>
-              <Text style={tw("text-blue-400")}>
+              <Text style={tw(`text-${user.theme}-400`)}>
                 {isFormVisible ? "Закрыть" : "Добавить материалы"}
               </Text>
               <Icon
                 name={!isFormVisible ? "expand-more" : "expand-less"}
                 type="material"
-                color="#60a5fa"
+                color={returnHexCode(user.theme as AppTheme)}
                 size={25}
               />
             </View>
@@ -117,7 +117,7 @@ const DisciplineScreen = (props: Props) => {
             scrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={(item) => {
-              return <Material material={item.item} userId={user?.userId} userType={user?.type} />;
+              return <Material material={item.item} userId={user?.userId} userType={user?.type} userTheme={user?.theme} />;
             }}
           />
         ) : (

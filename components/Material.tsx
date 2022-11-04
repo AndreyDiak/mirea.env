@@ -21,9 +21,10 @@ type Props = {
   material: Material;
   userId: string | undefined;
   userType: string | undefined;
+  userTheme: string | undefined;
 };
 
-const Material = ({ material, userId, userType }: Props) => {
+const Material = ({ material, userId, userType, userTheme }: Props) => {
   const tw = useTailwind();
 
   // const toast = useToast()
@@ -87,7 +88,7 @@ const Material = ({ material, userId, userType }: Props) => {
               key={document.documentId}
               onPress={async () => await Linking.openURL(document.document)}
             >
-              <Text style={tw("mb-2 font-semibold underline text-blue-400")}>
+              <Text style={tw(`mb-2 font-semibold underline text-${userTheme}-400`)}>
                 {document.title}
               </Text>
             </TouchableOpacity>

@@ -56,7 +56,7 @@ const MessageForm = ({
   };
 
   return (
-    <View style={tw(`w-full bg-white border-t-2 border-t-${user?.theme as AppTheme}-400`)}>
+    <View style={tw(`w-full bg-white`)}>
       {/* Replying on message */}
       {isReplyingOnMessage && (
         <View

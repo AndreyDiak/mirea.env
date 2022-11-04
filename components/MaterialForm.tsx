@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import {
@@ -27,12 +27,11 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
   const [formTitle, setFormTitle] = useState("");
   const [formText, setFormText] = useState("");
   const [documents, setDocuments] = useState<NewDocument[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const user = useSelector(getUser);
 
   const addDocument = async () => {
-
     await DocumentPicker.getDocumentAsync({
       multiple: true,
       copyToCacheDirectory: false,
@@ -51,10 +50,9 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
   };
 
   const submitForm = async () => {
-
-    if(!formText || !formTitle) {
-      setError('Заполните все поля!')
-      return 
+    if (!formText || !formTitle) {
+      setError("Заполните все поля!");
+      return;
     }
 
     setIsLoading(true);
@@ -71,7 +69,6 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           await addDoc(collection(db, `materials/${snap.id}/sources`), {
             title: document.name,
           }).then(async (newDoc) => {
-
             const blob = await new Promise((resolve, reject) => {
               const xhr = new XMLHttpRequest();
               xhr.onload = () => {
@@ -129,7 +126,9 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           value={formText}
           onChangeText={setFormText}
         />
-        {error && <Text style={tw('text-red-400 text-center mb-4')}>{error}</Text>}
+        {error && (
+          <Text style={tw("text-red-400 text-center mb-4")}>{error}</Text>
+        )}
         {documents.length > 0 && (
           <>
             <Card.Divider />
@@ -153,26 +152,31 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
             </Text>
           </View>
         ))}
+
         <Card.Divider />
-        <Text
-          style={tw("text-blue-400 text-center mb-4")}
-          onPress={addDocument}
+
+        <TouchableOpacity onPress={addDocument}>
+          <Text style={tw(`text-${user?.theme}-400 text-center mb-4`)}>
+            Добавить файлы
+          </Text>
+        </TouchableOpacity>
+
+        <Card.Divider />
+
+        <TouchableOpacity
+          style={tw("flex flex-row justify-center")}
+          onPress={submitForm}
         >
-          Добавить файлы
-        </Text>
-        <Card.Divider />
-        <View style={tw("flex flex-row justify-center")}>
           <Text
-            onPress={submitForm}
             style={tw(
               `${
-                !isLoading ? "bg-blue-400" : "bg-gray-400"
+                !isLoading ? `bg-${user?.theme}-400` : "bg-gray-400"
               } text-white font-semibold px-4 py-2 rounded-md`
             )}
           >
             {!isLoading ? "Загрузить" : "Загрузка..."}
           </Text>
-        </View>
+        </TouchableOpacity>
       </Card>
     </View>
   );
