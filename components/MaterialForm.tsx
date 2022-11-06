@@ -14,6 +14,7 @@ import { Card, Icon, Input } from "@rneui/themed";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {
   disciplineId: string;
@@ -156,7 +157,12 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
         <Card.Divider />
 
         <TouchableOpacity onPress={addDocument}>
-          <Text style={tw(`text-${user?.theme}-400 text-center mb-4`)}>
+          <Text
+            style={[
+              tw("text-center mb-4"),
+              { color: returnHexCode(user?.theme as AppTheme) },
+            ]}
+          >
             Добавить файлы
           </Text>
         </TouchableOpacity>
@@ -168,11 +174,14 @@ const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           onPress={submitForm}
         >
           <Text
-            style={tw(
-              `${
-                !isLoading ? `bg-${user?.theme}-400` : "bg-gray-400"
-              } text-white font-semibold px-4 py-2 rounded-md`
-            )}
+            style={[
+              tw("text-white font-semibold px-4 py-2 rounded-md"),
+              {
+                backgroundColor: !isLoading
+                  ? returnHexCode(user?.theme as AppTheme)
+                  : "#9ca3af",
+              },
+            ]}
           >
             {!isLoading ? "Загрузить" : "Загрузка..."}
           </Text>

@@ -14,6 +14,7 @@ import { db } from "../firebase";
 import { Card } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
@@ -88,7 +89,10 @@ const ChatsScreen = (props: Props) => {
                 }
               >
                 <Text
-                  style={tw(`text-${user?.theme as AppTheme}-400 underline`)}
+                  style={[
+                    tw("underline"),
+                    { color: returnHexCode(user?.theme as AppTheme) },
+                  ]}
                 >
                   Перейти
                 </Text>

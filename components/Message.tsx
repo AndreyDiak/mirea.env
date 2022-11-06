@@ -5,6 +5,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../firebase";
+import { returnDarkenHexCode, returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../utils/returnHexCodes";
 import UserAvatar from "./UserAvatar";
 
 type Props = {
@@ -49,32 +50,44 @@ const Message = ({
   return (
     <View
       style={[
-        tw(
-          `flex flex-row px-6 ${
-            message.email === email ? "justify-end" : "justify-start"
-          }
-          ${isBacklight ? `bg-${theme}-100` : ""}`
-        ),
+        [
+          tw(
+            `flex flex-row px-6 ${
+              message.email === email ? "justify-end" : "justify-start"
+            }`
+          ),
+          {
+            backgroundColor: isBacklight
+              ? returnLightenHexCode(theme as AppTheme)
+              : "transparent",
+          },
+        ],
       ]}
     >
       <View
         key={message.messageId}
-        style={tw(
-          `rounded-lg px-3 pt-3 pb-2 relative
+        style={[
+          tw(
+            `rounded-lg px-3 pt-3 pb-2 relative
           ${
             nextMessageEmail === message.email
               ? "mb-2"
               : `mb-6 ${message.email === email ? "pr-6" : "pl-6"}`
-          }
-          ${message.email === email ? "bg-white" : `bg-${theme}-400`}
-          `
-        )}
+          }`
+          ),
+          {
+            backgroundColor:
+              message.email === email ? "white" : returnHexCode(theme),
+          },
+        ]}
       >
         {/* Replying message... */}
         {!!replyingMessage && (
           <TouchableOpacity onPress={setBacklighMessage}>
             <View style={tw("flex flex-row pt-1")}>
-              <View style={tw(`w-0.5 h-full bg-${theme}-800 mr-2`)}></View>
+              <View style={[tw(`w-0.5 h-full mr-2`), {
+                backgroundColor: returnDarkestHexCode(theme)
+              }]}></View>
               <View>
                 <Text
                   style={tw(

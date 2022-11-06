@@ -16,6 +16,7 @@ import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../firebase";
 import { ToastAndroid } from "react-native";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {
   material: Material;
@@ -56,12 +57,12 @@ const Material = ({ material, userId, userType, userTheme }: Props) => {
   };
 
   const onReplyClick = async () => {
-    if(userType === 'teacher') {
-      navigation.navigate()
+    if (userType === "teacher") {
+      navigation.navigate();
     } else {
       // userType === 'student'
     }
-  }
+  };
 
   const q = query(
     collection(db, `users/${userId}/favorites`),
@@ -88,7 +89,12 @@ const Material = ({ material, userId, userType, userTheme }: Props) => {
               key={document.documentId}
               onPress={async () => await Linking.openURL(document.document)}
             >
-              <Text style={tw(`mb-2 font-semibold underline text-${userTheme}-400`)}>
+              <Text
+                style={[
+                  tw("mb-2 font-semibold underline"),
+                  { color: returnHexCode(userTheme as AppTheme) },
+                ]}
+              >
                 {document.title}
               </Text>
             </TouchableOpacity>

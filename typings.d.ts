@@ -1,9 +1,9 @@
-type AppTheme = 'blue' | 'violet' | 'emerald' | 'rose';
+type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
 interface Group {
   id: string;
   name: string;
-};
+}
 
 interface Discipline {
   id: string;
@@ -17,18 +17,14 @@ interface Material {
   likes: number;
   comments: Comment[];
   owner: string;
-  documents: {
-    title: string;
-    document: string;
-    documentId: string;
-  }[];
+  documents: Document[];
 }
 
 interface Message {
   message: string;
   timestamp: {
     seconds: number;
-    nanoseconds: number
+    nanoseconds: number;
   };
   displayName: string;
   email: string;
@@ -41,8 +37,14 @@ interface Message {
 interface Comment {
   email: string;
   text: string;
-  materialId: string
+  materialId: string;
   commentId: string;
+}
+
+interface Document {
+  title: string;
+  document: string;
+  documentId: string;
 }
 
 interface NewDocument {
@@ -57,6 +59,14 @@ interface Notification {
   userId: string;
   notificationId: string;
 }
+
+
+
+interface Favorites {
+  disciplineTitle: string;
+  material: Material
+}
+
 interface User {
   email: string;
   name: string;
@@ -91,11 +101,11 @@ type RootStackParamList = {
     discipline: Discipline;
   };
   Comments: {
-    material: Material
-  },
+    material: Material;
+  };
   Chats: {
-    discipline: Discipline
-  },
+    discipline: Discipline;
+  };
   Chat: {
     discipline: Discipline;
     groupId: string;

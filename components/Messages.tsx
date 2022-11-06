@@ -5,7 +5,7 @@ import { Icon } from "@rneui/themed";
 import Message from "./Message";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCode";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {
   messages: Message[];

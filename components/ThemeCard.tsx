@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser, setTheme } from "../features/userSlice";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
+import { returnDarkenHexCode, returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {
   theme: AppTheme;
@@ -27,15 +28,20 @@ const ThemeCard = ({ theme, isBordered }: Props) => {
   };
 
   return (
-    <TouchableOpacity
-      onPress={setUserTheme}
-    >
+    <TouchableOpacity onPress={setUserTheme}>
       <View
-        style={tw(
-          `w-12 h-8 bg-${theme}-400 rounded-md mr-4 ${
-            user?.theme === theme && isBordered ? `border-2 border-${theme}-600` : ""
-          }`
-        )}
+        style={[
+          tw("w-12 h-8 rounded-md mr-4"),
+          {
+            backgroundColor: returnHexCode(theme),
+            borderWidth: 2,
+            borderStyle: "solid",
+            borderColor:
+              user?.theme === theme && isBordered
+                ? returnDarkenHexCode(theme)
+                : "transparent",
+          },
+        ]}
       />
     </TouchableOpacity>
   );

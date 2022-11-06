@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
-import { returnHexCode } from "../utils/returnHexCode";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {
   discipline: Discipline;
@@ -20,7 +20,7 @@ const DisciplineCard = ({ discipline }: Props) => {
 
   const [chatId, setChatId] = useState("");
   const [groupId, setGroupId] = useState("");
-  
+
   useEffect(() => {
     const getChatInfo = async () => {
       if (user?.type === "student") {
@@ -43,13 +43,13 @@ const DisciplineCard = ({ discipline }: Props) => {
           setChatId(chatId);
         } else {
           // создаем новый чат...
-          await addDoc(collection(db, 'chats'), {
+          await addDoc(collection(db, "chats"), {
             disciplineId: discipline.id,
-            groupId: groupId
-          }).then(res => {
+            groupId: groupId,
+          }).then((res) => {
             // console.log(res)
             setChatId(res.id);
-          })
+          });
         }
       }
     };
@@ -65,10 +65,21 @@ const DisciplineCard = ({ discipline }: Props) => {
           style={tw("flex flex-row items-center")}
           onPress={() => navigation.navigate("Discipline", { discipline })}
         >
-          <Text style={tw(`text-${user?.theme as AppTheme}-400 underline font-bold mr-2`)}>
+          <Text
+            style={[
+              tw("underline font-bold mr-2"),
+              {
+                color: returnHexCode(user?.theme as AppTheme),
+              },
+            ]}
+          >
             Материалы
           </Text>
-          <Icon name="inventory" type="material" color={returnHexCode(user?.theme as AppTheme)} />
+          <Icon
+            name="inventory"
+            type="material"
+            color={returnHexCode(user?.theme as AppTheme)}
+          />
         </TouchableOpacity>
 
         <TouchableOpacity

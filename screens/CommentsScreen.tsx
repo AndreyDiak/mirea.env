@@ -18,6 +18,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import Comment from "../components/Comment";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {};
 
@@ -107,7 +108,7 @@ const CommentsScreen = (props: Props) => {
           style={tw("bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg")}
         />
         <TouchableOpacity onPress={addComment}>
-          <Icon name="send" type="material" color="#60a5fa" size={30} />
+          <Icon name="send" type="material" color={returnHexCode(user?.theme as AppTheme)} size={30} />
         </TouchableOpacity>
       </View>
     </View>

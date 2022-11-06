@@ -19,7 +19,7 @@ import Material from "../components/Material";
 import MaterialForm from "../components/MaterialForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
-import { returnHexCode } from "../utils/returnHexCode";
+import { returnHexCode } from "../utils/returnHexCodes";
 type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -90,7 +90,7 @@ const DisciplineScreen = (props: Props) => {
             onPress={() => setIsFormVisible(!isFormVisible)}
           >
             <View style={tw("flex flex-row items-center")}>
-              <Text style={tw(`text-${user.theme}-400`)}>
+              <Text style={{color: returnHexCode(user.theme as AppTheme)}}>
                 {isFormVisible ? "Закрыть" : "Добавить материалы"}
               </Text>
               <Icon

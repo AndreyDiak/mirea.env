@@ -5,10 +5,10 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getNotifications, getUser } from "../features/userSlice";
 import DisciplinesScreen from "../screens/DisciplinesScreen";
-import NotificationsScreen from "../screens/NotificationsScreen";
+import NotificationsScreen from "../screens/FavoritesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import TimeTableScreen from "../screens/TimeTableScreen";
-import { returnHexCode } from "../utils/returnHexCode";
+import { returnHexCode } from "../utils/returnHexCodes";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 const TabNavigator = () => {
@@ -23,19 +23,55 @@ const TabNavigator = () => {
         tabBarLabel: ({ focused }) => {
           if (route.name === "Profile") {
             return (
-              <Text style={tw(`text-[10px] ${focused ? `text-${user?.theme}-400` : 'text-[#9ca3af]'}`)}>Профиль</Text>
+              <Text
+                style={{
+                  color: focused
+                    ? returnHexCode(user?.theme as AppTheme)
+                    : "#9ca3af",
+                  fontSize: 10,
+                }}
+              >
+                Профиль
+              </Text>
             );
           } else if (route.name === "Disciplines") {
             return (
-              <Text style={tw(`text-[10px] ${focused ? `text-${user?.theme}-400` : 'text-[#9ca3af]'}`)}>Дисциплины</Text>
+              <Text
+                style={{
+                  color: focused
+                    ? returnHexCode(user?.theme as AppTheme)
+                    : "#9ca3af",
+                  fontSize: 10,
+                }}
+              >
+                Дисциплины
+              </Text>
             );
           } else if (route.name === "Timetable") {
             return (
-              <Text style={tw(`text-[10px] ${focused ? `text-${user?.theme}-400` : 'text-[#9ca3af]'}`)}>Расписание</Text>
+              <Text
+                style={{
+                  color: focused
+                    ? returnHexCode(user?.theme as AppTheme)
+                    : "#9ca3af",
+                  fontSize: 10,
+                }}
+              >
+                Расписание
+              </Text>
             );
           } else if (route.name === "Notifications") {
             return (
-              <Text style={tw(`text-[10px] ${focused ? `text-${user?.theme}-400` : 'text-[#9ca3af]'}`)}>Уведомления</Text>
+              <Text
+                style={{
+                  color: focused
+                    ? returnHexCode(user?.theme as AppTheme)
+                    : "#9ca3af",
+                  fontSize: 10,
+                }}
+              >
+                Избранное
+              </Text>
             );
           }
         },
@@ -76,7 +112,7 @@ const TabNavigator = () => {
           } else if (route.name === "Notifications") {
             return (
               <Icon
-                name="notifications"
+                name="save"
                 type="material"
                 color={
                   focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"

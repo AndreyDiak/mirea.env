@@ -12,7 +12,7 @@ import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCode";
+import { returnHexCode } from "../utils/returnHexCodes";
 import { theme } from "../tailwind.config";
 
 type Props = {
@@ -54,7 +54,7 @@ const MessageForm = ({
       }
     });
   };
-
+  
   return (
     <View style={tw(`w-full bg-white`)}>
       {/* Replying on message */}

@@ -12,6 +12,7 @@ import ThemeCard from "../components/ThemeCard";
 import UserAvatar from "../components/UserAvatar";
 import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
+import { returnHexCode } from "../utils/returnHexCodes";
 type Props = {};
 
 const ProfileScreen = () => {
@@ -148,7 +149,7 @@ const ProfileScreen = () => {
                     <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
                     <Text style={tw("text-[18px] font-bold")}>
                       <Text
-                        style={tw(`text-${user.theme}-400`)}
+                        style={{ color: returnHexCode(user.theme as AppTheme) }}
                         onPress={() => navigation.navigate("Discipline")}
                       >
                         ({user.disciplines.length}){" "}
@@ -203,7 +204,12 @@ const ProfileScreen = () => {
                 console.log("hey");
               }}
             >
-              <Text style={tw(`text-${user.theme}-400 text-center`)}>
+              <Text
+                style={[
+                  tw("text-center"),
+                  { color: returnHexCode(user.theme as AppTheme) },
+                ]}
+              >
                 Оставить отзыв
               </Text>
             </TouchableOpacity>
@@ -220,11 +226,10 @@ const ProfileScreen = () => {
         }}
       >
         <Text
-          style={tw(
-            `text-${
-              user.theme as AppTheme
-            }-400 px-2 py-1 rounded-md text-lg underline`
-          )}
+          style={[
+            tw("px-2 py-1 rounded-md text-lg underline"),
+            { color: returnHexCode(user.theme as AppTheme) },
+          ]}
         >
           Выйти из аккаунта
         </Text>
