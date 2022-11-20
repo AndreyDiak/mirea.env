@@ -1,5 +1,7 @@
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
+type UserType = 'student' | 'teacher' | 'admin';
+
 interface Group {
   id: string;
   name: string;

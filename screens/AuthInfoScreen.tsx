@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/forms/LoginForm";
 import { Input } from "@rneui/themed";
 import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";

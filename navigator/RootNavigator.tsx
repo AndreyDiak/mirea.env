@@ -5,12 +5,13 @@ import {
   getDocs,
   onSnapshot,
   query,
-  where
+  where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotifications, setUser } from "../features/userSlice";
 import { auth, db } from "../firebase";
+import AdminScreen from "../screens/AdminScreen";
 import AuthBioScreen from "../screens/AuthBioScreen";
 import AuthInfoScreen from "../screens/AuthInfoScreen";
 import ChatScreen from "../screens/ChatScreen";
@@ -29,7 +30,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = () => {
   // user которого мы получаем от сервиса авторизации...
   const [initialUser, setInitialUser] = useState<any>(null);
-
+  const [userType, setUserType] = useState<UserType>();
   const dispatch = useDispatch();
 
   // авторизация с сервиса...
@@ -56,6 +57,7 @@ const RootNavigator = () => {
           userId: querySnap.docs[0].id,
         };
         dispatch(setUser(user));
+        setUserType(user.type);
       } else {
         dispatch(setUser(null));
         dispatch(setNotifications([]));
@@ -64,7 +66,7 @@ const RootNavigator = () => {
     getUser();
   }, [initialUser]);
 
-  
+  console.log("userType: " + userType);
 
   return !initialUser ? (
     <Stack.Navigator>
@@ -92,6 +94,8 @@ const RootNavigator = () => {
         />
       </Stack.Group>
     </Stack.Navigator>
+  ) : userType === "admin" ? (
+    <AdminScreen />
   ) : (
     <Stack.Navigator>
       <Stack.Group>
@@ -103,7 +107,7 @@ const RootNavigator = () => {
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Discipline" component={DisciplineScreen} />
-        <Stack.Screen name='Comments' component={CommentsScreen} />
+        <Stack.Screen name="Comments" component={CommentsScreen} />
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Chats" component={ChatsScreen} />

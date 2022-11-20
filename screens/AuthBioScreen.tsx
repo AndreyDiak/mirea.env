@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import LoginDialog from "../components/LoginDialog";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/forms/LoginForm";
 import { auth, db } from "../firebase";
 
 type Props = {};

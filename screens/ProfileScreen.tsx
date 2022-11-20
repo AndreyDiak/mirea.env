@@ -164,18 +164,18 @@ const ProfileScreen = () => {
             <Card.Divider />
             {/* User theme */}
             <View style={tw("mb-2")}>
-              <View
+              {/* <View
                 style={tw("pb-4 flex flex-row items-center justify-between")}
               >
                 <Text>Ваша тема</Text>
                 <View>
                   <ThemeCard isBordered={false} theme={user.theme} />
                 </View>
-              </View>
+              </View> */}
 
-              <Card.Divider />
+              {/* <Card.Divider /> */}
               <View style={tw("mb-4")}>
-                <Text style={tw("text-center mb-2")}>Выбрать тему</Text>
+                <Text style={tw("text-center mb-2")}>Тема</Text>
                 <View style={tw("flex flex-row justify-center -mr-4")}>
                   <ThemeCard isBordered theme="blue" />
                   <ThemeCard isBordered theme="emerald" />

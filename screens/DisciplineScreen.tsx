@@ -16,7 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import Material from "../components/Material";
-import MaterialForm from "../components/MaterialForm";
+import MaterialForm from "../components/forms/MaterialForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";

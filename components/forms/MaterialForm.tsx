@@ -8,13 +8,13 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { db, storage } from "../firebase";
+import { db, storage } from "../../firebase";
 import * as DocumentPicker from "expo-document-picker";
 import { Card, Icon, Input } from "@rneui/themed";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useSelector } from "react-redux";
-import { getUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { getUser } from "../../features/userSlice";
+import { returnHexCode } from "../../utils/returnHexCodes";
 
 type Props = {
   disciplineId: string;

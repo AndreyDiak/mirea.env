@@ -9,11 +9,11 @@ import React, { useState } from "react";
 import { Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import { getUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCodes";
-import { theme } from "../tailwind.config";
+import { getUser } from "../../features/userSlice";
+import { returnHexCode } from "../../utils/returnHexCodes";
+import { theme } from "../../tailwind.config";
 
 type Props = {
   setIsReplyingOnMessage: (isReply: boolean) => void;

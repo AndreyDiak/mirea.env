@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import ChatTitle from "../components/ChatTitle";
-import MessageForm from "../components/MessageForm";
+import MessageForm from "../components/forms/MessageForm";
 import Messages from "../components/Messages";
 import { db } from "../firebase";
 
