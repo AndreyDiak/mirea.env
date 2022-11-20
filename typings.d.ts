@@ -3,7 +3,7 @@ type AppTheme = "blue" | "violet" | "emerald" | "rose";
 type UserType = 'student' | 'teacher' | 'admin';
 
 interface Group {
-  id: string;
+  groupId: string;
   name: string;
 }
 
@@ -62,11 +62,15 @@ interface Notification {
   notificationId: string;
 }
 
-
-
 interface Favorites {
   disciplineTitle: string;
   material: Material
+}
+
+interface Institute {
+  instituteTitle: string;
+  instituteShortTitle: string;
+  instituteId: string;
 }
 
 interface User {
