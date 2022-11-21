@@ -11,6 +11,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import Button from "../Button";
+import CheckListSingle from "../CheckListSingle";
 
 type Props = {};
 
@@ -19,7 +20,9 @@ const AddGroupForm = (props: Props) => {
 
   const [groupName, setGroupName] = useState("");
   const [institutes, setInstitutes] = useState<Institute[]>([]);
-  const [activeInstitute, setActiveInstitute] = useState<Institute | null>(null);
+  const [activeInstitute, setActiveInstitute] = useState<Institute | null>(
+    null
+  );
 
   useEffect(() => {
     const getInstitutes = async () => {
@@ -39,15 +42,14 @@ const AddGroupForm = (props: Props) => {
       return;
     }
 
-    await addDoc(collection(db, 'groups'), {
+    await addDoc(collection(db, "groups"), {
       name: groupName,
-      instituteId: activeInstitute.instituteId
+      instituteId: activeInstitute.instituteId,
     }).then(() => {
-      console.log('group added');
-      setGroupName('');
-      setActiveInstitute(null)
-    })
-
+      console.log("group added");
+      setGroupName("");
+      setActiveInstitute(null);
+    });
   };
 
   return (
@@ -58,28 +60,15 @@ const AddGroupForm = (props: Props) => {
           label="Название группы"
           value={groupName}
           onChangeText={setGroupName}
-          placeholder='Example name...'
+          placeholder="Example name..."
         />
-
-        <Text style={tw("text-center font-semibold mb-2")}>Выбрать институт</Text>
-        {/* <Card.Divider /> */}
-        <FlatList
-          data={institutes}
-          scrollEnabled
-          style={tw("max-h-[300px]")}
-          renderItem={({ item, index }) => (
-            <View>
-              <CheckBox
-                key={index}
-                title={item.instituteTitle}
-                checked={activeInstitute?.instituteId === item.instituteId}
-                onPress={() => setActiveInstitute(item)}
-                containerStyle={tw("")}
-              />
-            </View>
-          )}
+        <CheckListSingle
+          attr="instituteId"
+          title="Выбрать институт"
+          list={institutes}
+          selectedItem={activeInstitute}
+          setSelectedItem={setActiveInstitute}
         />
-        <Card.Divider />
         <Button title="Добавить" callback={addGroup} />
       </Card>
     </View>

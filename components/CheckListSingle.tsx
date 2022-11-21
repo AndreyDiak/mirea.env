@@ -5,31 +5,15 @@ import { CheckBox, Icon } from "@rneui/themed";
 
 type Props = {
   title: string;
-  attr: "userId" | "groupId";
-  list: (Group | Teacher)[];
-  selectedList: (Group | Teacher)[];
-  setList: (list: any[]) => void;
+  attr: "userId" | "disciplineId" | 'instituteId' | 'groupId'
+  list: (Group | Discipline | Institute | Group)[];
+  selectedItem: Group | Teacher | Institute | Discipline | null;
+  setSelectedItem: (item: any) => void;
 };
 
-const CheckList = ({ attr, title, list, selectedList, setList }: Props) => {
+const CheckListSingle = ({ attr, title, list, selectedItem, setSelectedItem }: Props) => {
   const tw = useTailwind();
-
-  // console.log(selectedList);
-
   const [isListVisible, setIsListVisible] = useState(false);
-
-  const toggleList = (newItem: Group | Teacher) => {
-    let listCopy = [...selectedList];
-    // @ts-ignore we know about needed attr...
-    let index = selectedList.findIndex((item) => item[attr] === newItem[attr]);
-    if (index !== -1) {
-      listCopy.splice(index, 1);
-    } else {
-      listCopy.push(newItem);
-    }
-    console.log(listCopy.length);
-    setList(listCopy);
-  };
 
   return (
     <View style={tw('mb-4')}>
@@ -53,13 +37,10 @@ const CheckList = ({ attr, title, list, selectedList, setList }: Props) => {
             <View>
               <CheckBox
                 key={index}
-                // @ts-ignore addind teacher female if it consist
-                title={item.name + ` ${item.female ? item.female : ''}`}
-                checked={selectedList.some(
-                  // @ts-ignore we know about needed attr...
-                  (selected) => selected[attr] === item[attr]
-                )}
-                onPress={() => toggleList(item)}
+                title={item.name}
+                // @ts-ignore right attr...
+                checked={!!selectedItem && item[attr] === selectedItem[attr]}
+                onPress={() => setSelectedItem(item)}
                 containerStyle={tw("")}
               />
             </View>
@@ -70,4 +51,4 @@ const CheckList = ({ attr, title, list, selectedList, setList }: Props) => {
   );
 };
 
-export default CheckList;
+export default CheckListSingle;

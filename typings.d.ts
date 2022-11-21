@@ -9,7 +9,7 @@ interface Group {
 
 interface Discipline {
   id: string;
-  title: string;
+  name: string;
 }
 
 interface Material {
@@ -68,8 +68,8 @@ interface Favorites {
 }
 
 interface Institute {
-  instituteTitle: string;
-  instituteShortTitle: string;
+  name: string;
+  shortName: string;
   instituteId: string;
 }
 

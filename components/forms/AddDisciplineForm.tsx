@@ -5,7 +5,7 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useTailwind } from "tailwind-rn/dist";
 import Button from "../Button";
-import CheckList from "../CheckList";
+import CheckListMulitple from "../CheckListMulitple";
 
 type Props = {};
 type ToggleItem = {
@@ -79,7 +79,7 @@ const AddDisciplineForm = (props: Props) => {
           placeholder="Example title..."
         />
         {/* Groups CheckList... */}
-        <CheckList
+        <CheckListMulitple
           title="Добавить группу"
           attr="groupId"
           list={groups}
@@ -89,7 +89,7 @@ const AddDisciplineForm = (props: Props) => {
 
         <Card.Divider />
         {/* Teachers CheckList... */}
-        <CheckList
+        <CheckListMulitple
           title="Добавить учителя"
           attr="userId"
           list={teachers}

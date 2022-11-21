@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
 import AddGroupForm from "../components/forms/AddGroupForm";
 import AddDisciplineForm from "../components/forms/AddDisciplineForm";
+import AddTimetableForm from "../components/forms/AddTimetableForm";
 
 type Props = {};
 
@@ -54,7 +55,12 @@ const AdminScreen = (props: Props) => {
             <View>
               <Card.Divider />
               <View style={tw("mb-2")}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsTimetableFormVisible(true);
+                    setIsMenuVisible(true);
+                  }}
+                >
                   <Text style={tw("text-blue-400")}>Добавить расписание</Text>
                 </TouchableOpacity>
               </View>
@@ -63,7 +69,6 @@ const AdminScreen = (props: Props) => {
                   onPress={() => {
                     setIsDisciplineFormVisible(true);
                     setIsMenuVisible(true);
-                    console.log("hdaf;s");
                   }}
                 >
                   <Text style={tw("text-blue-400")}>Добавить дисциплину</Text>
@@ -87,6 +92,7 @@ const AdminScreen = (props: Props) => {
       <View>
         {isGroupFormVisible && <AddGroupForm />}
         {isDisciplineFormVisible && <AddDisciplineForm />}
+        {isTimetableFormVisible && <AddTimetableForm />}
       </View>
     </View>
   );
