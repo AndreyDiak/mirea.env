@@ -66,19 +66,19 @@ const LoginDialog = ({
           <View>
             {disciplines.map((discipline, index) => {
               const i = myDisciplines.findIndex(
-                (item) => item.title === discipline.title
+                (item) => item.title === discipline.name
               );
               return (
                 <CheckBox
                   key={index}
-                  title={discipline.title}
+                  title={discipline.name}
                   checked={i !== -1}
                   onPress={() => {
                     const disciplineCopy = [...myDisciplines];
                     if (i === -1) {
                       disciplineCopy.push({
                         id: discipline.id,
-                        title: discipline.title,
+                        title: discipline.name,
                       });
                     } else {
                       disciplineCopy.splice(i, 1);

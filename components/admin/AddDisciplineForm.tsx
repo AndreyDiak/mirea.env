@@ -5,7 +5,7 @@ import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useTailwind } from "tailwind-rn/dist";
 import Button from "../Button";
-import CheckListMulitple from "../CheckListMulitple";
+import CheckListMulitple from "./CheckListMulitple";
 
 type Props = {};
 type ToggleItem = {

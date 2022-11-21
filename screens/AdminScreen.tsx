@@ -4,9 +4,9 @@ import { useTailwind } from "tailwind-rn/dist";
 import { Card } from "@rneui/themed";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import AddGroupForm from "../components/forms/AddGroupForm";
-import AddDisciplineForm from "../components/forms/AddDisciplineForm";
-import AddTimetableForm from "../components/forms/AddTimetableForm";
+import AddGroupForm from "../components/admin/AddGroupForm";
+import AddDisciplineForm from "../components/admin/AddDisciplineForm";
+import AddTimetableForm from "../components/admin/AddTimetableForm";
 
 type Props = {};
 

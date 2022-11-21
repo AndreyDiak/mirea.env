@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import Material from "../components/Material";
+import Material from "../components/discipline/Material";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnDarkenHexCode, returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../utils/returnHexCodes";

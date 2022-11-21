@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import Comment from "../components/Comment";
+import Comment from "../components/discipline/Comment";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";

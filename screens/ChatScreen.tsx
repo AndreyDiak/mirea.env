@@ -15,9 +15,9 @@ import {
   Text, View
 } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import ChatTitle from "../components/ChatTitle";
-import MessageForm from "../components/forms/MessageForm";
-import Messages from "../components/Messages";
+import ChatTitle from "../components/messages/ChatTitle";
+import MessageForm from "../components/messages/MessageForm";
+import Messages from "../components/messages/Messages";
 import { db } from "../firebase";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;

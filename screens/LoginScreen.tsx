@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import LoginForm from "../components/forms/LoginForm";
+import LoginForm from "../components/login/LoginForm";
 import { auth } from "../firebase";
 
 type Props = {};

@@ -14,9 +14,9 @@ import {
 import React, { useState } from "react";
 import { Linking, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import { ToastAndroid } from "react-native";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { returnHexCode } from "../../utils/returnHexCodes";
 
 type Props = {
   material: Material;

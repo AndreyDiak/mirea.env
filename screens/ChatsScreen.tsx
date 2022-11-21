@@ -31,7 +31,7 @@ const ChatsScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: discipline.title,
+      headerTitle: discipline.name,
     });
   }, []);
 

@@ -1,12 +1,11 @@
-import { useNavigation } from "@react-navigation/native";
-import { doc, getDoc, query } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import moment from "moment";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { db } from "../firebase";
-import { returnDarkenHexCode, returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../utils/returnHexCodes";
-import UserAvatar from "./UserAvatar";
+import { db } from "../../firebase";
+import { returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
+import UserAvatar from "../UserAvatar";
 
 type Props = {
   message: Message;

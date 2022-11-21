@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
-import DisciplineCard from "../components/DisciplineCard";
+import DisciplineCard from "../components/discipline/DisciplineCard";
 
 type Props = {};
 
@@ -34,7 +34,7 @@ const DisciplinesScreen = (props: Props) => {
 
         const disciplines = disciplinesSnap.docs.map((doc) => ({
           id: doc.id,
-          title: doc.data().title,
+          name: doc.data().name,
         }));
         setDisciplines(disciplines);
       } else {

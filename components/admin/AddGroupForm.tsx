@@ -11,7 +11,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import Button from "../Button";
-import CheckListSingle from "../CheckListSingle";
+import CheckListSingle from "./CheckListSingle";
 
 type Props = {};
 

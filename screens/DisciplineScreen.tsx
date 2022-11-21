@@ -15,8 +15,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import Material from "../components/Material";
-import MaterialForm from "../components/forms/MaterialForm";
+import Material from "../components/discipline/Material";
+import MaterialForm from "../components/discipline/MaterialForm";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";
@@ -38,7 +38,7 @@ const DisciplineScreen = (props: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: discipline.title,
+      headerTitle: discipline.name,
     });
   }, [discipline]);
 

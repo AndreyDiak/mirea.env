@@ -5,9 +5,9 @@ import React, { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { getUser } from "../features/userSlice";
-import { db } from "../firebase";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { getUser } from "../../features/userSlice";
+import { db } from "../../firebase";
+import { returnHexCode } from "../../utils/returnHexCodes";
 
 type Props = {
   discipline: Discipline;
@@ -58,7 +58,7 @@ const DisciplineCard = ({ discipline }: Props) => {
 
   return (
     <Card>
-      <Card.Title style={tw("font-bold")}>{discipline.title}</Card.Title>
+      <Card.Title style={tw("font-bold")}>{discipline.name}</Card.Title>
       <Card.Divider />
       <View style={tw("flex flex-row justify-between")}>
         <TouchableOpacity
