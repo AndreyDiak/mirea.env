@@ -81,18 +81,6 @@ const AddGroupForm = (props: Props) => {
         />
         <Card.Divider />
         <Button title="Добавить" callback={addGroup} />
-        {/* <TouchableOpacity
-          style={tw("flex flex-row justify-center")}
-          onPress={addGroup}
-        >
-          <Text
-            style={tw(
-              "bg-blue-400 px-3 py-2 text-white rounded-md font-semibold text-lg"
-            )}
-          >
-            Добавить
-          </Text>
-        </TouchableOpacity> */}
       </Card>
     </View>
   );

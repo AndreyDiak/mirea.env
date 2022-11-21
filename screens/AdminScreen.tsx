@@ -22,7 +22,7 @@ const AdminScreen = (props: Props) => {
     setIsDisciplineFormVisible(false);
     setIsGroupFormVisible(false);
     setIsTimetableFormVisible(false);
-  }
+  };
 
   return (
     <View style={tw("pt-10 px-4")}>
@@ -45,7 +45,7 @@ const AdminScreen = (props: Props) => {
             </View>
             {isMenuVisible && (
               <TouchableOpacity onPress={openMenu}>
-                <Text style={tw('text-blue-400')}>Открыть</Text>
+                <Text style={tw("text-blue-400")}>Открыть</Text>
               </TouchableOpacity>
             )}
           </View>
@@ -55,20 +55,17 @@ const AdminScreen = (props: Props) => {
               <Card.Divider />
               <View style={tw("mb-2")}>
                 <TouchableOpacity>
-                  <Text style={tw("text-blue-400")}>
-                    <Text style={tw("font-bold underline")}>
-                      Добавить / Изменить
-                    </Text>{" "}
-                    расписание
-                  </Text>
+                  <Text style={tw("text-blue-400")}>Добавить расписание</Text>
                 </TouchableOpacity>
               </View>
               <View style={tw("mb-2")}>
-                <TouchableOpacity onPress={() => {
-                  setIsDisciplineFormVisible(true)
-                  setIsMenuVisible(true);
-                  console.log('hdaf;s')
-                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setIsDisciplineFormVisible(true);
+                    setIsMenuVisible(true);
+                    console.log("hdaf;s");
+                  }}
+                >
                   <Text style={tw("text-blue-400")}>Добавить дисциплину</Text>
                 </TouchableOpacity>
               </View>
@@ -89,9 +86,8 @@ const AdminScreen = (props: Props) => {
       {/* Forms */}
       <View>
         {isGroupFormVisible && <AddGroupForm />}
-        {isDisciplineFormVisible && <AddDisciplineForm/>}
+        {isDisciplineFormVisible && <AddDisciplineForm />}
       </View>
-
     </View>
   );
 };

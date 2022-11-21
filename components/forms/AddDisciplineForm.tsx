@@ -1,18 +1,19 @@
-import { View, Text, FlatList } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Card, CheckBox, Input } from "@rneui/themed";
+import { Card, CheckBox, Icon, Input } from "@rneui/themed";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useTailwind } from "tailwind-rn/dist";
 import Button from "../Button";
+import CheckList from "../CheckList";
 
 type Props = {};
 type ToggleItem = {
-  type: 'group' | 'teacher'
-  item: Group | Teacher
-  selected: (Group | Teacher)[] 
-  setSelected: (selected: (Group | Teacher)[]) => void
-}
+  type: "group" | "teacher";
+  item: Group | Teacher;
+  selected: (Group | Teacher)[];
+  setSelected: (selected: (Group | Teacher)[]) => void;
+};
 const AddDisciplineForm = (props: Props) => {
   const tw = useTailwind();
 
@@ -23,8 +24,6 @@ const AddDisciplineForm = (props: Props) => {
 
   const [selectedGroups, setSelectedGroups] = useState<Group[]>([]);
   const [selectedTeachers, setSelectedTeachers] = useState<Teacher[]>([]);
-
-  // TODO переделать на универасальный лад чтобы не было повторение кода...
 
   useEffect(() => {
     const getGroups = async () => {
@@ -43,63 +42,29 @@ const AddDisciplineForm = (props: Props) => {
         ...teacher.data(),
         userId: teacher.id,
       }));
-      setTeachers(teachers as Teacher[])
+      setTeachers(teachers as Teacher[]);
     };
     getGroups();
     getTeachers();
   }, []);
 
-  const toggleGroup = (newGroup: Group) => {
-    let groupsCopy = [...selectedGroups];
-    if (selectedGroups.some((group) => group.groupId === newGroup.groupId)) {
-      let index = selectedGroups.findIndex(
-        (group) => group.groupId === newGroup.groupId
-      );
-      groupsCopy.splice(index, 1);
-    } else {
-      groupsCopy.push(newGroup);
-    }
-    setSelectedGroups(groupsCopy);
-  };
-
-  const toggleItem = ({item, type, selected, setSelected}: ToggleItem) => {
-    let selectedCopy = [...selected];
-    if(type === 'group') {
-      //@ts-ignore we know, thats this is a group
-      if (selected.some((group) => group.groupId === item.groupId)) {
-        let index = selected.findIndex(
-          //@ts-ignore we know, thats this is a group
-          (group) => group.groupId === item.groupId
-        );
-        selectedCopy.splice(index, 1);
-      }
-      } else if(type === 'teacher') {
-        if (selected.some((group) => group.userId === item.userId)) {
-          let index = selected.findIndex(
-            //@ts-ignore we know, thats this is a group
-            (group) => group.userId === item.userId
-          );
-          selectedCopy.splice(index, 1);
-        }
-    } else {
-      selectedCopy.push(item);
-    }
-    
-    setSelected(selectedCopy)
-  }
-
   const addDiscipline = async () => {
-    if (disciplineTitle === "" || selectedGroups.length === 0) {
+    if (
+      disciplineTitle === "" ||
+      selectedGroups.length === 0 ||
+      selectedTeachers.length === 0
+    ) {
       return;
     }
     await addDoc(collection(db, "disciplines"), {
-      groups: selectedGroups,
+      groups: selectedGroups.map(group => group.groupId),
       title: disciplineTitle,
-      teachers: [],
+      teachers: selectedTeachers.map(teacher => teacher.userId),
     }).then(() => {
       console.log("discipline added");
       setDisciplineTitle("");
       setSelectedGroups([]);
+      setSelectedTeachers([]);
     });
   };
 
@@ -113,42 +78,23 @@ const AddDisciplineForm = (props: Props) => {
           onChangeText={setDisciplineTitle}
           placeholder="Example title..."
         />
-        <Text style={tw("text-center font-semibold mb-2")}>
-          Добавить группы
-        </Text>
-        <FlatList
-          data={groups.sort((prev, next) => prev.name.localeCompare(next.name))}
-          scrollEnabled
-          style={tw("max-h-[200px]")}
-          renderItem={({ item, index }) => (
-            <View>
-              <CheckBox
-                key={index}
-                title={item.name}
-                checked={selectedGroups.some(
-                  (group) => group.groupId === item.groupId
-                )}
-                onPress={() => toggleGroup(item)}
-                containerStyle={tw("")}
-              />
-            </View>
-          )}
+        {/* Groups CheckList... */}
+        <CheckList
+          title="Добавить группу"
+          attr="groupId"
+          list={groups}
+          selectedList={selectedGroups}
+          setList={setSelectedGroups}
         />
-        <FlatList 
-          data={teachers.sort((prev, next) => prev.name.localeCompare(next.name))}
-          scrollEnabled
-          style={tw('')}
-          renderItem={({item, index}) => (
-            <View>
-              <CheckBox 
-                key={index}
-                title={`${item.name} ${item.female}`}
-                checked={false}
-                onPress={() => }
-                containerStyle={tw("")}
-              />
-            </View>
-          )}
+
+        <Card.Divider />
+        {/* Teachers CheckList... */}
+        <CheckList
+          title="Добавить учителя"
+          attr="userId"
+          list={teachers}
+          selectedList={selectedTeachers}
+          setList={setSelectedTeachers}
         />
 
         <Button title="Добавить" callback={addDiscipline} />
