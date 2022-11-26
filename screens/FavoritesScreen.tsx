@@ -7,18 +7,20 @@ import {
   onSnapshot,
   orderBy,
   query,
-  where,
+  where
 } from "firebase/firestore";
 import React, { useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import Material from "../components/discipline/Material";
 import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
-import { returnDarkenHexCode, returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../utils/returnHexCodes";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {};
+
+
 
 const FavoritesScreen = (props: Props) => {
   const tw = useTailwind();
@@ -26,6 +28,7 @@ const FavoritesScreen = (props: Props) => {
   const user = useSelector(getUser);
   const [favorites, setFavorites] = useState<Favorites[]>([]);
   const [disciplines, setDisciplines] = useState<string[]>([]);
+  const [activeFilter, setActiveFilter] = useState<string>('All')
 
   const q = query(collection(db, `users/${user?.userId}/favorites`));
 
@@ -36,10 +39,10 @@ const FavoritesScreen = (props: Props) => {
     }
     const newFavorites: newFavorites[] = snapshot.docs.map(
       (favorite) =>
-        ({
-          ...favorite.data(),
-          favoriteId: favorite.id,
-        } as newFavorites)
+      ({
+        ...favorite.data(),
+        favoriteId: favorite.id,
+      } as newFavorites)
     );
 
     let data: Favorites[] = [];
@@ -83,17 +86,17 @@ const FavoritesScreen = (props: Props) => {
               ...snap.data(),
               documents: docSnap.docs.map(
                 (doc) =>
-                  ({
-                    ...doc.data(),
-                    documentId: doc.id,
-                  } as Document)
+                ({
+                  ...doc.data(),
+                  documentId: doc.id,
+                } as Document)
               ),
               comments: commentSnap.docs.map(
                 (comment) =>
-                  ({
-                    ...comment.data(),
-                    commentId: comment.id,
-                  } as Comment)
+                ({
+                  ...comment.data(),
+                  commentId: comment.id,
+                } as Comment)
               ),
               materialId: favorite.materialId,
             } as Material,
@@ -107,42 +110,56 @@ const FavoritesScreen = (props: Props) => {
       setDisciplines(newDisciplines);
   });
 
-  console.log(disciplines);
-
   return (
     <View style={tw("py-6")}>
       {favorites?.length ? (
-        // Надо разбить по заголовкам дисциплин
-        // Отображать заголовок и сохранненые посты к нему
         // Добавить фильтр по дисциплинам?
-        <FlatList
-          data={disciplines.sort((prev, next) => prev.localeCompare(next))}
-          showsVerticalScrollIndicator={false}
-          renderItem={(discipline) => (
-            <View>
-              {/* discipline title */}
-              <Text style={[tw('text-center text-lg px-4 py-2 mt-4 font-extrabold'), {
-                // color: returnHexCode(user?.theme as AppTheme),
-                backgroundColor: returnHexCode(user?.theme as AppTheme)
-              }]}>{discipline.item}</Text>
-              <FlatList
-              style={tw('px-2')}
-                data={favorites.filter(
-                  (favorite) => favorite.disciplineTitle === discipline.item
-                )}
-                showsVerticalScrollIndicator={false}
-                renderItem={(favorite) => (
-                  <Material
-                    material={favorite.item.material}
-                    userId={user?.userId}
-                    userTheme={user?.theme}
-                    userType={user?.type}
-                  />
-                )}
-              />
-            </View>
-          )}
-        />
+        <View>
+          {/* Favorites filter */}
+          <View style={tw('flex flex-row px-4 py-4')}>
+            {['All', ...disciplines].map(discipline => (
+              <TouchableOpacity
+                onPress={() => setActiveFilter(discipline)}
+                style={[tw('rounded-lg px-3 text-white py-1'), {
+                  backgroundColor: returnHexCode(user.theme)
+                }]}>
+                <Text>{discipline}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          {/* List of all favorites */}
+          <FlatList
+            data={disciplines
+              .filter((discipline) => activeFilter === 'All' ? discipline : discipline === activeFilter)
+              .sort((prev, next) => prev.localeCompare(next))}
+            showsVerticalScrollIndicator={false}
+            renderItem={(discipline) => (
+              <View>
+                {/* discipline title */}
+                <Text style={[tw('text-center text-lg px-4 py-2 mt-4 font-extrabold'), {
+                  // color: returnHexCode(user?.theme as AppTheme),
+                  backgroundColor: returnHexCode(user?.theme as AppTheme)
+                }]}>{discipline.item}</Text>
+
+                <FlatList
+                  style={tw('px-2')}
+                  data={favorites.filter(
+                    (favorite) => favorite.disciplineTitle === discipline.item
+                  )}
+                  showsVerticalScrollIndicator={false}
+                  renderItem={(favorite) => (
+                    <Material
+                      material={favorite.item.material}
+                      userId={user?.userId}
+                      userTheme={user?.theme}
+                      userType={user?.type}
+                    />
+                  )}
+                />
+              </View>
+            )}
+          />
+        </View>
       ) : (
         <View style={tw("h-full w-full flex justify-center items-center")}>
           <View>
