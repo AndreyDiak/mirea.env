@@ -10,6 +10,7 @@ type Props = {
   error: string;
 };
 
+
 const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<LoginScreenNavigatorProp>();

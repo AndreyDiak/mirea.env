@@ -77,55 +77,54 @@ const AuthBioScreen = (props: Props) => {
   const toggleDialog = () => setIsDialogVisible(!isDialogVisible);
 
   const register = async () => {
-    if(name === '') {
+    if (name === '') {
       setError('Введите имя')
       return
     }
-    if(female === '') {
+    if (female === '') {
       setError('Введите фамилию')
       return
     }
-    if(isStudent && group === '') {
+    if (isStudent && group === '') {
       setError('Выберите группу')
       return
     }
-    if(!isStudent && myDisciplines.length === 0) {
+    if (!isStudent && myDisciplines.length === 0) {
       setError('Выберите дисциплины')
       return
     }
     let user = isStudent
       ? {
-          email: email.toLowerCase(),
-          name: name,
-          female: female,
-          password: password,
-          img: "",
-          group: group,
-          type: "student",
-        }
+        email: email.toLowerCase(),
+        name: name,
+        female: female,
+        password: password,
+        img: "",
+        group: group,
+        type: "student",
+      }
       : {
-          email: email.toLowerCase(),
-          name: name,
-          female: female,
-          password: password,
-          img: "",
-          disciplines: myDisciplines,
-          type: "teacher",
-        };
+        email: email.toLowerCase(),
+        name: name,
+        female: female,
+        password: password,
+        img: "",
+        disciplines: myDisciplines,
+        type: "teacher",
+      };
 
     await createUserWithEmailAndPassword(auth, email, password).then(
       async (res) => {
         console.log('user created!')
         await addDoc(
-          collection(db,'users'),
+          collection(db, 'users'),
           {
-            ...user,
-            // userId: res.user.uid,
+            ...user
           }
         );
       }
     );
-        
+
   };
 
   return (

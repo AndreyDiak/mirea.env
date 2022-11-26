@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, FlatList } from "react-native";
 import React from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { Dialog } from "@rneui/themed";
@@ -28,6 +28,20 @@ const LoginDialog = ({
   setMyDisciplines,
 }: Props) => {
   const tw = useTailwind();
+
+  const updateMyDisciplines = (discipline: Discipline, i: number) => {
+    const disciplineCopy = [...myDisciplines];
+    // сохраняем только id дисциплин
+    if (i === -1) { 
+      disciplineCopy.push({
+        id: discipline.id,
+      });
+    } else {
+      disciplineCopy.splice(i, 1);
+    }
+    setMyDisciplines(disciplineCopy);
+  }
+
   return (
     <View>
       <Dialog isVisible={isVisible} onBackdropPress={() => toggleVisible(!isVisible)}>
@@ -36,25 +50,30 @@ const LoginDialog = ({
           titleStyle={tw("text-center")}
         />
         {isStudent ? (
-          <View style={tw("flex flex-col justify-center")}>
-            {groups
-              .sort((prev, next) => prev.name.localeCompare(next.name))
-              .map(({ name }, index) => (
+          <View>
+            {/* render all groups */}
+            {/* TODO сделать сначала выбор института потом выбирать группы в нем... */}
+            <FlatList
+              data={groups
+                .sort((prev, next) => prev.name.localeCompare(next.name))}
+              scrollEnabled
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => (
                 <CheckBox
                   key={index}
-                  title={name}
-                  checked={name === group}
-                  onPress={() => setGroup(name)}
+                  title={item.name}
+                  checked={item.name === group}
+                  onPress={() => setGroup(item.name)}
                   containerStyle={tw("text-center")}
                 />
-              ))}
+              )}
+            />
             <View style={tw("flex flex-row justify-center")}>
               <Text
                 disabled={!group}
                 onPress={() => toggleVisible(!isVisible)}
                 style={tw(
-                  `${
-                    !!group ? "bg-blue-500" : "bg-gray-400"
+                  `${!!group ? "bg-blue-500" : "bg-gray-400"
                   } rounded-lg py-1 px-2 text-white text-lg`
                 )}
               >
@@ -64,37 +83,32 @@ const LoginDialog = ({
           </View>
         ) : (
           <View>
-            {disciplines.map((discipline, index) => {
-              const i = myDisciplines.findIndex(
-                (item) => item.title === discipline.name
-              );
-              return (
-                <CheckBox
-                  key={index}
-                  title={discipline.name}
-                  checked={i !== -1}
-                  onPress={() => {
-                    const disciplineCopy = [...myDisciplines];
-                    if (i === -1) {
-                      disciplineCopy.push({
-                        id: discipline.id,
-                        title: discipline.name,
-                      });
-                    } else {
-                      disciplineCopy.splice(i, 1);
-                    }
-                    setMyDisciplines(disciplineCopy);
-                  }}
-                />
-              );
-            })}
+            {/* render all disciolines */}
+            {/* TODO сделать сначала выбор института а потом уже привязанных к нему дисциплин */}
+            <FlatList
+              data={disciplines}
+              scrollEnabled
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item, index }) => {
+                const i = myDisciplines.findIndex(
+                  (item) => item.title === item.name
+                );
+                return (
+                  <CheckBox
+                    key={index}
+                    title={item.name}
+                    checked={i !== -1}
+                    onPress={() => updateMyDisciplines(item, i)}
+                  />
+                )
+              }}
+            />
             <View style={tw("flex flex-row justify-center")}>
               <Text
                 disabled={!myDisciplines.length}
                 onPress={() => toggleVisible(!isVisible)}
                 style={tw(
-                  `${
-                    !!myDisciplines.length ? "bg-blue-500" : "bg-gray-400"
+                  `${!!myDisciplines.length ? "bg-blue-500" : "bg-gray-400"
                   } rounded-lg py-1 px-2 text-white text-lg`
                 )}
               >
@@ -104,7 +118,7 @@ const LoginDialog = ({
           </View>
         )}
       </Dialog>
-    </View>
+    </View >
   );
 };
 
