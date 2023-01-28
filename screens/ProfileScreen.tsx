@@ -8,14 +8,13 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import ThemeCard from "../components/ThemeCard";
-import UserAvatar from "../components/UserAvatar";
+import { ThemeCard, UserAvatar } from "../components";
+
 import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";
-type Props = {};
 
-const ProfileScreen = () => {
+export const ProfileScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigatorProp>();
   const user = useSelector(getUser) as Student | Teacher;
@@ -29,6 +28,7 @@ const ProfileScreen = () => {
       quality: 1,
     }).then(async (image) => {
       if (!image.cancelled) {
+        // @ts-ignore
         setProfileImage(image.uri);
         const blob = await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -39,6 +39,7 @@ const ProfileScreen = () => {
             reject(new TypeError("Network request failed"));
           };
           xhr.responseType = "blob";
+          // @ts-ignore
           xhr.open("GET", image.uri, true);
           xhr.send(null);
         });
@@ -93,13 +94,14 @@ const ProfileScreen = () => {
       {/* Avatar + email */}
       <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
         <View style={tw("flex flex-row items-center justify-between")}>
-          <View>
+          {/* TODO включить обратно */}
+          {/* <View>
             {user.img !== "" || profileImage ? (
               <UserAvatar source={profileImage || user.img} />
             ) : (
               <UserAvatar title={user.name[0]} />
             )}
-          </View>
+          </View> */}
           <View>
             <Text
               style={[
@@ -176,12 +178,13 @@ const ProfileScreen = () => {
               {/* <Card.Divider /> */}
               <View style={tw("mb-4")}>
                 <Text style={tw("text-center mb-2")}>Тема</Text>
-                <View style={tw("flex flex-row justify-center -mr-4")}>
+                {/* TODO включить обратно */}
+                {/* <View style={tw("flex flex-row justify-center -mr-4")}>
                   <ThemeCard isBordered theme="blue" />
                   <ThemeCard isBordered theme="emerald" />
                   <ThemeCard isBordered theme="rose" />
                   <ThemeCard isBordered theme="violet" />
-                </View>
+                </View> */}
               </View>
             </View>
 
@@ -237,5 +240,3 @@ const ProfileScreen = () => {
     </View>
   );
 };
-
-export default ProfileScreen;

@@ -237,14 +237,14 @@
 			"height": 64
 		}
 	},
-	"max-h-[200px]": {
-		"style": {
-			"maxHeight": 200
-		}
-	},
 	"max-h-[400px]": {
 		"style": {
 			"maxHeight": 400
+		}
+	},
+	"max-h-[200px]": {
+		"style": {
+			"maxHeight": 200
 		}
 	},
 	"w-12": {
@@ -472,12 +472,6 @@
 			"backgroundColor": "rgb(156 163 175 / var(--tw-bg-opacity))"
 		}
 	},
-	"bg-blue-200": {
-		"style": {
-			"--tw-bg-opacity": 1,
-			"backgroundColor": "rgb(191 219 254 / var(--tw-bg-opacity))"
-		}
-	},
 	"p-6": {
 		"style": {
 			"paddingTop": 24,
@@ -568,16 +562,16 @@
 			"paddingBottom": 24
 		}
 	},
-	"px-8": {
-		"style": {
-			"paddingLeft": 32,
-			"paddingRight": 32
-		}
-	},
 	"py-1": {
 		"style": {
 			"paddingTop": 4,
 			"paddingBottom": 4
+		}
+	},
+	"px-8": {
+		"style": {
+			"paddingLeft": 32,
+			"paddingRight": 32
 		}
 	},
 	"px-6": {

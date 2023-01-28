@@ -3,12 +3,12 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import LoginForm from "../components/login/LoginForm";
+import { LoginForm } from "../components";
 import { auth } from "../firebase";
 
 type Props = {};
 
-const LoginScreen = (props: Props) => {
+export const LoginScreen = (props: Props) => {
   const tw = useTailwind();
 
   const [login, setLogin] = useState<string>("");
@@ -47,5 +47,3 @@ const LoginScreen = (props: Props) => {
     </View>
   );
 };
-
-export default LoginScreen;

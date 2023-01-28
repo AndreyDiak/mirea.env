@@ -187,12 +187,12 @@
   height: 4rem
 }
 
-.max-h-\[200px\] {
-  max-height: 200px
-}
-
 .max-h-\[400px\] {
   max-height: 400px
+}
+
+.max-h-\[200px\] {
+  max-height: 200px
 }
 
 .w-12 {
@@ -356,11 +356,6 @@
   background-color: rgb(156 163 175 / var(--tw-bg-opacity))
 }
 
-.bg-blue-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(191 219 254 / var(--tw-bg-opacity))
-}
-
 .p-6 {
   padding: 1.5rem
 }
@@ -420,14 +415,14 @@
   padding-bottom: 1.5rem
 }
 
-.px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem
-}
-
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem
+}
+
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem
 }
 
 .px-6 {

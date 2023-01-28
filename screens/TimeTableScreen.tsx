@@ -8,7 +8,7 @@ import { getUser } from "../features/userSlice";
 
 type Props = {};
 
-const TimeTableScreen = (props: Props) => {
+export const TimeTableScreen = () => {
   const tw = useTailwind();
   const user = useSelector(getUser);
   return (
@@ -25,5 +25,3 @@ const TimeTableScreen = (props: Props) => {
     </View>
   );
 };
-
-export default TimeTableScreen;

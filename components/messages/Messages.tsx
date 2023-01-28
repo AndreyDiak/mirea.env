@@ -2,7 +2,7 @@ import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useRef, useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { Icon } from "@rneui/themed";
-import Message from "./Message";
+import { Message } from "./Message";
 import { useSelector } from "react-redux";
 import { getUser } from "../../features/userSlice";
 import { returnHexCode } from "../../utils/returnHexCodes";
@@ -17,7 +17,7 @@ type Props = {
   setIsHeaderMenuVisible: (isVisible: boolean) => void;
 };
 
-const Messages = ({
+export const Messages = ({
   messages,
   chatId,
   isScrollToBottomVisible,
@@ -139,5 +139,3 @@ const Messages = ({
     </>
   );
 };
-
-export default Messages;

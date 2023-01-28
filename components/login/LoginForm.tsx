@@ -10,8 +10,7 @@ type Props = {
   error: string;
 };
 
-
-const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
+export const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<LoginScreenNavigatorProp>();
 
@@ -35,7 +34,7 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
           style={[
             tw("text-center text-2xl text-gray-600 py-4"),
             {
-              fontFamily: "Roboto_300Light",
+              fontFamily: "Roboto",
             },
           ]}
         >
@@ -83,5 +82,3 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
     </View>
   );
 };
-
-export default LoginForm;

@@ -7,7 +7,7 @@ type Props = {
   callback: () => void;
 };
 
-const Button = ({title, callback}: Props) => {
+export const Button = ({ title, callback }: Props) => {
   const tw = useTailwind();
 
   return (
@@ -25,5 +25,3 @@ const Button = ({title, callback}: Props) => {
     </TouchableOpacity>
   );
 };
-
-export default Button;

@@ -13,7 +13,7 @@ type Props = {
   discipline: Discipline;
 };
 
-const DisciplineCard = ({ discipline }: Props) => {
+export const DisciplineCard = ({ discipline }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
   const user = useSelector(getUser);
@@ -85,7 +85,7 @@ const DisciplineCard = ({ discipline }: Props) => {
         <TouchableOpacity
           style={tw("flex flex-row items-center")}
           onPress={() =>
-            user?.type === "student"
+            user.type === "student"
               ? navigation.navigate("Chat", {
                   discipline,
                   groupId,
@@ -101,5 +101,3 @@ const DisciplineCard = ({ discipline }: Props) => {
     </Card>
   );
 };
-
-export default DisciplineCard;

@@ -5,18 +5,24 @@ import { CheckBox, Icon } from "@rneui/themed";
 
 type Props = {
   title: string;
-  attr: "userId" | "disciplineId" | 'instituteId' | 'groupId'
+  attr: "userId" | "disciplineId" | "instituteId" | "groupId";
   list: (Group | Discipline | Institute | Group)[];
   selectedItem: Group | Teacher | Institute | Discipline | null;
   setSelectedItem: (item: any) => void;
 };
 
-const CheckListSingle = ({ attr, title, list, selectedItem, setSelectedItem }: Props) => {
+export const CheckListSingle = ({
+  attr,
+  title,
+  list,
+  selectedItem,
+  setSelectedItem,
+}: Props) => {
   const tw = useTailwind();
   const [isListVisible, setIsListVisible] = useState(false);
 
   return (
-    <View style={tw('mb-4')}>
+    <View style={tw("mb-4")}>
       <View style={tw("flex flex-row w-full items-center justify-between")}>
         <Text style={tw("text-center font-semibold")}>{title}</Text>
         <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
@@ -50,5 +56,3 @@ const CheckListSingle = ({ attr, title, list, selectedItem, setSelectedItem }: P
     </View>
   );
 };
-
-export default CheckListSingle;

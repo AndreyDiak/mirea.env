@@ -11,7 +11,13 @@ type Props = {
   setLessons: (lessons: string[][]) => void;
 };
 
-const TimeTableCard = ({ name, lessons, current, index, setLessons }: Props) => {
+export const TimeTableCard = ({
+  name,
+  lessons,
+  current,
+  index,
+  setLessons,
+}: Props) => {
   const tw = useTailwind();
   const [isCardVisible, setIsCardVisible] = useState(false);
 
@@ -40,7 +46,7 @@ const TimeTableCard = ({ name, lessons, current, index, setLessons }: Props) => 
             <View>
               <Input
                 value={lesson}
-                placeholder={`${index + 1} Lesson...`} /* @ts-ignore */
+                placeholder={`${index + 1} lesson...`}
                 onChangeText={(text) => changeText(text, index)}
               />
             </View>
@@ -50,5 +56,3 @@ const TimeTableCard = ({ name, lessons, current, index, setLessons }: Props) => 
     </Card>
   );
 };
-
-export default TimeTableCard;

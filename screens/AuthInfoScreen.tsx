@@ -1,22 +1,13 @@
-import { View, Text } from "react-native";
-import React, { useState } from "react";
-import { useTailwind } from "tailwind-rn/dist";
-import LoginForm from "../components/login/LoginForm";
-import { Input } from "@rneui/themed";
-import { CheckBox } from "@rneui/themed";
 import { useNavigation } from "@react-navigation/native";
-import {
-  createUserWithEmailAndPassword,
-  deleteUser,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
-import { auth, db } from "../firebase";
+import { Input } from "@rneui/themed";
 import { collection, getDocs, query, where } from "firebase/firestore";
-import { async } from "@firebase/util";
-type Props = {};
+import React, { useState } from "react";
+import { View } from "react-native";
+import { useTailwind } from "tailwind-rn/dist";
+import { LoginForm } from "../components";
+import { db } from "../firebase";
 
-const AuthInfoScreen = (props: Props) => {
+export const AuthInfoScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<AuthInfoScreenNavigatorProp>();
   const [email, setEmail] = useState<string>("");
@@ -28,14 +19,14 @@ const AuthInfoScreen = (props: Props) => {
   const register = async () => {
     // creating a query to DB
 
-    if(email == '') {
-      setError('Введите почту')
+    if (email == "") {
+      setError("Введите почту");
       return;
     }
 
     const q = query(
       collection(db, "users"),
-      where("email", "==", email.toLowerCase() )
+      where("email", "==", email.toLowerCase())
     );
     // getting snapshot from DB
     const querySnap = await getDocs(q);
@@ -92,5 +83,3 @@ const AuthInfoScreen = (props: Props) => {
     </View>
   );
 };
-
-export default AuthInfoScreen;

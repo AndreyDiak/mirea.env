@@ -1,31 +1,22 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  orderBy,
-  query,
-  where
-} from "firebase/firestore";
 import React, { useLayoutEffect, useState } from "react";
-import {
-  FlatList, Text, TouchableOpacity, View
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import Material from "../components/discipline/Material";
-import MaterialForm from "../components/discipline/MaterialForm";
+
+import { Material, MaterialForm, CenteredText } from "../components";
+
 import { getUser } from "../features/userSlice";
-import { db } from "../firebase";
+import { useMaterials } from "../hooks/";
 import { returnHexCode } from "../utils/returnHexCodes";
 type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
-const DisciplineScreen = (props: Props) => {
-  const [materials, setMaterials] = useState<Material[]>([]);
+export const DisciplineScreen = () => {
+  const [initialMaterials, setInitialMaterials] = useState<Material[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const tw = useTailwind();
@@ -42,55 +33,53 @@ const DisciplineScreen = (props: Props) => {
     });
   }, [discipline]);
 
-  const materialsQuery = query(
-    collection(db, "materials"),
-    where("disciplineId", "==", discipline.id),
-    orderBy("timestamp")
-  );
+  const { initialMaterials: materials } = useMaterials(discipline.id);
 
-  const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
-    const snapMaterials = await Promise.all(
-      snapshot.docs.map(async (material) => {
-        // добавляем documents в материал...
-        const docQ = query(collection(db, `materials/${material.id}/sources`));
-        const docSnap = await getDocs(docQ);
-        // добавляем comments к материалу...
-        const commentsQuery = query(
-          collection(db, "comments"),
-          where("materialId", "==", material.id),
-          orderBy("timestamp")
-        );
-        const commentSnap = await getDocs(commentsQuery);
-        return {
-          ...material.data(),
-          documents: docSnap.docs.map((doc) => ({
-            ...doc.data(),
-            documentId: doc.id,
-          })),
-          comments: commentSnap.docs.map((comment) => ({
-            ...comment.data(),
-            commentId: comment.id,
-          })),
-          materialId: material.id,
-        };
-      })
+  // const materialsQuery = query(
+  //   collection(db, "materials"),
+  //   where("disciplineId", "==", discipline.id),
+  //   orderBy("timestamp")
+  // );
+
+  // const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
+  //   const materials = await Promise.all(
+  //     snapshot.docs.map(async (m) => {
+  //       const material = await getMaterialById(m.id);
+  //       return material;
+  //     })
+  //   );
+
+  //   if (materials.length !== initialMaterials.length) {
+  //     setInitialMaterials(materials);
+  //   }
+  // });
+
+  if (!materials.length && user.type === "student") {
+    return (
+      <CenteredText
+        text={"Тут пока нет материалов..."}
+        Icon={
+          <Icon
+            name="inventory"
+            type="material"
+            color={returnHexCode(user?.theme as AppTheme)}
+            size={30}
+          />
+        }
+      />
     );
-
-    if (materials.length !== snapMaterials.length) {
-      setMaterials(snapMaterials as Material[]);
-    }
-  });
+  }
 
   return (
     <SafeAreaView style={tw("flex flex-col px-4")}>
       {user?.type === "teacher" && (
-        <View style={tw('')}>
+        <View style={tw("")}>
           <TouchableOpacity
             style={tw("flex flex-row justify-end")}
             onPress={() => setIsFormVisible(!isFormVisible)}
           >
             <View style={tw("flex flex-row items-center")}>
-              <Text style={{color: returnHexCode(user.theme as AppTheme)}}>
+              <Text style={{ color: returnHexCode(user.theme as AppTheme) }}>
                 {isFormVisible ? "Закрыть" : "Добавить материалы"}
               </Text>
               <Icon
@@ -110,32 +99,23 @@ const DisciplineScreen = (props: Props) => {
         </View>
       )}
       <View>
-        {materials.length ? (
-          <FlatList
-            style={tw("")}
-            data={materials.reverse()}
-            scrollEnabled
-            showsVerticalScrollIndicator={false}
-            renderItem={(item) => {
-              return <Material material={item.item} userId={user?.userId} userType={user?.type} userTheme={user?.theme} />;
-            }}
-          />
-        ) : (
-          <View style={tw("w-full h-full flex items-center justify-center")}>
-            <View>
-              <Text style={tw("mb-2 text-lg")}>Тут пока нет материалов...</Text>
-              <Icon
-                name="inventory"
-                type="material"
-                color={returnHexCode(user?.theme as AppTheme)}
-                size={30}
+        <FlatList
+          style={tw("")}
+          data={materials.reverse()}
+          scrollEnabled
+          showsVerticalScrollIndicator={false}
+          renderItem={(item) => {
+            return (
+              <Material
+                material={item.item}
+                userId={user?.userId}
+                userType={user?.type}
+                userTheme={user?.theme}
               />
-            </View>
-          </View>
-        )}
+            );
+          }}
+        />
       </View>
     </SafeAreaView>
   );
 };
-
-export default DisciplineScreen;

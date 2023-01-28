@@ -19,7 +19,7 @@ import { returnHexCode } from "../utils/returnHexCodes";
 type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
 
-const ChatsScreen = (props: Props) => {
+export const ChatsScreen = (props: Props) => {
   const tw = useTailwind();
 
   const navigation = useNavigation<ChatsScreenNavigatorProp>();
@@ -104,5 +104,3 @@ const ChatsScreen = (props: Props) => {
     </View>
   );
 };
-
-export default ChatsScreen;

@@ -9,14 +9,14 @@ type Props = {
   isStudent: boolean;
   disciplines: Discipline[];
   myDisciplines: any[];
-  groups: any[];
-  group: string;
+  groups: Group[];
+  group: Group;
   toggleVisible: (isVisible: boolean) => void;
-  setGroup: (group: string) => void;
+  setGroup: (group: Group) => void;
   setMyDisciplines: (myDisciplines: any[]) => void;
 };
 
-const LoginDialog = ({
+export const LoginDialog = ({
   isStudent,
   isVisible,
   toggleVisible,
@@ -32,7 +32,7 @@ const LoginDialog = ({
   const updateMyDisciplines = (discipline: Discipline, i: number) => {
     const disciplineCopy = [...myDisciplines];
     // сохраняем только id дисциплин
-    if (i === -1) { 
+    if (i === -1) {
       disciplineCopy.push({
         id: discipline.id,
       });
@@ -40,11 +40,14 @@ const LoginDialog = ({
       disciplineCopy.splice(i, 1);
     }
     setMyDisciplines(disciplineCopy);
-  }
+  };
 
   return (
     <View>
-      <Dialog isVisible={isVisible} onBackdropPress={() => toggleVisible(!isVisible)}>
+      <Dialog
+        isVisible={isVisible}
+        onBackdropPress={() => toggleVisible(!isVisible)}
+      >
         <Dialog.Title
           title={isStudent ? "Выбрать группу" : "Выбрать предметы"}
           titleStyle={tw("text-center")}
@@ -54,16 +57,17 @@ const LoginDialog = ({
             {/* render all groups */}
             {/* TODO сделать сначала выбор института потом выбирать группы в нем... */}
             <FlatList
-              data={groups
-                .sort((prev, next) => prev.name.localeCompare(next.name))}
+              data={groups.sort((prev, next) =>
+                prev.name.localeCompare(next.name)
+              )}
               scrollEnabled
               showsVerticalScrollIndicator={false}
               renderItem={({ item, index }) => (
                 <CheckBox
                   key={index}
                   title={item.name}
-                  checked={item.name === group}
-                  onPress={() => setGroup(item.name)}
+                  checked={Boolean(group) && item.id === group.id}
+                  onPress={() => setGroup(item)}
                   containerStyle={tw("text-center")}
                 />
               )}
@@ -73,7 +77,8 @@ const LoginDialog = ({
                 disabled={!group}
                 onPress={() => toggleVisible(!isVisible)}
                 style={tw(
-                  `${!!group ? "bg-blue-500" : "bg-gray-400"
+                  `${
+                    !!group ? "bg-blue-500" : "bg-gray-400"
                   } rounded-lg py-1 px-2 text-white text-lg`
                 )}
               >
@@ -83,7 +88,7 @@ const LoginDialog = ({
           </View>
         ) : (
           <View>
-            {/* render all disciolines */}
+            {/* render all disciplines */}
             {/* TODO сделать сначала выбор института а потом уже привязанных к нему дисциплин */}
             <FlatList
               data={disciplines}
@@ -100,7 +105,7 @@ const LoginDialog = ({
                     checked={i !== -1}
                     onPress={() => updateMyDisciplines(item, i)}
                   />
-                )
+                );
               }}
             />
             <View style={tw("flex flex-row justify-center")}>
@@ -108,7 +113,8 @@ const LoginDialog = ({
                 disabled={!myDisciplines.length}
                 onPress={() => toggleVisible(!isVisible)}
                 style={tw(
-                  `${!!myDisciplines.length ? "bg-blue-500" : "bg-gray-400"
+                  `${
+                    !!myDisciplines.length ? "bg-blue-500" : "bg-gray-400"
                   } rounded-lg py-1 px-2 text-white text-lg`
                 )}
               >
@@ -118,8 +124,6 @@ const LoginDialog = ({
           </View>
         )}
       </Dialog>
-    </View >
+    </View>
   );
 };
-
-export default LoginDialog;

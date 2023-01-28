@@ -5,11 +5,11 @@ import { useSelector } from "react-redux";
 import { getUser } from "../features/userSlice";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
-import DisciplineCard from "../components/discipline/DisciplineCard";
+import { CenteredText, DisciplineCard } from "../components";
+import { returnHexCode } from "../utils/returnHexCodes";
+import { Icon } from "@rneui/themed";
 
-type Props = {};
-
-const DisciplinesScreen = (props: Props) => {
+export const DisciplinesScreen = () => {
   const tw = useTailwind();
   const user = useSelector(getUser);
 
@@ -45,6 +45,22 @@ const DisciplinesScreen = (props: Props) => {
     // console.log("update");
   }, [user]);
 
+  if (!disciplines) {
+    return (
+      <CenteredText
+        text={"Загрузка"}
+        Icon={
+          <Icon
+            name="pending"
+            type="material"
+            color={returnHexCode(user?.theme as AppTheme)}
+            size={30}
+          />
+        }
+      />
+    );
+  }
+
   return (
     <View style={tw("py-8 h-full")}>
       <View>
@@ -53,12 +69,10 @@ const DisciplinesScreen = (props: Props) => {
         </Text>
       </View>
       <ScrollView>
-        {disciplines && disciplines.map((discipline) => (
+        {disciplines.map((discipline) => (
           <DisciplineCard key={discipline.id} discipline={discipline} />
         ))}
       </ScrollView>
     </View>
   );
 };
-
-export default DisciplinesScreen;

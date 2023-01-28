@@ -1,13 +1,17 @@
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
 import { Text } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getNotifications, getUser } from "../features/userSlice";
-import DisciplinesScreen from "../screens/DisciplinesScreen";
-import NotificationsScreen from "../screens/FavoritesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import TimeTableScreen from "../screens/TimeTableScreen";
+import {
+  DisciplinesScreen,
+  FavoritesScreen,
+  ProfileScreen,
+  TimeTableScreen,
+} from "../screens";
+
 import { returnHexCode } from "../utils/returnHexCodes";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -60,7 +64,7 @@ const TabNavigator = () => {
                 Расписание
               </Text>
             );
-          } else if (route.name === "Notifications") {
+          } else if (route.name === "Favorites") {
             return (
               <Text
                 style={{
@@ -109,7 +113,7 @@ const TabNavigator = () => {
                 size={30}
               />
             );
-          } else if (route.name === "Notifications") {
+          } else if (route.name === "Favorites") {
             return (
               <Icon
                 name="save"
@@ -134,7 +138,12 @@ const TabNavigator = () => {
         options={{ headerShown: false }}
         component={TimeTableScreen}
       />
-      {notifications.length ? (
+      <Tab.Screen
+        name="Favorites"
+        options={{ headerShown: false }}
+        component={FavoritesScreen}
+      />
+      {/* {notifications.length ? (
         <Tab.Screen
           name="Notifications"
           options={{ headerShown: false, tabBarBadge: notifications.length }}
@@ -146,7 +155,7 @@ const TabNavigator = () => {
           options={{ headerShown: false }}
           component={NotificationsScreen}
         />
-      )}
+      )} */}
       <Tab.Screen
         name="Profile"
         options={{ headerShown: false }}
