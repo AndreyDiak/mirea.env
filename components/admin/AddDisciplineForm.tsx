@@ -31,7 +31,7 @@ export const AddDisciplineForm = (props: Props) => {
       const snap = await getDocs(q);
       const groups = snap.docs.map((group) => ({
         ...group.data(),
-        groupId: group.id,
+        id: group.id,
       }));
       setGroups(groups as Group[]);
     };
@@ -57,7 +57,7 @@ export const AddDisciplineForm = (props: Props) => {
       return;
     }
     await addDoc(collection(db, "disciplines"), {
-      groups: selectedGroups.map((group) => group.groupId),
+      groups: selectedGroups.map((group) => group.id),
       title: disciplineTitle,
       teachers: selectedTeachers.map((teacher) => teacher.userId),
     }).then(() => {

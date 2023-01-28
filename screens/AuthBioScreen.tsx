@@ -1,14 +1,13 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { CheckBox, Input } from "@rneui/themed";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Text, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { getAllDisciplines, getAllGroups } from "../api";
+import { createUser } from "../api/auth/mutations/createUser";
 
 import { LoginDialog, LoginForm } from "../components";
-import { auth, db } from "../firebase";
+import { LoginDialogOpen } from "../components/login/LoginDialogOpen";
+import { LFilter } from "../typings/enums";
 
 type AuthBioScreenRouteProp = RouteProp<RootStackParamList, "AuthBio">;
 
@@ -25,103 +24,71 @@ export const AuthBioScreen = () => {
   const [name, setName] = useState<string>("");
   const [female, setFemale] = useState<string>("");
   const [isStudent, setIsStudent] = useState<boolean>(true);
+
+  const [filter, setFilter] = useState<LFilter>(LFilter.INSTITUTES);
+
+  const [selectedInstitutes, setSelectedInstitutes] = useState<Institute[]>([]);
   // only for students
-  const [groups, setGroups] = useState<Group[]>([]);
-  const [group, setGroup] = useState<Group>(null);
-  // only for teachers
-  const [disciplines, setDisciplines] = useState<Discipline[]>([]);
-  const [myDisciplines, setMyDisciplines] = useState<any[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<Group>(null);
+
+  // only for teachers (ids of linked disciplines)
+  const [selectedDisciplines, setSelectedDisciplines] = useState<string[]>([]);
 
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
-
   const [error, setError] = useState<string>("");
+
   const navigation = useNavigation<AuthBioScreenNavigatorProp>();
-
-  useEffect(() => {
-    const getData = async () => {
-      const disciplines = await getAllDisciplines();
-      const groups = await getAllGroups();
-
-      setDisciplines(disciplines);
-      setGroups(groups);
-    };
-
-    getData();
-  }, []);
 
   const {
     params: { email, password },
   } = useRoute<AuthBioScreenRouteProp>();
 
-  // console.log("email: " + email);
+  const toggleDialog = (filter: LFilter) => {
+    setFilter(filter);
+    setIsDialogVisible(!isDialogVisible);
+  };
 
-  const toggleDialog = () => setIsDialogVisible(!isDialogVisible);
+  const toggleUserTypeHandler = (isStudent: boolean) => {
+    setIsStudent(isStudent);
+    setSelectedGroup(null);
+    setSelectedDisciplines([]);
+    setSelectedInstitutes([]);
+  };
 
   const register = async () => {
-    if (name === "") {
-      setError("Введите имя");
-      return;
-    }
-    if (female === "") {
-      setError("Введите фамилию");
-      return;
-    }
-    if (isStudent && group === null) {
-      setError("Выберите группу");
-      return;
-    }
-    if (!isStudent && myDisciplines.length === 0) {
-      setError("Выберите дисциплины");
-      return;
-    }
-    let user = isStudent
-      ? {
-          email: email.toLowerCase(),
-          name: name,
-          female: female,
-          password: password,
-          img: "",
-          groupId: group,
-          type: "student",
-        }
-      : {
-          email: email.toLowerCase(),
-          name: name,
-          female: female,
-          password: password,
-          img: "",
-          disciplines: myDisciplines,
-          type: "teacher",
-        };
+    const data: NewUser = {
+      email: email.toLowerCase(),
+      name,
+      female,
+      password,
+      img: "",
+      theme: "blue",
+    };
 
-    await createUserWithEmailAndPassword(auth, email, password).then(
-      async (res) => {
-        console.log("user created!");
-        await addDoc(collection(db, "users"), {
-          ...user,
-        });
-      }
-    );
+    await createUser({
+      data,
+      isStudent,
+      group: selectedGroup,
+      disciplines: selectedDisciplines,
+      setError,
+    });
   };
 
   return (
-    <View
-      style={tw(
-        "w-full h-full bg-slate-100 flex flex-row items-center justify-center"
-      )}
-    >
+    <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
       <LoginForm handleSubmit={register} step="bio" error={error}>
         <View style={tw("")}>
           <LoginDialog
             isStudent={isStudent}
             isVisible={isDialogVisible}
+            filter={filter}
             toggleVisible={setIsDialogVisible}
-            group={group}
-            groups={groups}
-            disciplines={disciplines}
-            myDisciplines={myDisciplines}
-            setGroup={setGroup}
-            setMyDisciplines={setMyDisciplines}
+            myGroup={selectedGroup}
+            myDisciplines={selectedDisciplines}
+            myInstitutes={selectedInstitutes}
+            setMyGroup={setSelectedGroup}
+            setMyDisciplines={setSelectedDisciplines}
+            setMyInstitutes={setSelectedInstitutes}
           />
           <Input
             placeholder="Ваше имя..."
@@ -129,79 +96,49 @@ export const AuthBioScreen = () => {
             onChangeText={setName}
             containerStyle={{ margin: 0 }}
           />
-          <Input
-            placeholder="Ваша фамилия..."
-            value={female}
-            onChangeText={setFemale}
-          />
+          <Input placeholder="Ваша фамилия..." value={female} onChangeText={setFemale} />
           <CheckBox
             title="Я студент"
             checked={isStudent}
-            onPress={() => {
-              setIsStudent(true);
-              setGroup(null);
-              setMyDisciplines([]);
-            }}
+            onPress={() => toggleUserTypeHandler(true)}
             containerStyle={{ padding: 0 }}
           />
           <CheckBox
             title="Я преподаватель"
             checked={!isStudent}
-            onPress={() => {
-              setIsStudent(false);
-              setGroup(null);
-              setMyDisciplines([]);
-            }}
+            onPress={() => toggleUserTypeHandler(false)}
             containerStyle={{ padding: 0 }}
           />
-
-          <View>
+          {/* Select Group or disciplines */}
+          <View style={tw("text-blue-400 text-lg py-2")}>
+            <LoginDialogOpen
+              isSelected={!selectedInstitutes.length}
+              text={"Выбрать институт"}
+              subText={`Институт(ы): ${selectedInstitutes.map(
+                (institute) => `${institute.shortName} `
+              )}`}
+              openDialog={() => toggleDialog(LFilter.INSTITUTES)}
+            />
+          </View>
+          {!!selectedInstitutes.length && (
             <View style={tw("text-blue-400 text-lg py-2")}>
               {isStudent ? (
-                <>
-                  {!group ? (
-                    <Text
-                      style={tw("text-blue-400 text-lg text-center")}
-                      onPress={toggleDialog}
-                    >
-                      Выбрать группу
-                    </Text>
-                  ) : (
-                    <View style={tw("flex flex-row justify-center")}>
-                      <Text>Группа: {group.name} </Text>
-                      <Text
-                        style={tw("text-blue-400 underline")}
-                        onPress={toggleDialog}
-                      >
-                        Изменить
-                      </Text>
-                    </View>
-                  )}
-                </>
+                <LoginDialogOpen
+                  isSelected={!selectedGroup}
+                  text={"Выбрать группу"}
+                  subText={`Группа: ${selectedGroup && selectedGroup.name}`}
+                  openDialog={() => toggleDialog(LFilter.GROUPS)}
+                />
               ) : (
-                <>
-                  {!myDisciplines.length ? (
-                    <Text
-                      style={tw("text-blue-400 text-lg text-center")}
-                      onPress={toggleDialog}
-                    >
-                      Выбрать предметы
-                    </Text>
-                  ) : (
-                    <View style={tw("flex flex-row justify-center")}>
-                      <Text>Выбрано: ({myDisciplines.length}) </Text>
-                      <Text
-                        style={tw("text-blue-400 underline")}
-                        onPress={toggleDialog}
-                      >
-                        Изменить
-                      </Text>
-                    </View>
-                  )}
-                </>
+                <LoginDialogOpen
+                  isSelected={!selectedDisciplines.length}
+                  text={"Выбрать предметы"}
+                  subText={`Выбрано: (${selectedDisciplines.length}) `}
+                  openDialog={() => toggleDialog(LFilter.DISCIPLINES)}
+                />
               )}
             </View>
-          </View>
+          )}
         </View>
       </LoginForm>
     </View>

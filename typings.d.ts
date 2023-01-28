@@ -12,7 +12,7 @@ interface Group {
 interface Discipline {
   id: string;
   name: string;
-  instituteId: string;
+  instituteId: string; //5oo7uKcPGrJGEhuF9yqa
 }
 
 interface Institute {
@@ -93,8 +93,10 @@ interface User {
   userId: string;
 }
 
+type NewUser = Omit<User, "userId">;
+
 interface Student extends User {
-  group: string;
+  groupId: string;
   type: "student";
 }
 
@@ -103,7 +105,19 @@ interface Teacher extends User {
   type: "teacher";
 }
 
+interface NewStudent extends NewUser {
+  groupId: string;
+  type: "student";
+}
+
+interface NewTeacher extends NewUser {
+  disciplines: string[];
+  type: "teacher";
+}
+
 type SuperUser = Student | Teacher;
+
+type NewSuperUser = NewStudent | NewTeacher;
 
 type RootStackParamList = {
   Login: undefined;

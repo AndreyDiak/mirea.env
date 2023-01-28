@@ -8,6 +8,9 @@ import { db } from "../firebase";
 import { CenteredText, DisciplineCard } from "../components";
 import { returnHexCode } from "../utils/returnHexCodes";
 import { Icon } from "@rneui/themed";
+import { getDataById } from "../api/queries/getDataById";
+import { DBQueries } from "../typings/enums";
+import { getAllDataWithFilter } from "../api/queries/getAllDataWIthFilter";
 
 export const DisciplinesScreen = () => {
   const tw = useTailwind();
@@ -17,25 +20,14 @@ export const DisciplinesScreen = () => {
 
   useEffect(() => {
     const getData = async () => {
-      if (user?.type === "student") {
+      if (user.type === "student") {
         // get our group id...
-        const groupQuery = query(
-          collection(db, "groups"),
-          where("name", "==", user.group)
+        const group = await getDataById<Group>(user.groupId, DBQueries.GROUPS);
+        const disciplines = await getAllDataWithFilter<Discipline>(
+          DBQueries.DISCIPLINES,
+          "instituteId",
+          group.instituteId
         );
-        const groupSnap = await getDocs(groupQuery);
-        const groupId = groupSnap.docs[0].id;
-        // find all disciplines where there is our group...
-        const disciplinesQuery = query(
-          collection(db, "disciplines"),
-          where("groups", "array-contains", groupId)
-        );
-        const disciplinesSnap = await getDocs(disciplinesQuery);
-
-        const disciplines = disciplinesSnap.docs.map((doc) => ({
-          id: doc.id,
-          name: doc.data().name,
-        }));
         setDisciplines(disciplines);
       } else {
         setDisciplines(user?.disciplines as Discipline[]);
@@ -64,9 +56,7 @@ export const DisciplinesScreen = () => {
   return (
     <View style={tw("py-8 h-full")}>
       <View>
-        <Text style={tw("text-center font-bold text-xl text-gray-800 mb-2")}>
-          Ваши дисциплины
-        </Text>
+        <Text style={tw("text-center font-bold text-xl text-gray-800 mb-2")}>Ваши дисциплины</Text>
       </View>
       <ScrollView>
         {disciplines.map((discipline) => (

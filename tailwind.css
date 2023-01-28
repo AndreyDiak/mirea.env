@@ -195,6 +195,14 @@
   max-height: 200px
 }
 
+.max-h-\[300px\] {
+  max-height: 300px
+}
+
+.max-h-\[350px\] {
+  max-height: 350px
+}
+
 .w-12 {
   width: 3rem
 }
@@ -368,16 +376,16 @@
   padding: 1rem
 }
 
-.p-0 {
-  padding: 0px
-}
-
 .p-2 {
   padding: 0.5rem
 }
 
 .p-3 {
   padding: 0.75rem
+}
+
+.p-0 {
+  padding: 0px
 }
 
 .px-3 {
@@ -501,11 +509,6 @@
   line-height: 1rem
 }
 
-.text-sm {
-  font-size: 0.875rem;
-  line-height: 1.25rem
-}
-
 .text-\[44px\] {
   font-size: 44px
 }
@@ -513,6 +516,11 @@
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem
 }
 
 .font-semibold {
@@ -555,14 +563,14 @@
   color: rgb(75 85 99 / var(--tw-text-opacity))
 }
 
-.text-red-400 {
-  --tw-text-opacity: 1;
-  color: rgb(248 113 113 / var(--tw-text-opacity))
-}
-
 .text-blue-500 {
   --tw-text-opacity: 1;
   color: rgb(59 130 246 / var(--tw-text-opacity))
+}
+
+.text-red-400 {
+  --tw-text-opacity: 1;
+  color: rgb(248 113 113 / var(--tw-text-opacity))
 }
 
 .text-gray-400 {

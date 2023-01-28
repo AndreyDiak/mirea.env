@@ -76,10 +76,7 @@ export const ProfileScreen = () => {
           {Array(4)
             .fill(null)
             .map((_, index) => (
-              <View
-                key={index}
-                style={tw("flex flex-row justify-between mb-5")}
-              >
+              <View key={index} style={tw("flex flex-row justify-between mb-5")}>
                 <Skeleton style={tw("w-5/6 h-10 rounded-md")} />
                 <Skeleton circle style={tw("w-10 h-10")} />
               </View>
@@ -95,13 +92,13 @@ export const ProfileScreen = () => {
       <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
         <View style={tw("flex flex-row items-center justify-between")}>
           {/* TODO включить обратно */}
-          {/* <View>
+          <View>
             {user.img !== "" || profileImage ? (
               <UserAvatar source={profileImage || user.img} />
             ) : (
               <UserAvatar title={user.name[0]} />
             )}
-          </View> */}
+          </View>
           <View>
             <Text
               style={[
@@ -126,11 +123,7 @@ export const ProfileScreen = () => {
         <Card containerStyle={tw("rounded-sm")}>
           <View>
             {/* Name + Female */}
-            <View
-              style={tw(
-                "flex flex-row items-center justify-between flex-wrap mb-4"
-              )}
-            >
+            <View style={tw("flex flex-row items-center justify-between flex-wrap mb-4")}>
               <View>
                 <View>
                   <Text style={tw("text-lg text-gray-800")}>{user.name}</Text>
@@ -179,12 +172,12 @@ export const ProfileScreen = () => {
               <View style={tw("mb-4")}>
                 <Text style={tw("text-center mb-2")}>Тема</Text>
                 {/* TODO включить обратно */}
-                {/* <View style={tw("flex flex-row justify-center -mr-4")}>
+                <View style={tw("flex flex-row justify-center -mr-4")}>
                   <ThemeCard isBordered theme="blue" />
                   <ThemeCard isBordered theme="emerald" />
                   <ThemeCard isBordered theme="rose" />
                   <ThemeCard isBordered theme="violet" />
-                </View> */}
+                </View>
               </View>
             </View>
 
@@ -207,12 +200,7 @@ export const ProfileScreen = () => {
                 console.log("hey");
               }}
             >
-              <Text
-                style={[
-                  tw("text-center"),
-                  { color: returnHexCode(user.theme as AppTheme) },
-                ]}
-              >
+              <Text style={[tw("text-center"), { color: returnHexCode(user.theme as AppTheme) }]}>
                 Оставить отзыв
               </Text>
             </TouchableOpacity>
