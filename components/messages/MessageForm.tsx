@@ -24,13 +24,13 @@ type Props = {
   chatId: string;
 };
 
-const MessageForm = ({
+export const MessageForm = ({
   setIsReplyingOnMessage,
   setIsScrollToBottomVisible,
   setActiveMessage,
   isReplyingOnMessage,
   activeMessage,
-  chatId
+  chatId,
 }: Props) => {
   const tw = useTailwind();
   const [message, setMessage] = useState("");
@@ -54,7 +54,7 @@ const MessageForm = ({
       }
     });
   };
-  
+
   return (
     <View style={tw(`w-full bg-white`)}>
       {/* Replying on message */}
@@ -64,7 +64,12 @@ const MessageForm = ({
             "flex flex-row items-center justify-between bg-white px-4 py-2 border-b border-gray-200"
           )}
         >
-          <Icon name="redo" type="material" size={30} color={returnHexCode(user?.theme as AppTheme)} />
+          <Icon
+            name="redo"
+            type="material"
+            size={30}
+            color={returnHexCode(user?.theme as AppTheme)}
+          />
           <View style={tw("w-0.5 h-full bg-gray-400 ml-4")} />
           <View style={tw("flex-1 pl-4")}>
             <Text style={tw("font-semibold")}>
@@ -88,11 +93,14 @@ const MessageForm = ({
           onChangeText={setMessage}
         />
         <TouchableOpacity onPress={sendMessage} style={tw("pr-2")}>
-          <Icon name="send" type="material" color={returnHexCode(user?.theme as AppTheme)} size={30} />
+          <Icon
+            name="send"
+            type="material"
+            color={returnHexCode(user?.theme as AppTheme)}
+            size={30}
+          />
         </TouchableOpacity>
       </View>
     </View>
   );
 };
-
-export default MessageForm;

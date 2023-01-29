@@ -5,24 +5,19 @@ import {
   getDoc,
   onSnapshot,
   orderBy,
-  query
+  query,
 } from "firebase/firestore";
 
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  SafeAreaView,
-  Text, View
-} from "react-native";
+import { KeyboardAvoidingView, SafeAreaView, Text, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import ChatTitle from "../components/messages/ChatTitle";
-import MessageForm from "../components/messages/MessageForm";
-import Messages from "../components/messages/Messages";
+import { ChatTitle, Messages, MessageForm } from "../components";
+
 import { db } from "../firebase";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
-const ChatScreen = () => {
+export const ChatScreen = () => {
   const [title, setTitle] = useState("Загрузка...");
   const [messages, setMessages] = useState<Message[]>([]);
   const [isReplyingOnMessage, setIsReplyingOnMessage] = useState(false);
@@ -120,5 +115,3 @@ const ChatScreen = () => {
     </SafeAreaView>
   );
 };
-
-export default ChatScreen;

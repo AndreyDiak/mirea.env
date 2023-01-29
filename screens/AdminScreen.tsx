@@ -4,13 +4,13 @@ import { useTailwind } from "tailwind-rn/dist";
 import { Card } from "@rneui/themed";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import AddGroupForm from "../components/admin/AddGroupForm";
-import AddDisciplineForm from "../components/admin/AddDisciplineForm";
-import AddTimetableForm from "../components/admin/AddTimetableForm";
+import {
+  AddDisciplineForm,
+  AddTimetableForm,
+  AddGroupForm,
+} from "../components";
 
-type Props = {};
-
-const AdminScreen = (props: Props) => {
+export const AdminScreen = () => {
   const tw = useTailwind();
 
   const [isTimetableFormVisible, setIsTimetableFormVisible] = useState(false);
@@ -97,5 +97,3 @@ const AdminScreen = (props: Props) => {
     </View>
   );
 };
-
-export default AdminScreen;

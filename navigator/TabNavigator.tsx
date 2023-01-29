@@ -1,20 +1,18 @@
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
 import { Text } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { getNotifications, getUser } from "../features/userSlice";
-import DisciplinesScreen from "../screens/DisciplinesScreen";
-import NotificationsScreen from "../screens/FavoritesScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import TimeTableScreen from "../screens/TimeTableScreen";
+import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
+
 import { returnHexCode } from "../utils/returnHexCodes";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 const TabNavigator = () => {
-  const notifications = useSelector(getNotifications);
   const user = useSelector(getUser);
-  const tw = useTailwind();
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -25,9 +23,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused
-                    ? returnHexCode(user?.theme as AppTheme)
-                    : "#9ca3af",
+                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -38,9 +34,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused
-                    ? returnHexCode(user?.theme as AppTheme)
-                    : "#9ca3af",
+                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -51,22 +45,18 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused
-                    ? returnHexCode(user?.theme as AppTheme)
-                    : "#9ca3af",
+                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
                 Расписание
               </Text>
             );
-          } else if (route.name === "Notifications") {
+          } else if (route.name === "Favorites") {
             return (
               <Text
                 style={{
-                  color: focused
-                    ? returnHexCode(user?.theme as AppTheme)
-                    : "#9ca3af",
+                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -81,9 +71,7 @@ const TabNavigator = () => {
               <Icon
                 name="home"
                 type="material"
-                color={
-                  focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"
-                }
+                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -92,9 +80,7 @@ const TabNavigator = () => {
               <Icon
                 name="school"
                 type="material"
-                color={
-                  focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"
-                }
+                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -103,20 +89,16 @@ const TabNavigator = () => {
               <Icon
                 name="today"
                 type="material"
-                color={
-                  focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"
-                }
+                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
                 size={30}
               />
             );
-          } else if (route.name === "Notifications") {
+          } else if (route.name === "Favorites") {
             return (
               <Icon
                 name="save"
                 type="material"
-                color={
-                  focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"
-                }
+                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -129,12 +111,9 @@ const TabNavigator = () => {
         options={{ headerShown: false }}
         component={DisciplinesScreen}
       />
-      <Tab.Screen
-        name="Timetable"
-        options={{ headerShown: false }}
-        component={TimeTableScreen}
-      />
-      {notifications.length ? (
+      <Tab.Screen name="Timetable" options={{ headerShown: false }} component={TimeTableScreen} />
+      <Tab.Screen name="Favorites" options={{ headerShown: false }} component={FavoritesScreen} />
+      {/* {notifications.length ? (
         <Tab.Screen
           name="Notifications"
           options={{ headerShown: false, tabBarBadge: notifications.length }}
@@ -146,12 +125,8 @@ const TabNavigator = () => {
           options={{ headerShown: false }}
           component={NotificationsScreen}
         />
-      )}
-      <Tab.Screen
-        name="Profile"
-        options={{ headerShown: false }}
-        component={ProfileScreen}
-      />
+      )} */}
+      <Tab.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
     </Tab.Navigator>
   );
 };

@@ -1,25 +1,39 @@
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
-type UserType = 'student' | 'teacher' | 'admin';
+type UserType = "student" | "teacher" | "admin";
 
 interface Group {
-  groupId: string;
+  id: string;
   name: string;
+  instituteId: string;
+  disciplines: string[];
 }
 
 interface Discipline {
   id: string;
   name: string;
+  instituteId: string; //5oo7uKcPGrJGEhuF9yqa
+}
+
+interface Institute {
+  id: string;
+  name: string;
+  shortName: string;
 }
 
 interface Material {
+  id: string;
+  disciplineId: string;
+  timestamp: {
+    seconds: number;
+    nanoseconds: number;
+  };
   title: string;
   text: string;
-  materialId: string;
   likes: number;
+  ownerId: string;
   comments: Comment[];
-  owner: string;
-  documents: Document[];
+  documents: Source[];
 }
 
 interface Message {
@@ -40,13 +54,14 @@ interface Comment {
   email: string;
   text: string;
   materialId: string;
-  commentId: string;
+  id: string;
 }
 
-interface Document {
+interface Source {
   title: string;
   document: string;
-  documentId: string;
+  materialId: string;
+  id: string;
 }
 
 interface NewDocument {
@@ -62,9 +77,15 @@ interface Notification {
   notificationId: string;
 }
 
+interface Favorite {
+  id: string;
+  materialId: string;
+  userId: string;
+}
+
 interface Favorites {
-  disciplineTitle: string;
-  material: Material
+  disciplineName: string;
+  material: Material;
 }
 
 interface Institute {
@@ -83,13 +104,17 @@ interface User {
   userId: string;
 }
 
+type NewUser = Omit<User, "userId">;
+
 interface Student extends User {
-  group: string;
+  groupId: string;
+  instituteId: string;
   type: "student";
 }
 
 interface Teacher extends User {
-  disciplines: Discipline[];
+  disciplines: string[]; // ids of linked disciplines
+  institutes: string[]; // ids of linked institutes
   type: "teacher";
 }
 
@@ -123,7 +148,7 @@ type TabStackParamList = {
   Profile: undefined;
   Disciplines: undefined;
   Timetable: undefined;
-  Notifications: undefined;
+  Favorites: undefined;
 };
 
 type AuthSteps = "auth" | "info" | "bio";

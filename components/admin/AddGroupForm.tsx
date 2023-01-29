@@ -1,21 +1,15 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ScrollView,
-} from "react-native";
-import React, { useEffect, useState } from "react";
-import { Card, CheckBox, Input } from "@rneui/themed";
-import { useTailwind } from "tailwind-rn/dist";
+import { Card, Input } from "@rneui/themed";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../../firebase";
-import Button from "../Button";
-import CheckListSingle from "./CheckListSingle";
+import { Button } from "../Button";
+import { CheckListSingle } from "./CheckListSingle";
 
 type Props = {};
 
-const AddGroupForm = (props: Props) => {
+export const AddGroupForm = (props: Props) => {
   const tw = useTailwind();
 
   const [groupName, setGroupName] = useState("");
@@ -74,5 +68,3 @@ const AddGroupForm = (props: Props) => {
     </View>
   );
 };
-
-export default AddGroupForm;

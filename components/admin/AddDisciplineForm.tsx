@@ -1,11 +1,11 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useState, useEffect } from "react";
-import { Card, CheckBox, Icon, Input } from "@rneui/themed";
+import { Card, Input } from "@rneui/themed";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../firebase";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import Button from "../Button";
-import CheckListMulitple from "./CheckListMulitple";
+import { db } from "../../firebase";
+import { Button } from "../Button";
+import { CheckListMulitple } from "./CheckListMulitple";
 
 type Props = {};
 type ToggleItem = {
@@ -14,7 +14,7 @@ type ToggleItem = {
   selected: (Group | Teacher)[];
   setSelected: (selected: (Group | Teacher)[]) => void;
 };
-const AddDisciplineForm = (props: Props) => {
+export const AddDisciplineForm = (props: Props) => {
   const tw = useTailwind();
 
   const [disciplineTitle, setDisciplineTitle] = useState("");
@@ -31,7 +31,7 @@ const AddDisciplineForm = (props: Props) => {
       const snap = await getDocs(q);
       const groups = snap.docs.map((group) => ({
         ...group.data(),
-        groupId: group.id,
+        id: group.id,
       }));
       setGroups(groups as Group[]);
     };
@@ -57,9 +57,9 @@ const AddDisciplineForm = (props: Props) => {
       return;
     }
     await addDoc(collection(db, "disciplines"), {
-      groups: selectedGroups.map(group => group.groupId),
+      groups: selectedGroups.map((group) => group.id),
       title: disciplineTitle,
-      teachers: selectedTeachers.map(teacher => teacher.userId),
+      teachers: selectedTeachers.map((teacher) => teacher.userId),
     }).then(() => {
       console.log("discipline added");
       setDisciplineTitle("");
@@ -102,5 +102,3 @@ const AddDisciplineForm = (props: Props) => {
     </View>
   );
 };
-
-export default AddDisciplineForm;

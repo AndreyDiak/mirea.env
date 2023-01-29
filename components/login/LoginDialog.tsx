@@ -1,125 +1,128 @@
-import { View, Text, FlatList } from "react-native";
-import React from "react";
-import { useTailwind } from "tailwind-rn/dist";
 import { Dialog } from "@rneui/themed";
-import { CheckBox } from "@rneui/themed";
+import React, { useCallback, useEffect, useState } from "react";
+import { Text, Touchable, TouchableOpacity, View } from "react-native";
+import { useTailwind } from "tailwind-rn/dist";
+
+import { useInstitutes, useDisciplines, useGroups } from "../../hooks/login/";
+import { LFilter } from "../../typings/enums";
+import { LoginDialogDisciplines } from "./LoginDialogDisciplines";
+import { LoginDialogGroups } from "./LoginDialogGroups";
+import { LoginDialogInstitutes } from "./LoginDialogInstitutes";
+
+const titleMap: Record<LFilter, string> = {
+  disciplines: "Выбрать предметы",
+  groups: "Выбрать группу",
+  institutes: "Выбрать институт(ы)",
+};
 
 type Props = {
   isVisible: boolean;
   isStudent: boolean;
-  disciplines: Discipline[];
-  myDisciplines: any[];
-  groups: any[];
-  group: string;
+  myDisciplines: string[];
+  myGroup: Group;
+  myInstitutes: Institute[];
+  filter: LFilter;
+
   toggleVisible: (isVisible: boolean) => void;
-  setGroup: (group: string) => void;
-  setMyDisciplines: (myDisciplines: any[]) => void;
+  setMyGroup: (group: Group) => void;
+  setMyDisciplines: (myDisciplines: string[]) => void;
+  setMyInstitutes: (myInstitutes: Institute[]) => void;
 };
 
-const LoginDialog = ({
+export const LoginDialog = ({
   isStudent,
   isVisible,
   toggleVisible,
-  groups,
-  group,
-  setGroup,
-  disciplines,
+  filter,
+  myGroup,
+  setMyGroup,
   myDisciplines,
   setMyDisciplines,
+  myInstitutes,
+  setMyInstitutes,
 }: Props) => {
   const tw = useTailwind();
+  const { institutes, loading: ILoading } = useInstitutes();
 
-  const updateMyDisciplines = (discipline: Discipline, i: number) => {
-    const disciplineCopy = [...myDisciplines];
-    // сохраняем только id дисциплин
-    if (i === -1) { 
-      disciplineCopy.push({
-        id: discipline.id,
-      });
-    } else {
-      disciplineCopy.splice(i, 1);
+  const { disciplines, loading: DLoading } = useDisciplines(myInstitutes, filter);
+
+  const totalDisciplinesCount = !!disciplines
+    ? Object.values(disciplines).reduce((total, d) => total + d.length, 0)
+    : 0;
+
+  const { groups, loading: GLoading } = useGroups(myInstitutes, filter);
+
+  const submitButtonDisabled =
+    (filter === LFilter.DISCIPLINES && !!myDisciplines.length && totalDisciplinesCount > 0) ||
+    (filter === LFilter.GROUPS && !!myGroup && groups.length > 0) ||
+    (filter === LFilter.INSTITUTES && !!myInstitutes.length && institutes.length > 0) ||
+    (filter === LFilter.DISCIPLINES && totalDisciplinesCount === 0 && !DLoading) ||
+    (filter === LFilter.GROUPS && groups.length === 0 && !GLoading) ||
+    (filter === LFilter.INSTITUTES && institutes.length === 0 && !ILoading);
+
+  const toggleInstitutesHandler = (myInstitutes: Institute[]) => {
+    setMyInstitutes(myInstitutes);
+    setMyGroup(null);
+    setMyDisciplines([]);
+  };
+
+  const renderList = () => {
+    switch (filter) {
+      case LFilter.INSTITUTES:
+        return (
+          <LoginDialogInstitutes
+            isStudent={isStudent}
+            institutes={institutes}
+            myInstitutes={myInstitutes}
+            setMyInstitutes={toggleInstitutesHandler}
+          />
+        );
+      case LFilter.GROUPS:
+        return (
+          <LoginDialogGroups
+            groups={groups && groups.sort((prev, next) => prev.name.localeCompare(next.name))}
+            myGroup={myGroup}
+            setMyGroup={setMyGroup}
+            isLoading={GLoading}
+          />
+        );
+      case LFilter.DISCIPLINES:
+        return (
+          <LoginDialogDisciplines
+            disciplines={disciplines}
+            myDisciplines={myDisciplines}
+            setMyDisciplines={setMyDisciplines}
+            isLoading={DLoading}
+          />
+        );
+      default:
+        return null;
     }
-    setMyDisciplines(disciplineCopy);
-  }
+  };
 
   return (
     <View>
       <Dialog isVisible={isVisible} onBackdropPress={() => toggleVisible(!isVisible)}>
-        <Dialog.Title
-          title={isStudent ? "Выбрать группу" : "Выбрать предметы"}
-          titleStyle={tw("text-center")}
-        />
-        {isStudent ? (
-          <View>
-            {/* render all groups */}
-            {/* TODO сделать сначала выбор института потом выбирать группы в нем... */}
-            <FlatList
-              data={groups
-                .sort((prev, next) => prev.name.localeCompare(next.name))}
-              scrollEnabled
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => (
-                <CheckBox
-                  key={index}
-                  title={item.name}
-                  checked={item.name === group}
-                  onPress={() => setGroup(item.name)}
-                  containerStyle={tw("text-center")}
-                />
+        <Dialog.Title title={titleMap[filter]} titleStyle={tw("text-center")} />
+        {renderList()}
+
+        <View style={tw("flex flex-row justify-center")}>
+          <TouchableOpacity
+            disabled={!submitButtonDisabled}
+            onPress={() => toggleVisible(!isVisible)}
+          >
+            <Text
+              style={tw(
+                `${
+                  submitButtonDisabled ? "bg-blue-500" : "bg-gray-400"
+                } rounded-lg py-1 px-2 text-white text-lg`
               )}
-            />
-            <View style={tw("flex flex-row justify-center")}>
-              <Text
-                disabled={!group}
-                onPress={() => toggleVisible(!isVisible)}
-                style={tw(
-                  `${!!group ? "bg-blue-500" : "bg-gray-400"
-                  } rounded-lg py-1 px-2 text-white text-lg`
-                )}
-              >
-                Подтвердить
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View>
-            {/* render all disciolines */}
-            {/* TODO сделать сначала выбор института а потом уже привязанных к нему дисциплин */}
-            <FlatList
-              data={disciplines}
-              scrollEnabled
-              showsVerticalScrollIndicator={false}
-              renderItem={({ item, index }) => {
-                const i = myDisciplines.findIndex(
-                  (item) => item.title === item.name
-                );
-                return (
-                  <CheckBox
-                    key={index}
-                    title={item.name}
-                    checked={i !== -1}
-                    onPress={() => updateMyDisciplines(item, i)}
-                  />
-                )
-              }}
-            />
-            <View style={tw("flex flex-row justify-center")}>
-              <Text
-                disabled={!myDisciplines.length}
-                onPress={() => toggleVisible(!isVisible)}
-                style={tw(
-                  `${!!myDisciplines.length ? "bg-blue-500" : "bg-gray-400"
-                  } rounded-lg py-1 px-2 text-white text-lg`
-                )}
-              >
-                Подтвердить
-              </Text>
-            </View>
-          </View>
-        )}
+            >
+              Подтвердить
+            </Text>
+          </TouchableOpacity>
+        </View>
       </Dialog>
-    </View >
+    </View>
   );
 };
-
-export default LoginDialog;

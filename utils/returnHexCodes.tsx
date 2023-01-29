@@ -9,6 +9,8 @@ export const returnLightenHexCode = (theme: AppTheme) => {
       return "#ffe4e6";
     case "violet":
       return "#ede9fe";
+    default:
+      return "white";
   }
 };
 
@@ -23,6 +25,8 @@ export const returnHexCode = (theme: AppTheme) => {
       return "#fb7185";
     case "violet":
       return "#a78bfa";
+    default:
+      return "#60a5fa";
   }
 };
 
@@ -37,6 +41,8 @@ export const returnDarkenHexCode = (theme: AppTheme) => {
       return "#e11d48";
     case "violet":
       return "#7c3aed";
+    default:
+      return "#2563eb";
   }
 };
 
@@ -51,5 +57,7 @@ export const returnDarkestHexCode = (theme: AppTheme) => {
       return "#9f1239";
     case "violet":
       return "#5b21b6";
+    default:
+      return "#1e40af";
   }
 };

@@ -10,7 +10,7 @@ type Props = {
   replyOnMessage: () => void;
 };
 
-const ChatTitle = ({ message, onClose, replyOnMessage }: Props) => {
+export const ChatTitle = ({ message, onClose, replyOnMessage }: Props) => {
   const tw = useTailwind();
 
   const copyToClipboard = async () => {
@@ -33,5 +33,3 @@ const ChatTitle = ({ message, onClose, replyOnMessage }: Props) => {
     </View>
   );
 };
-
-export default ChatTitle;

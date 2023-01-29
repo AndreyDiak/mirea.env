@@ -4,8 +4,12 @@ import React, { useEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../../firebase";
-import { returnDarkestHexCode, returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
-import UserAvatar from "../UserAvatar";
+import {
+  returnDarkestHexCode,
+  returnHexCode,
+  returnLightenHexCode,
+} from "../../utils/returnHexCodes";
+import { UserAvatar } from "../UserAvatar";
 
 type Props = {
   message: Message;
@@ -17,7 +21,7 @@ type Props = {
   setBacklighMessage: () => void;
 };
 
-const Message = ({
+export const Message = ({
   message,
   email,
   nextMessageEmail,
@@ -57,7 +61,7 @@ const Message = ({
           ),
           {
             backgroundColor: isBacklight
-              ? returnLightenHexCode(theme as AppTheme)
+              ? returnLightenHexCode(theme)
               : "transparent",
           },
         ],
@@ -84,9 +88,14 @@ const Message = ({
         {!!replyingMessage && (
           <TouchableOpacity onPress={setBacklighMessage}>
             <View style={tw("flex flex-row pt-1")}>
-              <View style={[tw(`w-0.5 h-full mr-2`), {
-                backgroundColor: returnDarkestHexCode(theme)
-              }]}></View>
+              <View
+                style={[
+                  tw(`w-0.5 h-full mr-2`),
+                  {
+                    backgroundColor: returnDarkestHexCode(theme),
+                  },
+                ]}
+              ></View>
               <View>
                 <Text
                   style={tw(
@@ -173,5 +182,3 @@ const Message = ({
     </View>
   );
 };
-
-export default Message;

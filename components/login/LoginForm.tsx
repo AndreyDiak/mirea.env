@@ -10,8 +10,7 @@ type Props = {
   error: string;
 };
 
-
-const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
+export const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<LoginScreenNavigatorProp>();
 
@@ -35,32 +34,19 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
           style={[
             tw("text-center text-2xl text-gray-600 py-4"),
             {
-              fontFamily: "Roboto_300Light",
+              fontFamily: "Roboto",
             },
           ]}
         >
           {step === "auth" ? "Авторизация" : "Регистрация"}
         </Text>
-        {error !== "" && (
-          <Text style={tw("text-red-400 text-center")}>{error}</Text>
-        )}
+        {!!error && <Text style={tw("text-red-400 text-center")}>{error}</Text>}
         {/* Login + Pass */}
         {children}
 
-        <TouchableOpacity
-          style={tw("flex flex-row justify-center pt-2")}
-          onPress={handleSubmit}
-        >
-          <Text
-            style={tw(
-              "bg-blue-500 rounded-xl py-2 px-8 text-white font-bold text-2xl"
-            )}
-          >
-            {step === "auth"
-              ? "Войти"
-              : step === "info"
-              ? "Продолжить"
-              : "Регистрация"}
+        <TouchableOpacity style={tw("flex flex-row justify-center pt-2")} onPress={handleSubmit}>
+          <Text style={tw("bg-blue-500 rounded-xl py-2 px-8 text-white font-bold text-2xl")}>
+            {step === "auth" ? "Войти" : step === "info" ? "Продолжить" : "Регистрация"}
           </Text>
         </TouchableOpacity>
         <View style={tw("flex flex-row justify-center mt-4")}>
@@ -69,9 +55,7 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
           </Text>
           <TouchableOpacity
             onPress={() =>
-              step === "auth"
-                ? navigation.navigate("AuthInfo")
-                : navigation.navigate("Login")
+              step === "auth" ? navigation.navigate("AuthInfo") : navigation.navigate("Login")
             }
           >
             <Text style={tw("text-blue-400 underline")}>
@@ -83,5 +67,3 @@ const LoginForm = ({ step, children, handleSubmit, error }: Props) => {
     </View>
   );
 };
-
-export default LoginForm;

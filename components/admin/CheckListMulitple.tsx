@@ -11,7 +11,13 @@ type Props = {
   setList: (list: any[]) => void;
 };
 
-const CheckListMulitple = ({ attr, title, list, selectedList, setList }: Props) => {
+export const CheckListMulitple = ({
+  attr,
+  title,
+  list,
+  selectedList,
+  setList,
+}: Props) => {
   const tw = useTailwind();
 
   // console.log(selectedList);
@@ -32,7 +38,7 @@ const CheckListMulitple = ({ attr, title, list, selectedList, setList }: Props) 
   };
 
   return (
-    <View style={tw('mb-4')}>
+    <View style={tw("mb-4")}>
       <View style={tw("flex flex-row w-full items-center justify-between")}>
         <Text style={tw("text-center font-semibold")}>{title}</Text>
         <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
@@ -54,7 +60,7 @@ const CheckListMulitple = ({ attr, title, list, selectedList, setList }: Props) 
               <CheckBox
                 key={index}
                 // @ts-ignore addind teacher female if it consist
-                title={item.name + ` ${item.female ? item.female : ''}`}
+                title={item.name + ` ${item.female ? item.female : ""}`}
                 checked={selectedList.some(
                   // @ts-ignore we know about needed attr...
                   (selected) => selected[attr] === item[attr]
@@ -69,5 +75,3 @@ const CheckListMulitple = ({ attr, title, list, selectedList, setList }: Props) 
     </View>
   );
 };
-
-export default CheckListMulitple;

@@ -8,17 +8,16 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import ThemeCard from "../components/ThemeCard";
-import UserAvatar from "../components/UserAvatar";
+import { ThemeCard, UserAvatar } from "../components";
+
 import { getUser } from "../features/userSlice";
 import { auth, db, storage } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";
-type Props = {};
 
-const ProfileScreen = () => {
+export const ProfileScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigatorProp>();
-  const user = useSelector(getUser) as Student | Teacher;
+  const user = useSelector(getUser);
   const [profileImage, setProfileImage] = useState<null | string>(null);
 
   const pickImage = async () => {
@@ -29,6 +28,7 @@ const ProfileScreen = () => {
       quality: 1,
     }).then(async (image) => {
       if (!image.cancelled) {
+        // @ts-ignore
         setProfileImage(image.uri);
         const blob = await new Promise((resolve, reject) => {
           const xhr = new XMLHttpRequest();
@@ -39,6 +39,7 @@ const ProfileScreen = () => {
             reject(new TypeError("Network request failed"));
           };
           xhr.responseType = "blob";
+          // @ts-ignore
           xhr.open("GET", image.uri, true);
           xhr.send(null);
         });
@@ -75,10 +76,7 @@ const ProfileScreen = () => {
           {Array(4)
             .fill(null)
             .map((_, index) => (
-              <View
-                key={index}
-                style={tw("flex flex-row justify-between mb-5")}
-              >
+              <View key={index} style={tw("flex flex-row justify-between mb-5")}>
                 <Skeleton style={tw("w-5/6 h-10 rounded-md")} />
                 <Skeleton circle style={tw("w-10 h-10")} />
               </View>
@@ -93,6 +91,7 @@ const ProfileScreen = () => {
       {/* Avatar + email */}
       <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
         <View style={tw("flex flex-row items-center justify-between")}>
+          {/* TODO включить обратно */}
           <View>
             {user.img !== "" || profileImage ? (
               <UserAvatar source={profileImage || user.img} />
@@ -124,11 +123,7 @@ const ProfileScreen = () => {
         <Card containerStyle={tw("rounded-sm")}>
           <View>
             {/* Name + Female */}
-            <View
-              style={tw(
-                "flex flex-row items-center justify-between flex-wrap mb-4"
-              )}
-            >
+            <View style={tw("flex flex-row items-center justify-between flex-wrap mb-4")}>
               <View>
                 <View>
                   <Text style={tw("text-lg text-gray-800")}>{user.name}</Text>
@@ -142,14 +137,14 @@ const ProfileScreen = () => {
                 {user.type === "student" ? (
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
-                    <Text style={tw("text-xl font-bold")}>{user.group}</Text>
+                    <Text style={tw("text-xl font-bold")}>{user.groupId}</Text>
                   </View>
                 ) : (
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
                     <Text style={tw("text-[18px] font-bold")}>
                       <Text
-                        style={{ color: returnHexCode(user.theme as AppTheme) }}
+                        style={{ color: returnHexCode(user?.theme || "blue") }}
                         onPress={() => navigation.navigate("Discipline")}
                       >
                         ({user.disciplines.length}){" "}
@@ -169,13 +164,12 @@ const ProfileScreen = () => {
               >
                 <Text>Ваша тема</Text>
                 <View>
-                  <ThemeCard isBordered={false} theme={user.theme} />
+                  <ThemeCard isBordered={false} theme={user?.theme} />
                 </View>
               </View> */}
 
               {/* <Card.Divider /> */}
               <View style={tw("mb-4")}>
-                <Text style={tw("text-center mb-2")}>Тема</Text>
                 <View style={tw("flex flex-row justify-center -mr-4")}>
                   <ThemeCard isBordered theme="blue" />
                   <ThemeCard isBordered theme="emerald" />
@@ -204,12 +198,7 @@ const ProfileScreen = () => {
                 console.log("hey");
               }}
             >
-              <Text
-                style={[
-                  tw("text-center"),
-                  { color: returnHexCode(user.theme as AppTheme) },
-                ]}
-              >
+              <Text style={[tw("text-center"), { color: returnHexCode(user?.theme || "blue") }]}>
                 Оставить отзыв
               </Text>
             </TouchableOpacity>
@@ -228,7 +217,7 @@ const ProfileScreen = () => {
         <Text
           style={[
             tw("px-2 py-1 rounded-md text-lg underline"),
-            { color: returnHexCode(user.theme as AppTheme) },
+            { color: returnHexCode(user?.theme || "blue") },
           ]}
         >
           Выйти из аккаунта
@@ -237,5 +226,3 @@ const ProfileScreen = () => {
     </View>
   );
 };
-
-export default ProfileScreen;

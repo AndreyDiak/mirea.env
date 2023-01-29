@@ -1,29 +1,23 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import {
-  collection,
-  getDocs,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotifications, setUser } from "../features/userSlice";
 import { auth, db } from "../firebase";
-import AdminScreen from "../screens/AdminScreen";
-import AuthBioScreen from "../screens/AuthBioScreen";
-import AuthInfoScreen from "../screens/AuthInfoScreen";
-import ChatScreen from "../screens/ChatScreen";
-import ChatsScreen from "../screens/ChatsScreen";
-import CommentsScreen from "../screens/CommentsScreen";
-import DisciplineScreen from "../screens/DisciplineScreen";
-import LoginScreen from "../screens/LoginScreen";
-import TabNavigator from "./TabNavigator";
 
-type Props = {
-  user: any;
-};
+import {
+  AdminScreen,
+  AuthBioScreen,
+  AuthInfoScreen,
+  LoginScreen,
+  ChatsScreen,
+  ChatScreen,
+  CommentsScreen,
+  DisciplineScreen,
+} from "../screens";
+
+import TabNavigator from "./TabNavigator";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

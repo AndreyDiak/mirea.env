@@ -1,16 +1,16 @@
-import { View, Text, FlatList } from "react-native";
-import React, { useEffect, useState } from "react";
 import { Card } from "@rneui/themed";
 import { addDoc, collection, getDocs, query } from "firebase/firestore";
-import { db } from "../../firebase";
-import CheckListSingle from "./CheckListSingle";
-import TimeTableCard from "./TimeTableCard";
-import Button from "../Button";
+import React, { useEffect, useState } from "react";
+import { FlatList, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import { db } from "../../firebase";
+import { Button } from "../Button";
+import { CheckListSingle } from "./CheckListSingle";
+import { TimeTableCard } from "./TimeTableCard";
 
 type Props = {};
 
-const AddTimetableForm = (props: Props) => {
+export const AddTimetableForm = (props: Props) => {
   const tw = useTailwind();
   const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
@@ -46,17 +46,17 @@ const AddTimetableForm = (props: Props) => {
   }, []);
 
   const loadTimeTable = async () => {
-    if(!selectedGroup) {
+    if (!selectedGroup) {
       return;
     }
-    await addDoc(collection(db, 'timetable'), {
+    await addDoc(collection(db, "timetable"), {
       groupId: selectedGroup.groupId,
       timetable: lessons.map((lesson, index) => ({
         day: days[index],
-        lessons: lesson
-      }))
-    })
-  }
+        lessons: lesson,
+      })),
+    });
+  };
 
   return (
     <View>
@@ -89,5 +89,3 @@ const AddTimetableForm = (props: Props) => {
     </View>
   );
 };
-
-export default AddTimetableForm;
