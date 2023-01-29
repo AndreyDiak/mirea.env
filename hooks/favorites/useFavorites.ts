@@ -1,11 +1,11 @@
-import { collection, onSnapshot, query } from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { getMaterialById } from "../../api";
 import { getDataById } from "../../api/queries/getDataById";
 import { getUser } from "../../features/userSlice";
-import { db } from "../../firebase";
 import { DBQueries } from "../../typings/enums";
+import { QUERIES } from "../../utils/createDBQuery";
 
 // TODO переделать по типу useMaterials
 
@@ -17,40 +17,47 @@ interface FavoriteItem {
 export const useFavorites = () => {
   const user = useSelector(getUser);
   // const [loading, setLoading] = useState<boolean>(false);
-  const [initialFavorites, setInitialFavorites] = useState<Favorites[]>([]);
+  const [favorites, setFavorites] = useState<Favorites[]>([]);
+  // const q = query(collection(db, `users/${user.userId}/favorites`));
 
-  const q = query(collection(db, `users/${user.userId}/favorites`));
-
-  onSnapshot(q, async (snap) => {
-    // получение всех materialId которые хранятся у пользователя
-    const favoritesIdsList: FavoriteItem[] = snap.docs.map((favorite) => ({
-      fId: favorite.id,
-      mId: favorite.data().materialId,
-    }));
-
-    const favorites: Favorites[] = [];
-
-    await Promise.all(
-      favoritesIdsList.map(async (favorite) => {
-        // get material by ID
-        const material = await getMaterialById(favorite.mId);
-        // get discipline by ID
-        // const discipline = await getDisciplineById(material.disciplineId);
-        const discipline = await getDataById<Discipline>(
-          material.disciplineId,
-          DBQueries.DISCIPLINES
-        );
-
-        favorites.push({
-          disciplineName: discipline.name,
-          material,
-        });
-      })
-    );
-    if (favorites.length !== initialFavorites.length) {
-      setInitialFavorites(favorites);
-    }
+  const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DBQueries.FAVORITES, {
+    fieldName: "userId",
+    fieldValue: user.userId,
+    opStr: "==",
   });
 
-  return { initialFavorites };
+  const [snapshot, loading, error] = useCollection(q);
+
+  useEffect(() => {
+    const getData = async () => {
+      await Promise.all(
+        snapshot?.docs.map(async (doc) => {
+          const material = await getMaterialById(doc.data().materialId);
+          const discipline = await getDataById<Discipline>(
+            material.disciplineId,
+            DBQueries.DISCIPLINES
+          );
+          return {
+            disciplineName: discipline.name,
+            material,
+          };
+        }) || []
+      )
+        .then((data) => {
+          setFavorites(data || []);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    };
+    getData();
+  }, [snapshot]);
+
+  // });
+
+  return {
+    favorites,
+    loading: loading || (snapshot.docs.length > 0 && favorites.length === 0),
+    error,
+  };
 };

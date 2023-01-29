@@ -4,7 +4,7 @@ import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Material, CenteredText } from "../components";
+import { Material, CenteredText, Error, Loader } from "../components";
 import { getUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
 import { returnHexCode } from "../utils/returnHexCodes";
@@ -15,33 +15,24 @@ export const FavoritesScreen = () => {
 
   const [filter, setFilter] = useState<string>("All");
 
-  const { initialFavorites } = useFavorites();
+  const { favorites: favoritesList, loading, error } = useFavorites();
   // нужно скомпановать материалы по дисциплинам
 
   const favorites = useMemo(
     () =>
-      initialFavorites.reduce((total, item) => {
+      favoritesList.reduce((total, item) => {
         (total[item.disciplineName] = total[item.disciplineName] || []).push(item.material);
 
         return total;
       }, {} as Record<string, Material[]>),
-    [initialFavorites]
+    [favoritesList]
   );
 
+  if (loading) {
+    return <Loader text={"Загрузка избранных материалов"} theme={user?.theme} />;
+  }
   if (!favorites) {
-    return (
-      <CenteredText
-        text={"У вас нет избранных материалов("}
-        Icon={
-          <Icon
-            name="sentiment-very-dissatisfied"
-            type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
-            size={30}
-          />
-        }
-      />
-    );
+    return <Error text={"У вас нет избранных материалов"} theme={user?.theme} />;
   }
 
   return (

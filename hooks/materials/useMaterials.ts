@@ -27,11 +27,10 @@ export const useMaterials = (disciplineId: string) => {
   );
 
   useEffect(() => {
-    console.log("rerender");
     const getData = async () => {
       await Promise.all(
         snapshot?.docs.map(async (doc) => {
-          const m = getMaterialById(doc.id);
+          const m = await getMaterialById(doc.id);
           return m;
         }) || []
       )
@@ -41,7 +40,6 @@ export const useMaterials = (disciplineId: string) => {
         .catch((e) => {
           console.log(e);
         });
-      // setMaterials(materials || []);
     };
     getData();
   }, [snapshot]);
