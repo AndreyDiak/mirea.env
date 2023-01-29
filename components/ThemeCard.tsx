@@ -12,39 +12,33 @@ type Props = {
   isBordered: boolean;
 };
 
-export const ThemeCard: React.FC<Props> = React.memo(
-  ({ theme, isBordered }) => {
-    const tw = useTailwind();
-    const user = useSelector(getUser);
-    const dispatch = useDispatch();
+export const ThemeCard: React.FC<Props> = React.memo(({ theme, isBordered }) => {
+  const tw = useTailwind();
+  const user = useSelector(getUser);
+  const dispatch = useDispatch();
 
-    console.log(user?.theme);
+  const setUserTheme = async () => {
+    await updateDoc(doc(db, `users/${user?.userId}`), {
+      theme,
+    });
+    dispatch(setTheme(theme));
+    ToastAndroid.show("Тема обновлена", 1000);
+  };
 
-    const setUserTheme = async () => {
-      await updateDoc(doc(db, `users/${user?.userId}`), {
-        theme,
-      });
-      dispatch(setTheme(theme));
-      ToastAndroid.show("Тема обновлена", 1000);
-    };
-
-    return (
-      <TouchableOpacity onPress={setUserTheme}>
-        <View
-          style={[
-            tw("w-12 h-8 rounded-md mr-4"),
-            {
-              backgroundColor: returnHexCode(theme),
-              borderWidth: 2,
-              borderStyle: "solid",
-              borderColor:
-                user?.theme === theme && isBordered
-                  ? returnDarkenHexCode(theme)
-                  : "transparent",
-            },
-          ]}
-        />
-      </TouchableOpacity>
-    );
-  }
-);
+  return (
+    <TouchableOpacity onPress={setUserTheme}>
+      <View
+        style={[
+          tw("w-12 h-8 rounded-md mr-4"),
+          {
+            backgroundColor: returnHexCode(theme),
+            borderWidth: 2,
+            borderStyle: "solid",
+            borderColor:
+              user?.theme === theme && isBordered ? returnDarkenHexCode(theme) : "transparent",
+          },
+        ]}
+      />
+    </TouchableOpacity>
+  );
+});

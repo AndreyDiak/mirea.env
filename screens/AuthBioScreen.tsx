@@ -1,7 +1,7 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { CheckBox, Input } from "@rneui/themed";
 import React, { useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { createUser } from "../api/auth/mutations/createUser";
 
@@ -11,9 +11,6 @@ import { LFilter } from "../typings/enums";
 
 type AuthBioScreenRouteProp = RouteProp<RootStackParamList, "AuthBio">;
 
-// TODO вынести регистрацию в api
-
-// TODO делаем сначала выбор института
 // если type === 'student' можем выбрать только один институт а если type === 'teacher'
 // то можно выбрать несколько институтов
 // потом мы запрашиваем все группы которые есть в этом институте для student
@@ -71,8 +68,11 @@ export const AuthBioScreen = () => {
       group: selectedGroup,
       disciplines: selectedDisciplines,
       setError,
+      institutes: selectedInstitutes.map((institute) => institute.id),
     });
   };
+
+  console.log({ selectedInstitutes });
 
   return (
     <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>

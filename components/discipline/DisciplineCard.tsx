@@ -19,23 +19,14 @@ export const DisciplineCard = ({ discipline }: Props) => {
   const user = useSelector(getUser);
 
   const [chatId, setChatId] = useState("");
-  const [groupId, setGroupId] = useState("");
 
   useEffect(() => {
     const getChatInfo = async () => {
       if (user?.type === "student") {
-        const groupQ = query(
-          collection(db, "groups"),
-          where("name", "==", user.group)
-        );
-        const groupSnap = await getDocs(groupQ);
-        const groupId = groupSnap.docs[0].id;
-
-        setGroupId(groupId);
         const q = query(
           collection(db, "chats"),
           where("disciplineId", "==", discipline.id),
-          where("groupId", "==", groupId)
+          where("groupId", "==", user.groupId)
         );
         const snap = await getDocs(q);
         if (snap.docs.length > 0) {
@@ -45,9 +36,8 @@ export const DisciplineCard = ({ discipline }: Props) => {
           // создаем новый чат...
           await addDoc(collection(db, "chats"), {
             disciplineId: discipline.id,
-            groupId: groupId,
+            groupId: user.groupId,
           }).then((res) => {
-            // console.log(res)
             setChatId(res.id);
           });
         }
@@ -75,11 +65,7 @@ export const DisciplineCard = ({ discipline }: Props) => {
           >
             Материалы
           </Text>
-          <Icon
-            name="inventory"
-            type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
-          />
+          <Icon name="inventory" type="material" color={returnHexCode(user?.theme as AppTheme)} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -88,7 +74,7 @@ export const DisciplineCard = ({ discipline }: Props) => {
             user.type === "student"
               ? navigation.navigate("Chat", {
                   discipline,
-                  groupId,
+                  groupId: user.groupId,
                   chatId,
                 })
               : navigation.navigate("Chats", { discipline })

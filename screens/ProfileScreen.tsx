@@ -17,7 +17,7 @@ import { returnHexCode } from "../utils/returnHexCodes";
 export const ProfileScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<ProfileScreenNavigatorProp>();
-  const user = useSelector(getUser) as Student | Teacher;
+  const user = useSelector(getUser);
   const [profileImage, setProfileImage] = useState<null | string>(null);
 
   const pickImage = async () => {
@@ -137,14 +137,14 @@ export const ProfileScreen = () => {
                 {user.type === "student" ? (
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
-                    <Text style={tw("text-xl font-bold")}>{user.group}</Text>
+                    <Text style={tw("text-xl font-bold")}>{user.groupId}</Text>
                   </View>
                 ) : (
                   <View>
                     <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
                     <Text style={tw("text-[18px] font-bold")}>
                       <Text
-                        style={{ color: returnHexCode(user.theme as AppTheme) }}
+                        style={{ color: returnHexCode(user?.theme || "blue") }}
                         onPress={() => navigation.navigate("Discipline")}
                       >
                         ({user.disciplines.length}){" "}
@@ -164,14 +164,12 @@ export const ProfileScreen = () => {
               >
                 <Text>Ваша тема</Text>
                 <View>
-                  <ThemeCard isBordered={false} theme={user.theme} />
+                  <ThemeCard isBordered={false} theme={user?.theme} />
                 </View>
               </View> */}
 
               {/* <Card.Divider /> */}
               <View style={tw("mb-4")}>
-                <Text style={tw("text-center mb-2")}>Тема</Text>
-                {/* TODO включить обратно */}
                 <View style={tw("flex flex-row justify-center -mr-4")}>
                   <ThemeCard isBordered theme="blue" />
                   <ThemeCard isBordered theme="emerald" />
@@ -200,7 +198,7 @@ export const ProfileScreen = () => {
                 console.log("hey");
               }}
             >
-              <Text style={[tw("text-center"), { color: returnHexCode(user.theme as AppTheme) }]}>
+              <Text style={[tw("text-center"), { color: returnHexCode(user?.theme || "blue") }]}>
                 Оставить отзыв
               </Text>
             </TouchableOpacity>
@@ -219,7 +217,7 @@ export const ProfileScreen = () => {
         <Text
           style={[
             tw("px-2 py-1 rounded-md text-lg underline"),
-            { color: returnHexCode(user.theme as AppTheme) },
+            { color: returnHexCode(user?.theme || "blue") },
           ]}
         >
           Выйти из аккаунта

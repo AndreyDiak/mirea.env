@@ -21,16 +21,12 @@ export const FavoritesScreen = () => {
   const favorites = useMemo(
     () =>
       initialFavorites.reduce((total, item) => {
-        (total[item.disciplineName] = total[item.disciplineName] || []).push(
-          item.material
-        );
+        (total[item.disciplineName] = total[item.disciplineName] || []).push(item.material);
 
         return total;
       }, {} as Record<string, Material[]>),
     [initialFavorites]
   );
-
-  console.log(favorites);
 
   if (!favorites) {
     return (
@@ -59,7 +55,7 @@ export const FavoritesScreen = () => {
             style={[
               tw("rounded-lg px-3 py-1"),
               {
-                backgroundColor: returnHexCode(user.theme),
+                backgroundColor: returnHexCode(user?.theme || 'blue'),
               },
             ]}
           >
@@ -94,7 +90,7 @@ export const FavoritesScreen = () => {
                   key={favorite.index}
                   material={favorite.item}
                   userId={user.userId}
-                  userTheme={user.theme}
+                  userTheme={user?.theme}
                   userType={user.type}
                 />
               )}

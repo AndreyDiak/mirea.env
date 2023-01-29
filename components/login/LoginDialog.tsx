@@ -46,8 +46,9 @@ export const LoginDialog = ({
 
   const { disciplines, loading: DLoading } = useDisciplines(myInstitutes, filter);
 
-  const totalDisciplinesCount =
-    (!!disciplines && Object.values(disciplines).reduce((total, d) => total + d.length, 0)) ?? 0;
+  const totalDisciplinesCount = !!disciplines
+    ? Object.values(disciplines).reduce((total, d) => total + d.length, 0)
+    : 0;
 
   const { groups, loading: GLoading } = useGroups(myInstitutes, filter);
 

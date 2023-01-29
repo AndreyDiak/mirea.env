@@ -1,34 +1,50 @@
-import {
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  where,
-} from "firebase/firestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useCollection } from "react-firebase-hooks/firestore";
 import { getMaterialById } from "../../api";
-import { db } from "../../firebase";
-
+import { DBQueries } from "../../typings/enums";
+import { QUERIES } from "../../utils/createDBQuery";
 export const useMaterials = (disciplineId: string) => {
-  const [initialMaterials, setInitialMaterials] = useState<Material[]>([]);
-  const q = query(
-    collection(db, "materials"),
-    where("disciplineId", "==", disciplineId),
-    orderBy("timestamp")
+  const q = QUERIES.CREATE_SIMPLE_QUERY_ORDERED<Material>(
+    DBQueries.MATERIALS,
+    {
+      fieldName: "disciplineId",
+      fieldValue: disciplineId,
+      opStr: "==",
+    },
+    {
+      fieldValue: "timestamp",
+    }
+  );
+  const [snapshot, loading, error] = useCollection(q);
+  const [materials, setMaterials] = useState<Material[]>(null);
+
+  const rawMaterials = snapshot?.docs.map(
+    (m) =>
+      ({
+        id: m.id,
+        ...m.data(),
+      } as Material)
   );
 
-  onSnapshot(q, async (snapshot) => {
-    const materials = await Promise.all(
-      snapshot.docs.map(async (m) => {
-        const material = await getMaterialById(m.id);
-        return material;
-      })
-    );
+  useEffect(() => {
+    console.log("rerender");
+    const getData = async () => {
+      await Promise.all(
+        snapshot?.docs.map(async (doc) => {
+          const m = getMaterialById(doc.id);
+          return m;
+        }) || []
+      )
+        .then((data) => {
+          setMaterials(data || []);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      // setMaterials(materials || []);
+    };
+    getData();
+  }, [snapshot]);
 
-    if (materials.length !== initialMaterials.length) {
-      setInitialMaterials(materials);
-    }
-  });
-
-  return { initialMaterials };
+  return { materials: materials?.length ? materials : rawMaterials, loading, error };
 };

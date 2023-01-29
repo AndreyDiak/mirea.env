@@ -7,10 +7,18 @@ interface Props {
   isStudent: boolean;
   group: Group;
   disciplines: string[];
+  institutes: string[];
   setError: (error: string) => void;
 }
 
-export const createUser = async ({ data, isStudent, group, disciplines, setError }: Props) => {
+export const createUser = async ({
+  data,
+  isStudent,
+  group,
+  disciplines,
+  setError,
+  institutes,
+}: Props) => {
   if (data.name === "") {
     setError("Введите имя");
     return;
@@ -28,18 +36,20 @@ export const createUser = async ({ data, isStudent, group, disciplines, setError
     return;
   }
 
-  let user: NewSuperUser;
+  let user: SuperUser;
 
   if (isStudent) {
     user = {
-      ...data,
+      ...(data as User),
       groupId: group.id,
+      instituteId: institutes[0],
       type: "student",
     };
   } else {
     user = {
-      ...data,
+      ...(data as User),
       disciplines,
+      institutes,
       type: "teacher",
     };
   }

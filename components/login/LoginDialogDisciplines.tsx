@@ -27,17 +27,14 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(
       setMyDisciplines(disciplinesCopy);
     };
 
-    // console.log({ isLoading });
-    // console.log({ disciplines });
-
     const renderData = () => {
       if (isLoading) {
         return <Loader text="Загрузка доступных дисциплин" theme="blue" />;
       }
-      const totalDisciplinesCount = Object.values(disciplines).reduce(
-        (total, d) => total + d.length,
-        0
-      );
+      const totalDisciplinesCount = !!disciplines
+        ? Object.values(disciplines).reduce((total, d) => total + d.length, 0)
+        : 0;
+
       if (totalDisciplinesCount === 0) {
         return <Error text={"Дисциплины не найдены"} theme="blue" />;
       }

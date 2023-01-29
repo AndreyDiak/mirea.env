@@ -10,31 +10,23 @@ interface Props {
   userTheme: AppTheme;
 }
 
-export const MaterialFiles: React.FC<Props> = React.memo(
-  ({ documents, userTheme }) => {
-    const tw = useTailwind();
+export const MaterialFiles: React.FC<Props> = React.memo(({ documents, userTheme }) => {
+  const tw = useTailwind();
+  if (documents.length > 0)
     return (
-      !!documents.length && (
-        <View style={tw("mb-2")}>
-          <Card.Divider />
-          <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
-          {documents.map((document) => (
-            <TouchableOpacity
-              key={document.id}
-              onPress={async () => await Linking.openURL(document.document)}
-            >
-              <Text
-                style={[
-                  tw("mb-2 font-semibold underline"),
-                  { color: returnHexCode(userTheme) },
-                ]}
-              >
-                {document.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )
+      <View style={tw("mb-2")}>
+        <Card.Divider />
+        <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
+        {documents.map((document) => (
+          <TouchableOpacity
+            key={document.id}
+            onPress={async () => await Linking.openURL(document.document)}
+          >
+            <Text style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(userTheme) }]}>
+              {document.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     );
-  }
-);
+});

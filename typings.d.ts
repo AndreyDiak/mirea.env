@@ -24,6 +24,10 @@ interface Institute {
 interface Material {
   id: string;
   disciplineId: string;
+  timestamp: {
+    seconds: number;
+    nanoseconds: number;
+  };
   title: string;
   text: string;
   likes: number;
@@ -56,6 +60,7 @@ interface Comment {
 interface Source {
   title: string;
   document: string;
+  materialId: string;
   id: string;
 }
 
@@ -70,6 +75,12 @@ interface Notification {
   title: string;
   userId: string;
   notificationId: string;
+}
+
+interface Favorite {
+  id: string;
+  materialId: string;
+  userId: string;
 }
 
 interface Favorites {
@@ -97,27 +108,17 @@ type NewUser = Omit<User, "userId">;
 
 interface Student extends User {
   groupId: string;
+  instituteId: string;
   type: "student";
 }
 
 interface Teacher extends User {
-  disciplines: Discipline[];
-  type: "teacher";
-}
-
-interface NewStudent extends NewUser {
-  groupId: string;
-  type: "student";
-}
-
-interface NewTeacher extends NewUser {
-  disciplines: string[];
+  disciplines: string[]; // ids of linked disciplines
+  institutes: string[]; // ids of linked institutes
   type: "teacher";
 }
 
 type SuperUser = Student | Teacher;
-
-type NewSuperUser = NewStudent | NewTeacher;
 
 type RootStackParamList = {
   Login: undefined;

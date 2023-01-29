@@ -6,17 +6,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Material, MaterialForm, CenteredText } from "../components";
+import { Error, Loader, Material, MaterialForm } from "../components";
 
 import { getUser } from "../features/userSlice";
 import { useMaterials } from "../hooks/";
 import { returnHexCode } from "../utils/returnHexCodes";
-type Props = {};
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
 export const DisciplineScreen = () => {
-  const [initialMaterials, setInitialMaterials] = useState<Material[]>([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
 
   const tw = useTailwind();
@@ -33,41 +31,14 @@ export const DisciplineScreen = () => {
     });
   }, [discipline]);
 
-  const { initialMaterials: materials } = useMaterials(discipline.id);
+  const { materials, loading, error } = useMaterials(discipline.id);
 
-  // const materialsQuery = query(
-  //   collection(db, "materials"),
-  //   where("disciplineId", "==", discipline.id),
-  //   orderBy("timestamp")
-  // );
+  if (loading) {
+    return <Loader text={"Загрузка материалов"} theme={user?.theme} />;
+  }
 
-  // const unsubscribe = onSnapshot(materialsQuery, async (snapshot) => {
-  //   const materials = await Promise.all(
-  //     snapshot.docs.map(async (m) => {
-  //       const material = await getMaterialById(m.id);
-  //       return material;
-  //     })
-  //   );
-
-  //   if (materials.length !== initialMaterials.length) {
-  //     setInitialMaterials(materials);
-  //   }
-  // });
-
-  if (!materials.length && user.type === "student") {
-    return (
-      <CenteredText
-        text={"Тут пока нет материалов..."}
-        Icon={
-          <Icon
-            name="inventory"
-            type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
-            size={30}
-          />
-        }
-      />
-    );
+  if (materials.length === 0 && !loading) {
+    return <Error text={"Тут пока нет материалов..."} theme={user?.theme} />;
   }
 
   return (
@@ -79,22 +50,19 @@ export const DisciplineScreen = () => {
             onPress={() => setIsFormVisible(!isFormVisible)}
           >
             <View style={tw("flex flex-row items-center")}>
-              <Text style={{ color: returnHexCode(user.theme as AppTheme) }}>
+              <Text style={{ color: returnHexCode(user?.theme || "blue") }}>
                 {isFormVisible ? "Закрыть" : "Добавить материалы"}
               </Text>
               <Icon
                 name={!isFormVisible ? "expand-more" : "expand-less"}
                 type="material"
-                color={returnHexCode(user.theme as AppTheme)}
+                color={returnHexCode(user?.theme || "blue")}
                 size={25}
               />
             </View>
           </TouchableOpacity>
           {isFormVisible && (
-            <MaterialForm
-              disciplineId={discipline.id}
-              setIsFormVisible={setIsFormVisible}
-            />
+            <MaterialForm disciplineId={discipline.id} setIsFormVisible={setIsFormVisible} />
           )}
         </View>
       )}
@@ -104,10 +72,11 @@ export const DisciplineScreen = () => {
           data={materials.reverse()}
           scrollEnabled
           showsVerticalScrollIndicator={false}
-          renderItem={(item) => {
+          renderItem={({ item: material, index }) => {
             return (
               <Material
-                material={item.item}
+                key={material.id}
+                material={material}
                 userId={user?.userId}
                 userType={user?.type}
                 userTheme={user?.theme}

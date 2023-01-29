@@ -12,18 +12,13 @@ interface Props {
 
 export const LoginDialogInstitutes: React.FC<Props> = React.memo(
   ({ isStudent, institutes, setMyInstitutes, myInstitutes }) => {
-    const toggleMyInstitututes = (
-      institute: Institute,
-      isSelected: boolean
-    ) => {
+    const toggleMyInstitututes = (institute: Institute, isSelected: boolean) => {
       if (isStudent) {
         setMyInstitutes([institute]);
       } else {
         let myInstitutesCopy = [...myInstitutes];
         if (isSelected) {
-          myInstitutesCopy = myInstitutesCopy.filter(
-            (inst) => inst.id !== institute.id
-          );
+          myInstitutesCopy = myInstitutesCopy.filter((inst) => inst.id !== institute.id);
         } else {
           myInstitutesCopy.push(institute);
         }
@@ -34,17 +29,13 @@ export const LoginDialogInstitutes: React.FC<Props> = React.memo(
     const tw = useTailwind();
     return (
       <View>
-        {/* render all groups */}
-        {/* TODO сделать сначала выбор института потом выбирать группы в нем... */}
         <FlatList
           data={institutes}
           scrollEnabled
           style={tw("max-h-[350px]")}
           showsVerticalScrollIndicator={false}
           renderItem={({ item, index }) => {
-            const isSelected = myInstitutes.some(
-              (institute) => institute.id === item.id
-            );
+            const isSelected = myInstitutes.some((institute) => institute.id === item.id);
             return (
               <CheckBox
                 key={index}

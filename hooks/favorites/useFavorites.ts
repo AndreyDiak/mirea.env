@@ -1,9 +1,13 @@
 import { collection, onSnapshot, query } from "firebase/firestore";
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { getMaterialById, getDisciplineById } from "../../api";
+import { getMaterialById } from "../../api";
+import { getDataById } from "../../api/queries/getDataById";
 import { getUser } from "../../features/userSlice";
 import { db } from "../../firebase";
+import { DBQueries } from "../../typings/enums";
+
+// TODO переделать по типу useMaterials
 
 interface FavoriteItem {
   fId: string; // current favorite item id
@@ -31,7 +35,11 @@ export const useFavorites = () => {
         // get material by ID
         const material = await getMaterialById(favorite.mId);
         // get discipline by ID
-        const discipline = await getDisciplineById(material.disciplineId);
+        // const discipline = await getDisciplineById(material.disciplineId);
+        const discipline = await getDataById<Discipline>(
+          material.disciplineId,
+          DBQueries.DISCIPLINES
+        );
 
         favorites.push({
           disciplineName: discipline.name,
