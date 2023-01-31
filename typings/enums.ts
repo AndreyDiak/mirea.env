@@ -12,7 +12,7 @@ export const enum DBQueries {
   USERS = "users", // все пользователи
 }
 
-export const enum LFilter {
+export const enum LFilter { // LoginPopupFilters
   INSTITUTES = "institutes",
   GROUPS = "groups",
   DISCIPLINES = "disciplines",

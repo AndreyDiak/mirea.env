@@ -10,7 +10,7 @@ export const returnLightenHexCode = (theme: AppTheme) => {
     case "violet":
       return "#ede9fe";
     default:
-      return "white";
+      return "#dbeafe";
   }
 };
 
