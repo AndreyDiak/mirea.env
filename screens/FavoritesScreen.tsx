@@ -4,18 +4,17 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, Material } from "../components";
-import { getUser } from "../features/userSlice";
+import { groupId } from "../features/userSlice";
 import { useFavorites } from "../hooks";
 import { returnHexCode } from "../utils/returnHexCodes";
 
 export const FavoritesScreen = () => {
   const tw = useTailwind();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const [filter, setFilter] = useState<string>("All");
 
   const { favorites: favoritesList, loading, error } = useFavorites();
-  // нужно скомпановать материалы по дисциплинам
 
   const favorites = useMemo(
     () =>
@@ -30,9 +29,11 @@ export const FavoritesScreen = () => {
   if (loading) {
     return <Loader text={"Загрузка избранных материалов"} theme={user?.theme} />;
   }
-  if (!favorites) {
+  if (Object.keys(favorites).length === 0) {
     return <Error text={"У вас нет избранных материалов"} theme={user?.theme} />;
   }
+
+  console.log({ favorites });
 
   return (
     <View style={tw("py-6 flex flex-col")}>

@@ -1,17 +1,11 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Keyboard } from "react-native";
 import React, { useState } from "react";
 import { Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useSelector } from "react-redux";
-import { getUser } from "../../features/userSlice";
+import { groupId } from "../../features/userSlice";
 import { returnHexCode } from "../../utils/returnHexCodes";
 import { theme } from "../../tailwind.config";
 
@@ -34,7 +28,7 @@ export const MessageForm = ({
 }: Props) => {
   const tw = useTailwind();
   const [message, setMessage] = useState("");
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   // sendMessage function
   const sendMessage = async () => {
     await addDoc(collection(db, `chats/${chatId}/messages`), {
@@ -72,9 +66,7 @@ export const MessageForm = ({
           />
           <View style={tw("w-0.5 h-full bg-gray-400 ml-4")} />
           <View style={tw("flex-1 pl-4")}>
-            <Text style={tw("font-semibold")}>
-              {activeMessage?.displayName}
-            </Text>
+            <Text style={tw("font-semibold")}>{activeMessage?.displayName}</Text>
             <Text style={tw("text-gray-400")}>{activeMessage?.message}</Text>
           </View>
           <TouchableOpacity onPress={() => setIsReplyingOnMessage(false)}>

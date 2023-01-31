@@ -4,7 +4,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { Icon } from "@rneui/themed";
 import { Message } from "./Message";
 import { useSelector } from "react-redux";
-import { getUser } from "../../features/userSlice";
+import { groupId } from "../../features/userSlice";
 import { returnHexCode } from "../../utils/returnHexCodes";
 
 type Props = {
@@ -27,7 +27,7 @@ export const Messages = ({
   setIsHeaderMenuVisible,
 }: Props) => {
   const tw = useTailwind();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   const flatListRef = useRef();
 
   const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
@@ -37,9 +37,7 @@ export const Messages = ({
       // @ts-ignore all exists...
       flatListRef.current.scrollToIndex({
         animating: true,
-        index: messages.findIndex(
-          (msg) => msg.messageId === activeMessageIndex
-        ),
+        index: messages.findIndex((msg) => msg.messageId === activeMessageIndex),
       });
     }
   };
@@ -104,9 +102,7 @@ export const Messages = ({
                 email={user?.email as string}
                 theme={user?.theme as AppTheme}
                 nextMessageEmail={
-                  !!messages[item.index + 1]
-                    ? messages[item.index + 1].email
-                    : null
+                  !!messages[item.index + 1] ? messages[item.index + 1].email : null
                 }
                 isBacklight={
                   item.item.messageId === selectedMessageId ||

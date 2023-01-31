@@ -9,6 +9,7 @@ import {
   where,
   WhereFilterOp,
 } from "firebase/firestore";
+import { string } from "yargs";
 import { db } from "../firebase";
 import { DBQueries } from "../typings/enums";
 
@@ -65,10 +66,7 @@ export const QUERIES = {
     ),
 };
 
-export function createDoc(
-  collectionName: DBQueries,
-  docId: string
-): DocumentReference<DocumentData> {
-  const d = doc(db, `${collectionName}/${docId}`);
-  return d;
-}
+export const DOCS = {
+  CREATE_DOC: (collectionName: DBQueries, docId: string): DocumentReference<DocumentData> =>
+    doc(db, `${collectionName}/${docId}`),
+};

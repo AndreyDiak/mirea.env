@@ -8,8 +8,9 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, Material, MaterialForm } from "../components";
 
-import { getUser } from "../features/userSlice";
+import { groupId } from "../features/userSlice";
 import { useMaterials } from "../hooks/";
+import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
 import { returnHexCode } from "../utils/returnHexCodes";
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -19,7 +20,7 @@ export const DisciplineScreen = () => {
 
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const {
     params: { discipline },
@@ -40,6 +41,8 @@ export const DisciplineScreen = () => {
   if (materials.length === 0 && !loading) {
     return <Error text={"Тут пока нет материалов..."} theme={user?.theme} />;
   }
+
+  console.log(materials);
 
   return (
     <SafeAreaView style={tw("flex flex-col px-4")}>

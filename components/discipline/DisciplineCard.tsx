@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { getUser } from "../../features/userSlice";
+import { groupId } from "../../features/userSlice";
 import { db } from "../../firebase";
 import { returnHexCode } from "../../utils/returnHexCodes";
 
@@ -16,7 +16,7 @@ type Props = {
 export const DisciplineCard = ({ discipline }: Props) => {
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const [chatId, setChatId] = useState("");
 

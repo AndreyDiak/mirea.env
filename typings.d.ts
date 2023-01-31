@@ -1,6 +1,13 @@
+import { UType } from "./typings/enums";
+
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
 type UserType = "student" | "teacher" | "admin";
+
+interface Timestamp {
+  seconds: number;
+  nanoseconds: number;
+}
 
 interface Group {
   id: string;
@@ -24,24 +31,18 @@ interface Institute {
 interface Material {
   id: string;
   disciplineId: string;
-  timestamp: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  timestamp: Timestamp;
   title: string;
   text: string;
   likes: number;
   ownerId: string;
-  comments: Comment[];
-  documents: Source[];
+  // comments: DBComment[];
+  // documents: Source[];
 }
 
 interface Message {
   message: string;
-  timestamp: {
-    seconds: number;
-    nanoseconds: number;
-  };
+  timestamp: Timestamp;
   displayName: string;
   email: string;
   type: string;
@@ -50,10 +51,11 @@ interface Message {
   replyingMessage: string | null;
 }
 
-interface Comment {
+interface DBComment {
   email: string;
   text: string;
   materialId: string;
+  timestamp: Timestamp;
   id: string;
 }
 
@@ -109,13 +111,13 @@ type NewUser = Omit<User, "userId">;
 interface Student extends User {
   groupId: string;
   instituteId: string;
-  type: "student";
+  type: UType.STUDENT;
 }
 
 interface Teacher extends User {
   disciplines: string[]; // ids of linked disciplines
   institutes: string[]; // ids of linked institutes
-  type: "teacher";
+  type: UType.TEACHER;
 }
 
 type SuperUser = Student | Teacher;

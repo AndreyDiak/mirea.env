@@ -10,18 +10,11 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useLayoutEffect, useRef, useState } from "react";
-import {
-  FlatList,
-  Keyboard,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { Comment } from "../components";
-import { getUser } from "../features/userSlice";
+import { groupId } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";
 
@@ -29,7 +22,7 @@ type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
 export const CommentsScreen = () => {
   const navigation = useNavigation<CommentsScreenNavigatorProp>();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   const {
     params: { material },
   } = useRoute<CommentsScreenRouteProp>();
@@ -85,9 +78,7 @@ export const CommentsScreen = () => {
         <Card.Title>{material.title}</Card.Title>
         <Text>{material.text}</Text>
       </Card>
-      <Text style={tw("text-lg text-center my-4")}>
-        Комментарии ({comments.length})
-      </Text>
+      <Text style={tw("text-lg text-center my-4")}>Комментарии ({comments.length})</Text>
       <FlatList
         // @ts-ignore workable ref
         ref={flatListRef}

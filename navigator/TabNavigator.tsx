@@ -4,14 +4,14 @@ import { Icon } from "@rneui/themed";
 import { Text } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { getNotifications, getUser } from "../features/userSlice";
+import { getNotifications, groupId } from "../features/userSlice";
 import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
 
 import { returnHexCode } from "../utils/returnHexCodes";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
 const TabNavigator = () => {
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   return (
     <Tab.Navigator

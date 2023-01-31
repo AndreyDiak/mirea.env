@@ -6,3 +6,4 @@ export * from "./common";
 export * from "./discipline";
 export * from "./login";
 export * from "./messages";
+export * from "./profile";

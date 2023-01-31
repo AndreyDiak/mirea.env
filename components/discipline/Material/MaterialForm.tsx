@@ -5,7 +5,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { addMaterial } from "../../../api/materials/mutations/addMaterial";
-import { getUser } from "../../../features/userSlice";
+import { groupId } from "../../../features/userSlice";
 import { returnHexCode } from "../../../utils/returnHexCodes";
 
 type Props = {
@@ -22,7 +22,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
   const [documents, setDocuments] = useState<NewDocument[]>([]);
   const [error, setError] = useState("");
 
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const addDocument = async () => {
     await DocumentPicker.getDocumentAsync({
@@ -49,13 +49,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
     }
 
     setIsLoading(true);
-    await addMaterial(
-      formTitle,
-      formText,
-      user.userId,
-      disciplineId,
-      documents
-    );
+    await addMaterial(formTitle, formText, user.userId, disciplineId, documents);
     // await addDoc(collection(db, "materials"), {
     //   title: formTitle,
     //   text: formText,
@@ -126,9 +120,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
           value={formText}
           onChangeText={setFormText}
         />
-        {error && (
-          <Text style={tw("text-red-400 text-center mb-4")}>{error}</Text>
-        )}
+        {error && <Text style={tw("text-red-400 text-center mb-4")}>{error}</Text>}
         {/* documents list */}
         {documents.length > 0 && (
           <>
@@ -143,17 +135,10 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
                 <Text style={tw("text-xs mb-2 w-5/6")}>{document.name}</Text>
                 <TouchableOpacity
                   onPress={() =>
-                    setDocuments(
-                      documents.length > 1 ? documents.splice(index, 1) : []
-                    )
+                    setDocuments(documents.length > 1 ? documents.splice(index, 1) : [])
                   }
                 >
-                  <Icon
-                    name="close"
-                    type="material"
-                    color="#374151"
-                    size={20}
-                  />
+                  <Icon name="close" type="material" color="#374151" size={20} />
                 </TouchableOpacity>
               </View>
             ))}
@@ -163,29 +148,19 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
         <Card.Divider />
         {/* add documents handler */}
         <TouchableOpacity onPress={addDocument}>
-          <Text
-            style={[
-              tw("text-center mb-4"),
-              { color: returnHexCode(user?.theme as AppTheme) },
-            ]}
-          >
+          <Text style={[tw("text-center mb-4"), { color: returnHexCode(user?.theme as AppTheme) }]}>
             Добавить файлы
           </Text>
         </TouchableOpacity>
 
         <Card.Divider />
         {/* submit form handler */}
-        <TouchableOpacity
-          style={tw("flex flex-row justify-center")}
-          onPress={submitForm}
-        >
+        <TouchableOpacity style={tw("flex flex-row justify-center")} onPress={submitForm}>
           <Text
             style={[
               tw("text-white font-semibold px-4 py-2 rounded-md"),
               {
-                backgroundColor: !isLoading
-                  ? returnHexCode(user?.theme as AppTheme)
-                  : "#9ca3af",
+                backgroundColor: !isLoading ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
               },
             ]}
           >

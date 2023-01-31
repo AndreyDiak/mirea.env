@@ -1,20 +1,20 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { setNotifications, setUser } from "../features/userSlice";
-import { auth, db } from "../firebase";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { groupId, setUser } from "../features/userSlice";
+import { auth } from "../firebase";
+import { useUser } from "../hooks/user/useUser";
 
 import {
   AdminScreen,
   AuthBioScreen,
   AuthInfoScreen,
-  LoginScreen,
-  ChatsScreen,
   ChatScreen,
+  ChatsScreen,
   CommentsScreen,
   DisciplineScreen,
+  LoginScreen,
 } from "../screens";
 
 import TabNavigator from "./TabNavigator";
@@ -24,8 +24,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootNavigator = () => {
   // user которого мы получаем от сервиса авторизации...
   const [initialUser, setInitialUser] = useState<any>(null);
-  const [userType, setUserType] = useState<UserType>();
   const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
   // авторизация с сервиса...
   onAuthStateChanged(auth, async (resolve) => {
@@ -33,43 +33,20 @@ const RootNavigator = () => {
       setInitialUser(resolve);
     } else {
       setInitialUser(null);
+      dispatch(setUser(null));
     }
   });
+  useUser(initialUser);
 
-  //на основе данных с сервиса получаем данные с БД
-  useEffect(() => {
-    const getUser = async () => {
-      if (initialUser) {
-        const q = query(
-          collection(db, "users"),
-          where("email", "==", initialUser.email)
-        );
-        const querySnap = await getDocs(q);
-        // Teacher | Student type...
-        const user: any = {
-          ...querySnap.docs[0].data(),
-          userId: querySnap.docs[0].id,
-        };
-        dispatch(setUser(user));
-        setUserType(user.type);
-      } else {
-        dispatch(setUser(null));
-        dispatch(setNotifications([]));
-      }
-    };
-    getUser();
-  }, [initialUser]);
+  // @ts-ignore
+  if (user && user.type === "admin") {
+    return <AdminScreen />;
+  }
 
-  console.log("userType: " + userType);
-
-  return !initialUser ? (
+  return !user ? (
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen
-          options={{ headerShown: false }}
-          name="Login"
-          component={LoginScreen}
-        />
+        <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen
           options={{
             headerShown: false,
@@ -88,16 +65,10 @@ const RootNavigator = () => {
         />
       </Stack.Group>
     </Stack.Navigator>
-  ) : userType === "admin" ? (
-    <AdminScreen />
   ) : (
     <Stack.Navigator>
       <Stack.Group>
-        <Stack.Screen
-          name="Main"
-          options={{ headerShown: false }}
-          component={TabNavigator}
-        />
+        <Stack.Screen name="Main" options={{ headerShown: false }} component={TabNavigator} />
       </Stack.Group>
       <Stack.Group>
         <Stack.Screen name="Discipline" component={DisciplineScreen} />

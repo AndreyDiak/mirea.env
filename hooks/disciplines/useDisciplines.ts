@@ -1,11 +1,11 @@
-import { getUser } from "./../../features/userSlice";
+import { groupId } from "./../../features/userSlice";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { DBQueries } from "../../typings/enums";
 import { getAllDataWithFilter, getDataById } from "../../api";
 
 export const useDisciplines = () => {
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   const [disciplines, setDisciplines] = useState<Discipline[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
