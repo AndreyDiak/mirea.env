@@ -1,10 +1,9 @@
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { CheckBox, Input } from "@rneui/themed";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { createUser } from "../api/auth/mutations/createUser";
-
 import { LoginDialog, LoginForm } from "../components";
 import { LoginDialogOpen } from "../components/login/LoginDialogOpen";
 import { LFilter } from "../typings/enums";
@@ -34,7 +33,7 @@ export const AuthBioScreen = () => {
   const [isDialogVisible, setIsDialogVisible] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const navigation = useNavigation<AuthBioScreenNavigatorProp>();
+  // const navigation = useNavigation<AuthBioScreenNavigatorProp>();
 
   const {
     params: { email, password },
@@ -71,8 +70,6 @@ export const AuthBioScreen = () => {
       institutes: selectedInstitutes.map((institute) => institute.id),
     });
   };
-
-  console.log({ selectedInstitutes });
 
   return (
     <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>

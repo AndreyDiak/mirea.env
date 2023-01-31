@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { DBQueries, LFilter } from "../../typings/enums";
-import { getAllDataWithFilter } from "./../../api/queries/getAllDataWIthFilter";
+import { getAllDataWithFilter } from "./../../api";
 
 export const useDisciplines = (institutes: Institute[], filter: LFilter) => {
-  const [disciplines, setDisciplines] = useState<Record<string, Discipline[]>>(null);
+  const [disciplines, setDisciplines] =
+    useState<Record<string, Discipline[]>>(null);
 
   const [loading, setLoading] = useState<boolean>(false);
 

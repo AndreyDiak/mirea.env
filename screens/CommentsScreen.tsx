@@ -25,11 +25,9 @@ import { getUser } from "../features/userSlice";
 import { db } from "../firebase";
 import { returnHexCode } from "../utils/returnHexCodes";
 
-type Props = {};
-
 type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
-export const CommentsScreen = (props: Props) => {
+export const CommentsScreen = () => {
   const navigation = useNavigation<CommentsScreenNavigatorProp>();
   const user = useSelector(getUser);
   const {

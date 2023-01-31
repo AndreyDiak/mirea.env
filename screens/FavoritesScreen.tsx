@@ -1,10 +1,9 @@
-import { Icon } from "@rneui/themed";
 import React, { useMemo, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Material, CenteredText, Error, Loader } from "../components";
+import { Error, Loader, Material } from "../components";
 import { getUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
 import { returnHexCode } from "../utils/returnHexCodes";

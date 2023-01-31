@@ -15,7 +15,7 @@ const titleMap: Record<LFilter, string> = {
   institutes: "Выбрать институт(ы)",
 };
 
-type Props = {
+interface Props {
   isVisible: boolean;
   isStudent: boolean;
   myDisciplines: string[];
@@ -29,7 +29,7 @@ type Props = {
   setMyInstitutes: (myInstitutes: Institute[]) => void;
 };
 
-export const LoginDialog = ({
+export const LoginDialog: React.FC<Props> = React.memo(({
   isStudent,
   isVisible,
   toggleVisible,
@@ -40,7 +40,7 @@ export const LoginDialog = ({
   setMyDisciplines,
   myInstitutes,
   setMyInstitutes,
-}: Props) => {
+}) => {
   const tw = useTailwind();
   const { institutes, loading: ILoading } = useInstitutes();
 
@@ -62,6 +62,10 @@ export const LoginDialog = ({
 
   const toggleInstitutesHandler = (myInstitutes: Institute[]) => {
     setMyInstitutes(myInstitutes);
+    // в идеале надо проверять, что если мы студент
+    // и мы выбираем новый институт, то тогда мы зануляем выбранную группу,
+    // а если мы преподователь то мы должны проверять, что если мы убрали институт, 
+    // откуда мы брали дисциплины, то мы должны их удалять
     setMyGroup(null);
     setMyDisciplines([]);
   };
@@ -105,7 +109,6 @@ export const LoginDialog = ({
       <Dialog isVisible={isVisible} onBackdropPress={() => toggleVisible(!isVisible)}>
         <Dialog.Title title={titleMap[filter]} titleStyle={tw("text-center")} />
         {renderList()}
-
         <View style={tw("flex flex-row justify-center")}>
           <TouchableOpacity
             disabled={!submitButtonDisabled}
@@ -113,8 +116,7 @@ export const LoginDialog = ({
           >
             <Text
               style={tw(
-                `${
-                  submitButtonDisabled ? "bg-blue-500" : "bg-gray-400"
+                `${submitButtonDisabled ? "bg-blue-500" : "bg-gray-400"
                 } rounded-lg py-1 px-2 text-white text-lg`
               )}
             >
@@ -125,4 +127,4 @@ export const LoginDialog = ({
       </Dialog>
     </View>
   );
-};
+})
