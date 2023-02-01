@@ -1,9 +1,9 @@
 import { getDoc } from "firebase/firestore";
 import { DBQueries } from "../../typings/enums";
-import { createDoc } from "../../utils/createDBQuery";
+import { DOCS } from "../../utils/createDBQuery";
 
 export const getDataById = async <T>(id: string, collectionName: DBQueries): Promise<T> => {
-  const q = createDoc(collectionName, id);
+  const q = DOCS.CREATE_DOC(collectionName, id);
   const snap = await getDoc(q);
 
   if (snap.exists) {

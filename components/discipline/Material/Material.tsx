@@ -1,11 +1,10 @@
 import { Card } from "@rneui/themed";
-import { collection, onSnapshot, query, where } from "firebase/firestore";
-import React, { useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { deleteMaterial } from "../../../api/materials";
-import { db } from "../../../firebase";
-import { useFavorite } from "../../../hooks/favorites/useFavorite";
+import { deleteMaterial } from "../../../api";
+import { useFavorite } from "../../../hooks";
+import type { AppTheme, Material } from "../../../typings";
 import { MaterialFiles } from "./MaterialFiles";
 import { MaterialMenu } from "./MaterialMenu";
 
@@ -16,21 +15,8 @@ type Props = {
   userTheme: AppTheme;
 };
 
-export const Material: React.FC<Props> = ({ material, userId, userType, userTheme }) => {
+export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {
   const tw = useTailwind();
-
-  // const [isFavorite, setIsFavorite] = useState<boolean>();
-
-  // const q = query(
-  //   collection(db, `users/${userId}/favorites`),
-  //   where("materialId", "==", material.id)
-  // );
-
-  // // подписка на
-  // onSnapshot(q, (snapshot) => {
-  //   const isFavorite = snapshot.docs.length > 0;
-  //   setIsFavorite(isFavorite);
-  // });
 
   const isFavorite = useFavorite(userId, material.id);
 
@@ -39,8 +25,8 @@ export const Material: React.FC<Props> = ({ material, userId, userType, userThem
       <Card.Title style={tw("font-bold text-lg")}>{material.title}</Card.Title>
       <Card.Divider />
       <Text style={tw("mb-4")}>{material.text}</Text>
-
-      <MaterialFiles documents={material?.documents || []} userTheme={userTheme || "blue"} />
+      {/* TODO переделать на отдельную загрузку */}
+      <MaterialFiles materialId={material.id} />
 
       <Card.Divider />
       {/* Icons / Favorites / Comments / Share */}
@@ -52,4 +38,4 @@ export const Material: React.FC<Props> = ({ material, userId, userType, userThem
       )}
     </Card>
   );
-};
+});

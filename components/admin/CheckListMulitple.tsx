@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, FlatList } from "react-native";
 import React, { useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { CheckBox, Icon } from "@rneui/themed";
+import { Group, Teacher } from "../../typings";
 
 type Props = {
   title: string;
@@ -11,16 +12,8 @@ type Props = {
   setList: (list: any[]) => void;
 };
 
-export const CheckListMulitple = ({
-  attr,
-  title,
-  list,
-  selectedList,
-  setList,
-}: Props) => {
+export const CheckListMulitple = ({ attr, title, list, selectedList, setList }: Props) => {
   const tw = useTailwind();
-
-  // console.log(selectedList);
 
   const [isListVisible, setIsListVisible] = useState(false);
 

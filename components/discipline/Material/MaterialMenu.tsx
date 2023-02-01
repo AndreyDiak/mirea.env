@@ -5,6 +5,7 @@ import React from "react";
 import { View, TouchableOpacity } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { handleFavorite } from "../../../api";
+import type { DisciplineScreenNavigatorProp, Material } from "../../../typings";
 
 interface Props {
   userId: string;
@@ -12,11 +13,7 @@ interface Props {
   isFavorite: boolean;
 }
 
-export const MaterialMenu: React.FC<Props> = ({
-  userId,
-  material,
-  isFavorite,
-}) => {
+export const MaterialMenu: React.FC<Props> = ({ userId, material, isFavorite }) => {
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
   // еще не реализовано

@@ -1,12 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import {
-  collection,
-  doc,
-  getDoc,
-  onSnapshot,
-  orderBy,
-  query,
-} from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
 
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { KeyboardAvoidingView, SafeAreaView, Text, View } from "react-native";
@@ -14,18 +7,19 @@ import { useTailwind } from "tailwind-rn/dist";
 import { ChatTitle, Messages, MessageForm } from "../components";
 
 import { db } from "../firebase";
+import type { ChatScreenNavigatorProp, DBMessage, RootStackParamList } from "../typings";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
 export const ChatScreen = () => {
   const [title, setTitle] = useState("Загрузка...");
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<DBMessage[]>([]);
   const [isReplyingOnMessage, setIsReplyingOnMessage] = useState(false);
 
   const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState(false);
   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
 
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<DBMessage | null>(null);
   const tw = useTailwind();
 
   const {
@@ -44,7 +38,7 @@ export const ChatScreen = () => {
           </View>
         ) : (
           <ChatTitle
-            message={selectedMessage as Message}
+            message={selectedMessage}
             onClose={onTitleClose}
             replyOnMessage={() => {
               setIsReplyingOnMessage(true);
@@ -68,17 +62,17 @@ export const ChatScreen = () => {
   }, []);
 
   // subscribe to recieve messages...
-  const q = query(
-    collection(db, `chats/${chatId}/messages`),
-    orderBy("timestamp")
-  );
+  const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp"));
   const unsubscribe = onSnapshot(q, (snapshot) => {
-    const snapMessages = snapshot.docs.map((message) => ({
-      ...message.data(),
-      messageId: message.id,
-    }));
+    const snapMessages = snapshot.docs.map(
+      (message) =>
+        ({
+          ...message.data(),
+          id: message.id,
+        } as DBMessage)
+    );
     if (messages.length !== snapMessages.length) {
-      setMessages(snapMessages as Message[]);
+      setMessages(snapMessages);
       setIsScrollToBottomVisible(true);
     }
   });
@@ -98,7 +92,7 @@ export const ChatScreen = () => {
           messages={messages}
           isScrollToBottomVisible={isScrollToBottomVisible}
           setIsScrollToBottomVisible={setIsScrollToBottomVisible}
-          selectedMessageId={selectedMessage?.messageId}
+          selectedMessageId={selectedMessage?.id}
           setSelectedMessage={setSelectedMessage}
           setIsHeaderMenuVisible={setIsHeaderMenuVisible}
         />

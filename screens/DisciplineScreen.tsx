@@ -6,11 +6,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, Material, MaterialForm } from "../components";
+import { Error, Loader, MaterialCard, MaterialForm } from "../components";
 
-import { getUser } from "../features/userSlice";
-import { useMaterials } from "../hooks/";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { selectUser } from "../features/userSlice";
+import { useMaterials } from "../hooks";
+import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
+import { UType } from "../typings/enums";
+import { returnHexCode } from "../utils";
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
@@ -19,7 +21,7 @@ export const DisciplineScreen = () => {
 
   const tw = useTailwind();
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const {
     params: { discipline },
@@ -37,7 +39,7 @@ export const DisciplineScreen = () => {
     return <Loader text={"Загрузка материалов"} theme={user?.theme} />;
   }
 
-  if (materials.length === 0 && !loading) {
+  if (materials.length === 0 && !loading && user.type === UType.STUDENT) {
     return <Error text={"Тут пока нет материалов..."} theme={user?.theme} />;
   }
 
@@ -74,7 +76,7 @@ export const DisciplineScreen = () => {
           showsVerticalScrollIndicator={false}
           renderItem={({ item: material, index }) => {
             return (
-              <Material
+              <MaterialCard
                 key={material.id}
                 material={material}
                 userId={user?.userId}

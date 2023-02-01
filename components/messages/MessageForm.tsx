@@ -1,26 +1,19 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  TextInput,
-  Keyboard,
-} from "react-native";
-import React, { useState } from "react";
 import { Icon } from "@rneui/themed";
-import { useTailwind } from "tailwind-rn/dist";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
-import { db } from "../../firebase";
+import React, { useState } from "react";
+import { Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { getUser } from "../../features/userSlice";
-import { returnHexCode } from "../../utils/returnHexCodes";
-import { theme } from "../../tailwind.config";
+import { useTailwind } from "tailwind-rn/dist";
+import { addMessage } from "../../api";
+import { selectUser } from "../../features/userSlice";
+import { DBMessage } from "../../typings";
+import { returnHexCode } from "../../utils";
 
 type Props = {
   setIsReplyingOnMessage: (isReply: boolean) => void;
   setIsScrollToBottomVisible: (isVisible: boolean) => void;
-  setActiveMessage: (message: null | Message) => void;
+  setActiveMessage: (message: null | DBMessage) => void;
   isReplyingOnMessage: boolean;
-  activeMessage: Message | null;
+  activeMessage: DBMessage | null;
   chatId: string;
 };
 
@@ -34,18 +27,17 @@ export const MessageForm = ({
 }: Props) => {
   const tw = useTailwind();
   const [message, setMessage] = useState("");
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   // sendMessage function
   const sendMessage = async () => {
-    await addDoc(collection(db, `chats/${chatId}/messages`), {
-      message: message,
-      timestamp: serverTimestamp(),
-      displayName: user?.name,
-      email: user?.email,
-      type: user?.type,
-      photoUrl: user?.img,
-      replyingMessage: isReplyingOnMessage ? activeMessage?.messageId : null,
-    }).then(async (res) => {
+    await addMessage(chatId, {
+      message,
+      displayName: user.name,
+      email: user.email,
+      type: user.type,
+      photoUrl: user.img,
+      replyingMessage: isReplyingOnMessage ? activeMessage?.id : null,
+    }).then(() => {
       Keyboard.dismiss();
       setMessage("");
       if (isReplyingOnMessage) {
@@ -64,17 +56,10 @@ export const MessageForm = ({
             "flex flex-row items-center justify-between bg-white px-4 py-2 border-b border-gray-200"
           )}
         >
-          <Icon
-            name="redo"
-            type="material"
-            size={30}
-            color={returnHexCode(user?.theme as AppTheme)}
-          />
+          <Icon name="redo" type="material" size={30} color={returnHexCode(user.theme)} />
           <View style={tw("w-0.5 h-full bg-gray-400 ml-4")} />
           <View style={tw("flex-1 pl-4")}>
-            <Text style={tw("font-semibold")}>
-              {activeMessage?.displayName}
-            </Text>
+            <Text style={tw("font-semibold")}>{activeMessage?.displayName}</Text>
             <Text style={tw("text-gray-400")}>{activeMessage?.message}</Text>
           </View>
           <TouchableOpacity onPress={() => setIsReplyingOnMessage(false)}>
@@ -93,12 +78,7 @@ export const MessageForm = ({
           onChangeText={setMessage}
         />
         <TouchableOpacity onPress={sendMessage} style={tw("pr-2")}>
-          <Icon
-            name="send"
-            type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
-            size={30}
-          />
+          <Icon name="send" type="material" color={returnHexCode(user.theme)} size={30} />
         </TouchableOpacity>
       </View>
     </View>

@@ -3,19 +3,19 @@ import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, Material } from "../components";
-import { getUser } from "../features/userSlice";
+import { Error, Loader, MaterialCard } from "../components";
+import { selectUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
-import { returnHexCode } from "../utils/returnHexCodes";
+import type { Material } from "../typings";
+import { returnHexCode } from "../utils";
 
 export const FavoritesScreen = () => {
   const tw = useTailwind();
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
 
   const [filter, setFilter] = useState<string>("All");
 
   const { favorites: favoritesList, loading, error } = useFavorites();
-  // нужно скомпановать материалы по дисциплинам
 
   const favorites = useMemo(
     () =>
@@ -30,9 +30,11 @@ export const FavoritesScreen = () => {
   if (loading) {
     return <Loader text={"Загрузка избранных материалов"} theme={user?.theme} />;
   }
-  if (!favorites) {
+  if (Object.keys(favorites).length === 0) {
     return <Error text={"У вас нет избранных материалов"} theme={user?.theme} />;
   }
+
+  console.log({ favorites });
 
   return (
     <View style={tw("py-6 flex flex-col")}>
@@ -64,7 +66,7 @@ export const FavoritesScreen = () => {
               style={[
                 tw("text-center text-lg px-4 py-2 mt-4 font-extrabold"),
                 {
-                  backgroundColor: returnHexCode(user?.theme as AppTheme),
+                  backgroundColor: returnHexCode(user.theme),
                 },
               ]}
             >
@@ -76,7 +78,7 @@ export const FavoritesScreen = () => {
               showsVerticalScrollIndicator={false}
               scrollEnabled
               renderItem={(favorite) => (
-                <Material
+                <MaterialCard
                   key={favorite.index}
                   material={favorite.item}
                   userId={user.userId}

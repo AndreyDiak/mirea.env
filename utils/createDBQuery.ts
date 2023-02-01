@@ -1,8 +1,8 @@
 import {
   collection,
+  doc,
   DocumentData,
   DocumentReference,
-  doc,
   orderBy,
   query,
   Query,
@@ -65,10 +65,7 @@ export const QUERIES = {
     ),
 };
 
-export function createDoc(
-  collectionName: DBQueries,
-  docId: string
-): DocumentReference<DocumentData> {
-  const d = doc(db, `${collectionName}/${docId}`);
-  return d;
-}
+export const DOCS = {
+  CREATE_DOC: (collectionName: DBQueries, docId: string): DocumentReference<DocumentData> =>
+    doc(db, `${collectionName}/${docId}`),
+};

@@ -1,42 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { SuperUser } from "../typings";
 
-export interface CounterState {
+export interface UserState {
   user: SuperUser | null;
-  notifiications: Notification[];
 }
 
-const initialState: CounterState = {
+const initialState: UserState = {
   user: null,
-  notifiications: [],
 };
 
 export const counterSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<Teacher | Student | null>) => {
+    setUser: (state, action: PayloadAction<SuperUser | null>) => {
       state.user = action.payload;
-    },
-    setNotifications: (state, action: PayloadAction<Notification[]>) => {
-      state.notifiications = action.payload;
-    },
-    setTheme: (state, action: PayloadAction<AppTheme>) => {
-      // @ts-ignore
-      state.user = {
-        ...state.user,
-        theme: action.payload,
-      };
     },
   },
 });
 
-export const getUser = (state: RootState) => state.userPage.user;
-export const getNotifications = (state: RootState) =>
-  state.userPage.notifiications;
+export const selectUser = (state: RootState) => state.userPage.user;
+
+export const selectUserTheme = (state: RootState) => state.userPage.user.theme;
 
 // Action creators are generated for each case reducer function
-export const { setUser, setNotifications, setTheme } = counterSlice.actions;
+export const { setUser } = counterSlice.actions;
 
 export default counterSlice.reducer;

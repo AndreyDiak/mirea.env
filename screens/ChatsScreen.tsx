@@ -2,19 +2,13 @@ import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useLayoutEffect, useEffect, useState } from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import {
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { Card } from "@rneui/themed";
 import { useSelector } from "react-redux";
-import { getUser } from "../features/userSlice";
+import { selectUser } from "../features/userSlice";
 import { returnHexCode } from "../utils/returnHexCodes";
+import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
 
 type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
@@ -24,7 +18,7 @@ export const ChatsScreen = (props: Props) => {
 
   const navigation = useNavigation<ChatsScreenNavigatorProp>();
   const [chats, setChats] = useState<any[]>([]);
-  const user = useSelector(getUser);
+  const user = useSelector(selectUser);
   const {
     params: { discipline },
   } = useRoute<ChatsScreenRouteProp>();
@@ -37,10 +31,7 @@ export const ChatsScreen = (props: Props) => {
 
   useEffect(() => {
     const getChats = async () => {
-      const q = query(
-        collection(db, "chats"),
-        where("disciplineId", "==", discipline.id)
-      );
+      const q = query(collection(db, "chats"), where("disciplineId", "==", discipline.id));
       const qSnap = await getDocs(q);
       let chats: any[] = qSnap.docs.map((chat) => ({
         ...chat.data(),
@@ -56,11 +47,7 @@ export const ChatsScreen = (props: Props) => {
           };
         })
       );
-      setChats(
-        chats.sort((prev, next) =>
-          prev.groupInfo.name > next.groupInfo.name ? 1 : -1
-        )
-      );
+      setChats(chats.sort((prev, next) => (prev.groupInfo.name > next.groupInfo.name ? 1 : -1)));
     };
     getChats();
   }, []);
@@ -76,8 +63,7 @@ export const ChatsScreen = (props: Props) => {
           <Card key={item.item.chatId}>
             <View style={tw("flex flex-row justify-between")}>
               <Text>
-                Группа:{" "}
-                <Text style={tw("font-bold")}>{item.item.groupInfo.name}</Text>
+                Группа: <Text style={tw("font-bold")}>{item.item.groupInfo.name}</Text>
               </Text>
               <TouchableOpacity
                 onPress={() =>
@@ -88,14 +74,7 @@ export const ChatsScreen = (props: Props) => {
                   })
                 }
               >
-                <Text
-                  style={[
-                    tw("underline"),
-                    { color: returnHexCode(user?.theme as AppTheme) },
-                  ]}
-                >
-                  Перейти
-                </Text>
+                <Text style={[tw("underline"), { color: returnHexCode(user.theme) }]}>Перейти</Text>
               </TouchableOpacity>
             </View>
           </Card>
