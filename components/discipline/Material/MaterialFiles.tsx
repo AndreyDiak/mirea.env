@@ -1,28 +1,36 @@
 import { Card } from "@rneui/themed";
 import React from "react";
 
-import { View, Text, TouchableOpacity, Linking } from "react-native";
+import { Linking, Text, TouchableOpacity, View } from "react-native";
+import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+import { selectUserTheme } from "../../../features/userSlice";
+import { useMaterialDocuments } from "../../../hooks";
 import { returnHexCode } from "../../../utils/returnHexCodes";
+import { Loader } from "../../common";
 
 interface Props {
-  documents: Source[];
-  userTheme: AppTheme;
+  materialId: string;
 }
 
-export const MaterialFiles: React.FC<Props> = React.memo(({ documents, userTheme }) => {
+export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
   const tw = useTailwind();
-  if (documents.length > 0)
+  const theme = useSelector(selectUserTheme);
+  const { sources, loading, error } = useMaterialDocuments(materialId);
+  if (sources.length === 0 && loading) {
+    return <Loader text={"Загрузка..."} theme={theme} />;
+  }
+  if (sources.length > 0)
     return (
       <View style={tw("mb-2")}>
         <Card.Divider />
         <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
-        {documents.map((document) => (
+        {sources.map((document) => (
           <TouchableOpacity
             key={document.id}
             onPress={async () => await Linking.openURL(document.document)}
           >
-            <Text style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(userTheme) }]}>
+            <Text style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(theme) }]}>
               {document.title}
             </Text>
           </TouchableOpacity>

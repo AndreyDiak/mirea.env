@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { DisciplineCard, Loader } from "../components";
-import { groupId } from "../features/userSlice";
+import { selectUser } from "../features/userSlice";
 import { useDisciplines } from "../hooks";
 
 export const DisciplinesScreen = () => {

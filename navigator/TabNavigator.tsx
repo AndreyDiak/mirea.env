@@ -1,12 +1,12 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
+import React from "react";
 import { Text } from "react-native";
 import { useSelector } from "react-redux";
-import { useTailwind } from "tailwind-rn/dist";
-import { getNotifications, groupId } from "../features/userSlice";
+import { selectUser } from "../features/userSlice";
 import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
 
+import { TabStackParamList } from "../typings";
 import { returnHexCode } from "../utils/returnHexCodes";
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -23,7 +23,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
+                  color: focused ? returnHexCode(user.theme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -34,7 +34,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
+                  color: focused ? returnHexCode(user.theme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -45,7 +45,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
+                  color: focused ? returnHexCode(user.theme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -56,7 +56,7 @@ const TabNavigator = () => {
             return (
               <Text
                 style={{
-                  color: focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
+                  color: focused ? returnHexCode(user.theme) : "#9ca3af",
                   fontSize: 10,
                 }}
               >
@@ -71,7 +71,7 @@ const TabNavigator = () => {
               <Icon
                 name="home"
                 type="material"
-                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
+                color={focused ? returnHexCode(user.theme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -80,7 +80,7 @@ const TabNavigator = () => {
               <Icon
                 name="school"
                 type="material"
-                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
+                color={focused ? returnHexCode(user.theme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -89,7 +89,7 @@ const TabNavigator = () => {
               <Icon
                 name="today"
                 type="material"
-                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
+                color={focused ? returnHexCode(user.theme) : "#9ca3af"}
                 size={30}
               />
             );
@@ -98,7 +98,7 @@ const TabNavigator = () => {
               <Icon
                 name="save"
                 type="material"
-                color={focused ? returnHexCode(user?.theme as AppTheme) : "#9ca3af"}
+                color={focused ? returnHexCode(user.theme) : "#9ca3af"}
                 size={30}
               />
             );

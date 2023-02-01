@@ -2,9 +2,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { groupId, setUser } from "../features/userSlice";
+import { selectUser, setUser } from "../features/userSlice";
 import { auth } from "../firebase";
-import { useUser } from "../hooks/user/useUser";
+import { useUser } from "../hooks";
 
 import {
   AdminScreen,
@@ -16,6 +16,7 @@ import {
   DisciplineScreen,
   LoginScreen,
 } from "../screens";
+import { RootStackParamList } from "../typings";
 
 import TabNavigator from "./TabNavigator";
 

@@ -6,8 +6,9 @@ import { collection, doc, getDoc, getDocs, query, where } from "firebase/firesto
 import { db } from "../firebase";
 import { Card } from "@rneui/themed";
 import { useSelector } from "react-redux";
-import { groupId } from "../features/userSlice";
+import { selectUser } from "../features/userSlice";
 import { returnHexCode } from "../utils/returnHexCodes";
+import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
 
 type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
@@ -73,9 +74,7 @@ export const ChatsScreen = (props: Props) => {
                   })
                 }
               >
-                <Text style={[tw("underline"), { color: returnHexCode(user?.theme as AppTheme) }]}>
-                  Перейти
-                </Text>
+                <Text style={[tw("underline"), { color: returnHexCode(user.theme) }]}>Перейти</Text>
               </TouchableOpacity>
             </View>
           </Card>

@@ -3,9 +3,10 @@ import React from "react";
 import { useTailwind } from "tailwind-rn/dist";
 import { Icon } from "@rneui/themed";
 import * as Clipboard from "expo-clipboard";
+import { DBMessage } from "../../typings";
 
 type Props = {
-  message: Message;
+  message: DBMessage;
   onClose: () => void;
   replyOnMessage: () => void;
 };

@@ -2,9 +2,9 @@ import { Card } from "@rneui/themed";
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { deleteMaterial } from "../../../api/materials";
-import { useFavorite } from "../../../hooks/favorites/useFavorite";
-import { AppTheme, Material } from "../../../typings";
+import { deleteMaterial } from "../../../api";
+import { useFavorite } from "../../../hooks";
+import type { AppTheme, Material } from "../../../typings";
 import { MaterialFiles } from "./MaterialFiles";
 import { MaterialMenu } from "./MaterialMenu";
 
@@ -15,7 +15,7 @@ type Props = {
   userTheme: AppTheme;
 };
 
-export const Material: React.FC<Props> = React.memo(({ material, userId, userType, userTheme }) => {
+export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {
   const tw = useTailwind();
 
   const isFavorite = useFavorite(userId, material.id);
@@ -26,7 +26,7 @@ export const Material: React.FC<Props> = React.memo(({ material, userId, userTyp
       <Card.Divider />
       <Text style={tw("mb-4")}>{material.text}</Text>
       {/* TODO переделать на отдельную загрузку */}
-      <MaterialFiles documents={material?.documents || []} userTheme={userTheme || "blue"} />
+      <MaterialFiles materialId={material.id} />
 
       <Card.Divider />
       {/* Icons / Favorites / Comments / Share */}

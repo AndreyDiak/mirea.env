@@ -1,8 +1,9 @@
-import { groupId } from "./../../features/userSlice";
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
-import { DBQueries } from "../../typings/enums";
+import { useSelector } from "react-redux";
 import { getAllDataWithFilter, getDataById } from "../../api";
+import type { Discipline, Group } from "../../typings";
+import { DBQueries } from "../../typings/enums";
+import { selectUser } from "./../../features/userSlice";
 
 export const useDisciplines = () => {
   const user = useSelector(selectUser);
@@ -27,7 +28,7 @@ export const useDisciplines = () => {
         } else {
           const disciplines: Discipline[] = [];
           await Promise.all(
-            user.disciplines.map(async (d) => {
+            user?.disciplines.map(async (d) => {
               const discipline = await getDataById<Discipline>(d, DBQueries.DISCIPLINES);
               disciplines.push(discipline);
             })

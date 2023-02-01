@@ -11,7 +11,7 @@ import { returnHexCode } from "../../utils/returnHexCodes";
 export const ProfileAdditional: React.FC = React.memo(() => {
   const tw = useTailwind();
   const theme = useSelector(selectUserTheme);
-  // TODO
+
   const { groupName, disciplinesList, loading, uType } = useAddUserData();
 
   const renderGroupName = () => {
@@ -28,7 +28,7 @@ export const ProfileAdditional: React.FC = React.memo(() => {
     return (
       <TouchableOpacity>
         <Text style={[tw("text-[18px] font-bold"), { color: returnHexCode(theme) }]}>
-          ({disciplinesList.length}) предмета
+          ({disciplinesList.length}) {disciplinesList.length < 5 ? "Предмета" : "Предметов"}
         </Text>
       </TouchableOpacity>
     );

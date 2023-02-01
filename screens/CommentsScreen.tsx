@@ -1,22 +1,16 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import {
-  addDoc,
-  collection,
-  onSnapshot,
-  orderBy,
-  query,
-  serverTimestamp,
-  where,
-} from "firebase/firestore";
+import { addDoc, serverTimestamp } from "firebase/firestore";
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { Comment } from "../components";
-import { groupId } from "../features/userSlice";
-import { db } from "../firebase";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { Comment, Loader } from "../components";
+import { selectUser } from "../features/userSlice";
+import { useMaterialComments } from "../hooks";
+import type { CommentsScreenNavigatorProp, RootStackParamList } from "../typings";
+import { DBQueries } from "../typings/enums";
+import { createCollection, returnHexCode } from "../utils";
 
 type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -29,7 +23,6 @@ export const CommentsScreen = () => {
 
   const tw = useTailwind();
   const [commentText, setCommentText] = useState("");
-  const [comments, setComments] = useState<Comment[]>(material.comments);
 
   const flatListRef = useRef();
 
@@ -39,32 +32,45 @@ export const CommentsScreen = () => {
     });
   });
 
-  const q = query(
-    collection(db, "comments"),
-    where("materialId", "==", material.materialId),
-    orderBy("timestamp")
-  );
+  const { comments, loading, error } = useMaterialComments(material.id);
 
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    const commentsSnap = snapshot.docs.map((comment) => ({
-      ...comment.data(),
-      commentId: comment.id,
-    }));
-    if (comments.length !== commentsSnap.length) {
-      setComments(commentsSnap as Comment[]);
+  if (comments.length === 0 && loading) {
+    return <Loader text={"Загрузка комментариев"} theme={user.theme} />;
+  }
+
+  const renderCommentsList = () => {
+    if (comments.length === 0) {
+      return <Text style={tw("text-center my-2")}>Напишите первый комментарий...</Text>;
     }
-  });
+    return (
+      <FlatList
+        // @ts-ignore workable ref
+        ref={flatListRef}
+        data={comments}
+        style={tw("w-10/12 mx-auto my-2")}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item: comment, index }) => (
+          <Comment
+            key={comment.id}
+            comment={comment}
+            index={index}
+            isLast={index === comments.length - 1}
+          />
+        )}
+      />
+    );
+  };
 
   const addComment = async () => {
     if (commentText.length === 0) {
       return;
     }
     Keyboard.dismiss();
-    await addDoc(collection(db, "comments"), {
+    await addDoc(createCollection(DBQueries.COMMENTS), {
       email: user?.email,
       text: commentText,
       timestamp: serverTimestamp(),
-      materialId: material.materialId,
+      materialId: material.id,
     }).then((res) => {
       setCommentText("");
       // @ts-ignore workable ref
@@ -79,21 +85,7 @@ export const CommentsScreen = () => {
         <Text>{material.text}</Text>
       </Card>
       <Text style={tw("text-lg text-center my-4")}>Комментарии ({comments.length})</Text>
-      <FlatList
-        // @ts-ignore workable ref
-        ref={flatListRef}
-        data={comments}
-        style={tw("w-10/12 mx-auto my-2")}
-        showsVerticalScrollIndicator={false}
-        renderItem={(item) => (
-          <Comment
-            key={item.index}
-            comment={item.item}
-            index={item.index}
-            isLast={item.index === comments.length - 1}
-          />
-        )}
-      />
+      {renderCommentsList()}
       <View style={tw("flex flex-row items-center justify-center px-2")}>
         <TextInput
           placeholder="Введите комментарий..."
@@ -102,12 +94,7 @@ export const CommentsScreen = () => {
           style={tw("bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg")}
         />
         <TouchableOpacity onPress={addComment}>
-          <Icon
-            name="send"
-            type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
-            size={30}
-          />
+          <Icon name="send" type="material" color={returnHexCode(user.theme)} size={30} />
         </TouchableOpacity>
       </View>
     </View>

@@ -1,15 +1,14 @@
 import {
   collection,
+  doc,
   DocumentData,
   DocumentReference,
-  doc,
   orderBy,
   query,
   Query,
   where,
   WhereFilterOp,
 } from "firebase/firestore";
-import { string } from "yargs";
 import { db } from "../firebase";
 import { DBQueries } from "../typings/enums";
 

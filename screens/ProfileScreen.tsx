@@ -11,7 +11,6 @@ import { ProfileAdditional, ProfileImage, ProfileSkeleton, ThemeCard } from "../
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { ProfileScreenNavigatorProp } from "../typings";
-import { UType } from "../typings/enums";
 import { returnHexCode } from "../utils/returnHexCodes";
 
 export const ProfileScreen = () => {
@@ -79,15 +78,13 @@ export const ProfileScreen = () => {
 
             <Card.Divider />
             {/* User theme */}
-            <View style={tw("mb-2")}>
-              {/* <Card.Divider /> */}
-              <View style={tw("mb-4")}>
-                <View style={tw("flex flex-row justify-center -mr-4")}>
-                  <ThemeCard isBordered theme="blue" />
-                  <ThemeCard isBordered theme="emerald" />
-                  <ThemeCard isBordered theme="rose" />
-                  <ThemeCard isBordered theme="violet" />
-                </View>
+
+            <View style={tw("mb-4")}>
+              <View style={tw("flex flex-row justify-center -mr-4")}>
+                <ThemeCard isBordered theme="blue" />
+                <ThemeCard isBordered theme="emerald" />
+                <ThemeCard isBordered theme="rose" />
+                <ThemeCard isBordered theme="violet" />
               </View>
             </View>
 
@@ -121,7 +118,6 @@ export const ProfileScreen = () => {
       <TouchableOpacity
         style={tw("flex flex-row justify-center absolute bottom-10 w-full")}
         onPress={() => {
-          console.log("logout");
           signOut(auth);
         }}
       >

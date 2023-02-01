@@ -4,9 +4,10 @@ import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { addMaterial } from "../../../api/materials/mutations/addMaterial";
-import { groupId } from "../../../features/userSlice";
-import { returnHexCode } from "../../../utils/returnHexCodes";
+import { addMaterial } from "../../../api";
+import { selectUser } from "../../../features/userSlice";
+import { NewDocument } from "../../../typings";
+import { returnHexCode } from "../../../utils/";
 
 type Props = {
   disciplineId: string;
@@ -50,52 +51,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
 
     setIsLoading(true);
     await addMaterial(formTitle, formText, user.userId, disciplineId, documents);
-    // await addDoc(collection(db, "materials"), {
-    //   title: formTitle,
-    //   text: formText,
-    //   owner: user?.userId,
-    //   likes: 0,
-    //   disciplineId: disciplineId,
-    //   timestamp: serverTimestamp(),
-    // }).then(async (snap) => {
-    //   if (documents.length) {
-    //     documents.map(async (document) => {
-    //       await addDoc(collection(db, `materials/${snap.id}/sources`), {
-    //         title: document.name,
-    //       }).then(async (newDoc) => {
-    //         const blob = await new Promise((resolve, reject) => {
-    //           const xhr = new XMLHttpRequest();
-    //           xhr.onload = () => {
-    //             resolve(xhr.response);
-    //           };
-    //           xhr.onerror = (e) => {
-    //             reject(new TypeError("Network request failed"));
-    //           };
-    //           xhr.responseType = "blob";
-    //           xhr.open("GET", document.uri, true);
-    //           xhr.send(null);
-    //         });
 
-    //         const docRef = ref(
-    //           storage,
-    //           `materials/${disciplineId}/${document.name}`
-    //         );
-
-    //         // @ts-ignore
-    //         await uploadBytes(docRef, blob).then(async () => {
-    //           const downloadUrl = await getDownloadURL(docRef);
-
-    //           await updateDoc(
-    //             doc(db, `materials/${snap.id}/sources/${newDoc.id}`),
-    //             {
-    //               document: downloadUrl,
-    //             }
-    //           ).then(() => console.log("docs added!"));
-    //         });
-    //       });
-    //     });
-    //   }
-    // });
     setIsLoading(false);
     setDocuments([]);
     setIsFormVisible(false);
@@ -148,7 +104,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
         <Card.Divider />
         {/* add documents handler */}
         <TouchableOpacity onPress={addDocument}>
-          <Text style={[tw("text-center mb-4"), { color: returnHexCode(user?.theme as AppTheme) }]}>
+          <Text style={[tw("text-center mb-4"), { color: returnHexCode(user.theme) }]}>
             Добавить файлы
           </Text>
         </TouchableOpacity>
@@ -160,7 +116,7 @@ export const MaterialForm = ({ disciplineId, setIsFormVisible }: Props) => {
             style={[
               tw("text-white font-semibold px-4 py-2 rounded-md"),
               {
-                backgroundColor: !isLoading ? returnHexCode(user?.theme as AppTheme) : "#9ca3af",
+                backgroundColor: !isLoading ? returnHexCode(user.theme) : "#9ca3af",
               },
             ]}
           >

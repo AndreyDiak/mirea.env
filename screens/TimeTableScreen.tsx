@@ -1,10 +1,10 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { useTailwind } from "tailwind-rn/dist";
 import { Icon } from "@rneui/themed";
-import { returnHexCode } from "../utils/returnHexCodes";
+import React from "react";
+import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
-import { groupId } from "../features/userSlice";
+import { useTailwind } from "tailwind-rn/dist";
+import { selectUser } from "../features/userSlice";
+import { returnHexCode } from "../utils/returnHexCodes";
 
 type Props = {};
 

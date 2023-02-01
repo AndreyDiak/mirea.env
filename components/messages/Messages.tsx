@@ -1,19 +1,20 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useRef, useState } from "react";
-import { useTailwind } from "tailwind-rn/dist";
 import { Icon } from "@rneui/themed";
-import { Message } from "./Message";
+import React, { useRef, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
-import { groupId } from "../../features/userSlice";
+import { useTailwind } from "tailwind-rn/dist";
+import { selectUser } from "../../features/userSlice";
+import type { DBMessage } from "../../typings";
 import { returnHexCode } from "../../utils/returnHexCodes";
+import { Message } from "./Message";
 
 type Props = {
-  messages: Message[];
+  messages: DBMessage[];
   chatId: string;
   isScrollToBottomVisible: boolean;
   selectedMessageId: string | undefined;
   setIsScrollToBottomVisible: (isVisible: boolean) => void;
-  setSelectedMessage: (selectedMessage: Message) => void;
+  setSelectedMessage: (selectedMessage: DBMessage) => void;
   setIsHeaderMenuVisible: (isVisible: boolean) => void;
 };
 
@@ -37,7 +38,7 @@ export const Messages = ({
       // @ts-ignore all exists...
       flatListRef.current.scrollToIndex({
         animating: true,
-        index: messages.findIndex((msg) => msg.messageId === activeMessageIndex),
+        index: messages.findIndex((msg) => msg.id === activeMessageIndex),
       });
     }
   };
@@ -51,10 +52,10 @@ export const Messages = ({
   };
 
   // onMessagePress function...
-  const onMessagePress = (message: Message) => {};
+  const onMessagePress = (message: DBMessage) => {};
 
   // onMessageLongPress function...
-  const onMessageLongPress = (message: Message) => {
+  const onMessageLongPress = (message: DBMessage) => {
     setIsHeaderMenuVisible(true);
     setSelectedMessage(message);
   };
@@ -71,7 +72,7 @@ export const Messages = ({
           <Icon
             name="keyboard-arrow-down"
             type="material"
-            color={returnHexCode(user?.theme as AppTheme)}
+            color={returnHexCode(user.theme)}
             size={40}
           />
         </TouchableOpacity>
@@ -91,27 +92,22 @@ export const Messages = ({
           onEndReached={() => setIsScrollToBottomVisible(false)}
           showsVerticalScrollIndicator={false}
           // initialScrollIndex={messages.length - 3}
-          renderItem={(item) => (
+          renderItem={({ item: message, index }) => (
             <TouchableOpacity
-              onPress={() => onMessagePress(item.item)}
-              onLongPress={() => onMessageLongPress(item.item)}
+              onPress={() => onMessagePress(message)}
+              onLongPress={() => onMessageLongPress(message)}
             >
               <Message
-                key={item.index}
-                message={item.item}
-                email={user?.email as string}
-                theme={user?.theme as AppTheme}
-                nextMessageEmail={
-                  !!messages[item.index + 1] ? messages[item.index + 1].email : null
-                }
-                isBacklight={
-                  item.item.messageId === selectedMessageId ||
-                  item.item.messageId === backligthMessage
-                }
+                key={message.id}
+                message={message}
+                email={user.email}
+                theme={user.theme}
+                nextMessageEmail={!!messages[index + 1] ? messages[index + 1].email : null}
+                isBacklight={message.id === selectedMessageId || message.id === backligthMessage}
                 chatId={chatId}
                 setBacklighMessage={() => {
-                  setBackligntMessage(item.item.replyingMessage);
-                  scrollToIndex(item.item.replyingMessage);
+                  setBackligntMessage(message.replyingMessage);
+                  scrollToIndex(message.replyingMessage);
                 }}
               />
             </TouchableOpacity>
@@ -126,7 +122,7 @@ export const Messages = ({
             <Icon
               name="chat-bubble-outline"
               type="material"
-              color={returnHexCode(user?.theme as AppTheme)}
+              color={returnHexCode(user.theme)}
               size={30}
             />
           </View>

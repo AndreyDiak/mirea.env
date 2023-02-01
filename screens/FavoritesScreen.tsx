@@ -3,10 +3,11 @@ import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, Material } from "../components";
-import { groupId } from "../features/userSlice";
+import { Error, Loader, MaterialCard } from "../components";
+import { selectUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
-import { returnHexCode } from "../utils/returnHexCodes";
+import type { Material } from "../typings";
+import { returnHexCode } from "../utils";
 
 export const FavoritesScreen = () => {
   const tw = useTailwind();
@@ -65,7 +66,7 @@ export const FavoritesScreen = () => {
               style={[
                 tw("text-center text-lg px-4 py-2 mt-4 font-extrabold"),
                 {
-                  backgroundColor: returnHexCode(user?.theme as AppTheme),
+                  backgroundColor: returnHexCode(user.theme),
                 },
               ]}
             >
@@ -77,7 +78,7 @@ export const FavoritesScreen = () => {
               showsVerticalScrollIndicator={false}
               scrollEnabled
               renderItem={(favorite) => (
-                <Material
+                <MaterialCard
                   key={favorite.index}
                   material={favorite.item}
                   userId={user.userId}

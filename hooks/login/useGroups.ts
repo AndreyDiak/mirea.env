@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { Group, Institute } from "../../typings";
 import { DBQueries, LFilter } from "../../typings/enums";
-import { getAllDataWithFilter } from "./../../api/queries/getAllDataWIthFilter";
+import { getAllDataWithFilter } from "./../../api";
 
 export const useGroups = (institutes: Institute[], filter: LFilter) => {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -10,14 +11,13 @@ export const useGroups = (institutes: Institute[], filter: LFilter) => {
     const getData = async () => {
       if (!!institutes.length && filter === LFilter.GROUPS) {
         setLoading(true);
-        console.log("loading started");
-        console.log(institutes[0].id);
+
         const DBGroups = await getAllDataWithFilter<Group>(
           DBQueries.GROUPS,
           "instituteId",
           institutes[0].id
         );
-        console.log("loading ended");
+
         setGroups(DBGroups);
         setLoading(false);
       }

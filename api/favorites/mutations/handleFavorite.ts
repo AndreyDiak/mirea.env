@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 import { ToastAndroid } from "react-native";
 import { db } from "../../../firebase";
+import type { Favorite } from "../../../typings";
 import { DBQueries } from "../../../typings/enums";
 import { QUERIES } from "../../../utils/createDBQuery";
 

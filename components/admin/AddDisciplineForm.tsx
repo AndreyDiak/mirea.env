@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 import { db } from "../../firebase";
+import { Group, Teacher } from "../../typings";
 import { Button } from "../Button";
 import { CheckListMulitple } from "./CheckListMulitple";
 
@@ -49,11 +50,7 @@ export const AddDisciplineForm = (props: Props) => {
   }, []);
 
   const addDiscipline = async () => {
-    if (
-      disciplineTitle === "" ||
-      selectedGroups.length === 0 ||
-      selectedTeachers.length === 0
-    ) {
+    if (disciplineTitle === "" || selectedGroups.length === 0 || selectedTeachers.length === 0) {
       return;
     }
     await addDoc(collection(db, "disciplines"), {

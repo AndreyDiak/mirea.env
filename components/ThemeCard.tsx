@@ -1,11 +1,12 @@
 import { doc, updateDoc } from "firebase/firestore";
 import React from "react";
 import { ToastAndroid, TouchableOpacity, View } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { groupId } from "../features/userSlice";
+import { selectUser } from "../features/userSlice";
 import { db } from "../firebase";
-import { returnDarkenHexCode, returnHexCode } from "../utils/returnHexCodes";
+import type { AppTheme } from "../typings";
+import { returnDarkenHexCode, returnHexCode } from "../utils";
 
 type Props = {
   theme: AppTheme;
@@ -15,13 +16,11 @@ type Props = {
 export const ThemeCard: React.FC<Props> = React.memo(({ theme, isBordered }) => {
   const tw = useTailwind();
   const user = useSelector(selectUser);
-  const dispatch = useDispatch();
 
   const setUserTheme = async () => {
     await updateDoc(doc(db, `users/${user?.userId}`), {
       theme,
     });
-    // dispatch(setTheme(theme));
     ToastAndroid.show("Тема обновлена", 1000);
   };
 

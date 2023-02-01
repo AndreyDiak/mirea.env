@@ -1,13 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { addDoc, getDocs } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { groupId } from "../../features/userSlice";
-import { db } from "../../firebase";
-import { returnHexCode } from "../../utils/returnHexCodes";
+import { selectUser } from "../../features/userSlice";
+import type { Chat, Discipline, DisciplineScreenNavigatorProp } from "../../typings";
+import { DBQueries } from "../../typings/enums";
+import { createCollection, QUERIES, returnHexCode } from "../../utils";
 
 type Props = {
   discipline: Discipline;
@@ -22,19 +23,26 @@ export const DisciplineCard = ({ discipline }: Props) => {
 
   useEffect(() => {
     const getChatInfo = async () => {
-      if (user?.type === "student") {
-        const q = query(
-          collection(db, "chats"),
-          where("disciplineId", "==", discipline.id),
-          where("groupId", "==", user.groupId)
-        );
+      if (user.type === "student") {
+        const q = QUERIES.CREATE_MULTIPLE_QUERY<Chat>(DBQueries.CHATS, [
+          {
+            fieldName: "disciplineId",
+            fieldValue: discipline.id,
+            opStr: "==",
+          },
+          {
+            fieldName: "groupId",
+            fieldValue: user.groupId,
+            opStr: "==",
+          },
+        ]);
         const snap = await getDocs(q);
         if (snap.docs.length > 0) {
           const chatId = snap.docs[0].id;
           setChatId(chatId);
         } else {
           // создаем новый чат...
-          await addDoc(collection(db, "chats"), {
+          await addDoc(createCollection(DBQueries.CHATS), {
             disciplineId: discipline.id,
             groupId: user.groupId,
           }).then((res) => {
@@ -59,13 +67,13 @@ export const DisciplineCard = ({ discipline }: Props) => {
             style={[
               tw("underline font-bold mr-2"),
               {
-                color: returnHexCode(user?.theme as AppTheme),
+                color: returnHexCode(user.theme),
               },
             ]}
           >
             Материалы
           </Text>
-          <Icon name="inventory" type="material" color={returnHexCode(user?.theme as AppTheme)} />
+          <Icon name="inventory" type="material" color={returnHexCode(user.theme)} />
         </TouchableOpacity>
 
         <TouchableOpacity

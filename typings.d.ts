@@ -16,6 +16,12 @@ interface Group {
   disciplines: string[];
 }
 
+interface Chat {
+  disciplineId: string;
+  groupId: string;
+  id: string;
+}
+
 interface Discipline {
   id: string;
   name: string;
@@ -40,14 +46,14 @@ interface Material {
   // documents: Source[];
 }
 
-interface Message {
+interface DBMessage {
   message: string;
   timestamp: Timestamp;
   displayName: string;
   email: string;
   type: string;
   photoUrl: string;
-  messageId: string;
+  id: string;
   replyingMessage: string | null;
 }
 

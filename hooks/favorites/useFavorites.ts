@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { getMaterialById } from "../../api";
-import { getDataById } from "../../api/queries/getDataById";
-import { groupId } from "../../features/userSlice";
+import { getDataById } from "../../api";
+import { selectUser } from "../../features/userSlice";
+import type { Discipline, Favorite, Favorites } from "../../typings";
 import { DBQueries } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 

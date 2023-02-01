@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../features/userSlice";
+import { SuperUser, User } from "../../typings";
 import { DBQueries } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
