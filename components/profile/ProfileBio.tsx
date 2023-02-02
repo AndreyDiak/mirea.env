@@ -1,16 +1,20 @@
 import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
-import { selectUserTheme } from "../../features/userSlice";
 
 import { useAddUserData } from "../../hooks";
+import type { AppTheme } from "../../typings";
 import { UType } from "../../typings/enums";
 import { returnHexCode } from "../../utils/returnHexCodes";
 
-export const ProfileAdditional: React.FC = React.memo(() => {
+interface Props {
+  name: string;
+  female: string;
+  theme: AppTheme;
+}
+
+export const ProfileBio: React.FC<Props> = React.memo(({ name, female, theme }) => {
   const tw = useTailwind();
-  const theme = useSelector(selectUserTheme);
 
   const { groupName, disciplinesList, loading, uType } = useAddUserData();
 
@@ -34,19 +38,35 @@ export const ProfileAdditional: React.FC = React.memo(() => {
     );
   };
 
-  if (uType === UType.STUDENT) {
+  const renderData = () => {
+    if (uType === UType.STUDENT) {
+      return (
+        <View>
+          <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
+          {renderGroupName()}
+        </View>
+      );
+    }
     return (
       <View>
-        <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
-        {renderGroupName()}
+        <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
+        {renderDisciplinesList()}
       </View>
     );
-  }
+  };
 
   return (
-    <View>
-      <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
-      {renderDisciplinesList()}
+    <View style={tw("flex flex-row items-center justify-between flex-wrap mb-4")}>
+      <View>
+        <View>
+          <Text style={tw("text-lg text-gray-800")}>{name}</Text>
+        </View>
+        <View>
+          <Text style={tw("text-lg text-gray-800")}>{female}</Text>
+        </View>
+      </View>
+      {/* Group or Disciplines */}
+      {renderData()}
     </View>
   );
 });

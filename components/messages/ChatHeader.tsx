@@ -5,17 +5,17 @@ import { Icon } from "@rneui/themed";
 import * as Clipboard from "expo-clipboard";
 import { DBMessage } from "../../typings";
 
-type Props = {
+interface Props {
   message: DBMessage;
   onClose: () => void;
   replyOnMessage: () => void;
-};
+}
 
-export const ChatTitle = ({ message, onClose, replyOnMessage }: Props) => {
+export const ChatHeader: React.FC<Props> = React.memo(({ message, onClose, replyOnMessage }) => {
   const tw = useTailwind();
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(message.message);
+    await Clipboard.setStringAsync(message.text);
     ToastAndroid.show("Скопировано в буфер обмена", 1000);
     onClose();
   };
@@ -28,9 +28,6 @@ export const ChatTitle = ({ message, onClose, replyOnMessage }: Props) => {
       <TouchableOpacity onPress={replyOnMessage} style={tw("mr-4")}>
         <Icon name="redo" type="material" size={30} color="#374151" />
       </TouchableOpacity>
-      <TouchableOpacity onPress={onClose}>
-        <Icon name="close" type="material" size={30} color="#374151" />
-      </TouchableOpacity>
     </View>
   );
-};
+});

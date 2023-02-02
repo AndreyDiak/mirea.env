@@ -1,24 +1,24 @@
-import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useLayoutEffect, useEffect, useState } from "react";
-import { useTailwind } from "tailwind-rn/dist";
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore";
-import { db } from "../firebase";
 import { Card } from "@rneui/themed";
+import React, { useLayoutEffect } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
+import { useTailwind } from "tailwind-rn/dist";
+import { Loader } from "../components";
 import { selectUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { useChats } from "../hooks";
 import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
+import { returnHexCode } from "../utils/returnHexCodes";
 
-type Props = {};
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
 
-export const ChatsScreen = (props: Props) => {
+export const ChatsScreen = () => {
   const tw = useTailwind();
 
   const navigation = useNavigation<ChatsScreenNavigatorProp>();
-  const [chats, setChats] = useState<any[]>([]);
+
   const user = useSelector(selectUser);
+
   const {
     params: { discipline },
   } = useRoute<ChatsScreenRouteProp>();
@@ -29,28 +29,11 @@ export const ChatsScreen = (props: Props) => {
     });
   }, []);
 
-  useEffect(() => {
-    const getChats = async () => {
-      const q = query(collection(db, "chats"), where("disciplineId", "==", discipline.id));
-      const qSnap = await getDocs(q);
-      let chats: any[] = qSnap.docs.map((chat) => ({
-        ...chat.data(),
-        chatId: chat.id,
-      }));
-      chats = await Promise.all(
-        chats.map(async (chat) => {
-          const chatQ = doc(db, `groups/${chat.groupId}`);
-          const chatSnap = await getDoc(chatQ);
-          return {
-            ...chat,
-            groupInfo: chatSnap.data(),
-          };
-        })
-      );
-      setChats(chats.sort((prev, next) => (prev.groupInfo.name > next.groupInfo.name ? 1 : -1)));
-    };
-    getChats();
-  }, []);
+  const { chats, loading } = useChats(discipline.id);
+
+  if (loading) {
+    return <Loader text={"Загрузка чатов"} theme={user.theme} />;
+  }
 
   return (
     <View>
@@ -59,18 +42,17 @@ export const ChatsScreen = (props: Props) => {
       </View>
       <FlatList
         data={chats}
-        renderItem={(item) => (
-          <Card key={item.item.chatId}>
+        renderItem={({ item: chat }) => (
+          <Card key={chat.id}>
             <View style={tw("flex flex-row justify-between")}>
               <Text>
-                Группа: <Text style={tw("font-bold")}>{item.item.groupInfo.name}</Text>
+                Группа: <Text style={tw("font-bold")}>{chat.groupName}</Text>
               </Text>
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Chat", {
+                    ...chat,
                     discipline,
-                    groupId: item.item.groupId,
-                    chatId: item.item.chatId,
                   })
                 }
               >

@@ -6,12 +6,13 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { ProfileAdditional, ProfileImage, ProfileSkeleton, ThemeCard } from "../components";
+import { ProfileBio, ProfileImage, ProfileSkeleton, ProfileTheme } from "../components";
 
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
-import { ProfileScreenNavigatorProp } from "../typings";
-import { returnHexCode } from "../utils/returnHexCodes";
+import type { ProfileScreenNavigatorProp } from "../typings";
+import { UType } from "../typings/enums";
+import { returnHexCode } from "../utils";
 
 export const ProfileScreen = () => {
   const tw = useTailwind();
@@ -39,78 +40,30 @@ export const ProfileScreen = () => {
         <Text style={tw("text-center text-lg")}>Личные данные</Text>
 
         <Card containerStyle={tw("rounded-sm")}>
-          <View>
-            {/* Name + Female */}
-            <View style={tw("flex flex-row items-center justify-between flex-wrap mb-4")}>
-              <View>
-                <View>
-                  <Text style={tw("text-lg text-gray-800")}>{user.name}</Text>
-                </View>
-                <View>
-                  <Text style={tw("text-lg text-gray-800")}>{user.female}</Text>
-                </View>
-              </View>
-              {/* Group or Disciplines */}
-              <ProfileAdditional />
-
-              {/* <View>
-                {user.type === "student" ? (
-                  <View>
-                    <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
-                    <Text style={tw("text-xl font-bold")}>{user.groupId}</Text>
-                  </View>
-                ) : (
-                  <View>
-                    <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
-                    <Text style={tw("text-[18px] font-bold")}>
-                      <Text
-                        style={{ color: returnHexCode(user.theme) }}
-                        onPress={() => navigation.navigate("Discipline")}
-                      >
-                        ({user.disciplines.length}){" "}
-                      </Text>
-                      предмета
-                    </Text>
-                  </View>
-                )}
-              </View> */}
-            </View>
-
-            <Card.Divider />
-            {/* User theme */}
-
-            <View style={tw("mb-4")}>
-              <View style={tw("flex flex-row justify-center -mr-4")}>
-                <ThemeCard isBordered theme="blue" />
-                <ThemeCard isBordered theme="emerald" />
-                <ThemeCard isBordered theme="rose" />
-                <ThemeCard isBordered theme="violet" />
-              </View>
-            </View>
-
-            <Card.Divider />
-
-            {/* User type */}
-            <View style={tw("mb-4")}>
-              <Text>Уровень доступа </Text>
-              <Text style={tw("text-lg font-bold mt-1")}>
-                {user.type === "student" ? "Студент" : "Преподаватель"}
-              </Text>
-            </View>
-
-            <Card.Divider />
-
-            {/* Feedback */}
-            <TouchableOpacity
-              onPress={() => {
-                console.log("hey");
-              }}
-            >
-              <Text style={[tw("text-center"), { color: returnHexCode(user?.theme || "blue") }]}>
-                Оставить отзыв
-              </Text>
-            </TouchableOpacity>
+          {/* Name + Female */}
+          <ProfileBio name={user.name} female={user.female} theme={user.theme} />
+          <Card.Divider />
+          <ProfileTheme />
+          {/* User type */}
+          <View style={tw("mb-4")}>
+            <Text>Уровень доступа </Text>
+            <Text style={tw("text-lg font-bold mt-1")}>
+              {user.type === UType.STUDENT ? "Студент" : "Преподаватель"}
+            </Text>
           </View>
+
+          <Card.Divider />
+
+          {/* Feedback */}
+          <TouchableOpacity
+            onPress={() => {
+              console.log("hey");
+            }}
+          >
+            <Text style={[tw("text-center"), { color: returnHexCode(user.theme) }]}>
+              Оставить отзыв
+            </Text>
+          </TouchableOpacity>
         </Card>
       </View>
       {/* Sign out */}
@@ -124,7 +77,7 @@ export const ProfileScreen = () => {
         <Text
           style={[
             tw("px-2 py-1 rounded-md text-lg underline"),
-            { color: returnHexCode(user?.theme || "blue") },
+            { color: returnHexCode(user.theme) },
           ]}
         >
           Выйти из аккаунта

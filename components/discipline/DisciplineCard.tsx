@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
-import { addDoc, getDocs } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { selectUser } from "../../features/userSlice";
-import type { Chat, Discipline, DisciplineScreenNavigatorProp } from "../../typings";
-import { DBQueries } from "../../typings/enums";
-import { createCollection, QUERIES, returnHexCode } from "../../utils";
+import { useChat } from "../../hooks";
+import type { Discipline, DisciplineScreenNavigatorProp } from "../../typings";
+import { UType } from "../../typings/enums";
+import { returnHexCode } from "../../utils";
 
 type Props = {
   discipline: Discipline;
@@ -19,40 +19,8 @@ export const DisciplineCard = ({ discipline }: Props) => {
   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
   const user = useSelector(selectUser);
 
-  const [chatId, setChatId] = useState("");
-
-  useEffect(() => {
-    const getChatInfo = async () => {
-      if (user.type === "student") {
-        const q = QUERIES.CREATE_MULTIPLE_QUERY<Chat>(DBQueries.CHATS, [
-          {
-            fieldName: "disciplineId",
-            fieldValue: discipline.id,
-            opStr: "==",
-          },
-          {
-            fieldName: "groupId",
-            fieldValue: user.groupId,
-            opStr: "==",
-          },
-        ]);
-        const snap = await getDocs(q);
-        if (snap.docs.length > 0) {
-          const chatId = snap.docs[0].id;
-          setChatId(chatId);
-        } else {
-          // создаем новый чат...
-          await addDoc(createCollection(DBQueries.CHATS), {
-            disciplineId: discipline.id,
-            groupId: user.groupId,
-          }).then((res) => {
-            setChatId(res.id);
-          });
-        }
-      }
-    };
-    getChatInfo();
-  }, []);
+  // TODO сделать хуком
+  const { chat, loading } = useChat(discipline.id);
 
   return (
     <Card>
@@ -79,11 +47,13 @@ export const DisciplineCard = ({ discipline }: Props) => {
         <TouchableOpacity
           style={tw("flex flex-row items-center")}
           onPress={() =>
-            user.type === "student"
+            // если пользователь быстро нажал,
+            // (до того как загрузился chatId, то мы должны делать лоадер)
+            // "загрузка чата" или "создание чата"
+            user.type === UType.STUDENT
               ? navigation.navigate("Chat", {
-                  discipline,
-                  groupId: user.groupId,
-                  chatId,
+                  chatId: chat.id,
+                  groupName: chat.groupName,
                 })
               : navigation.navigate("Chats", { discipline })
           }
