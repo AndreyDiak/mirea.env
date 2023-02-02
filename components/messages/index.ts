@@ -1,3 +1,4 @@
-export * from "./ChatTitle";
+export * from "./ChatHeader";
 export * from "./MessageForm";
-export * from "./Messages";
+export * from "./MessagesList";
+export * from "./MessagesScrollToBottom";

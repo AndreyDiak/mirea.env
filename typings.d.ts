@@ -22,6 +22,10 @@ interface Chat {
   id: string;
 }
 
+type ChatPreview = Pick<Chat, "groupId" | "id"> & {
+  groupName: string;
+};
+
 interface Discipline {
   id: string;
   name: string;
@@ -47,7 +51,7 @@ interface Material {
 }
 
 interface DBMessage {
-  message: string;
+  text: string;
   timestamp: Timestamp;
   displayName: string;
   email: string;
@@ -146,8 +150,7 @@ type RootStackParamList = {
     discipline: Discipline;
   };
   Chat: {
-    discipline: Discipline;
-    groupId: string;
+    groupName: string;
     chatId: string;
   };
 };

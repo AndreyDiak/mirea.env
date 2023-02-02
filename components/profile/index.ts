@@ -1,2 +1,3 @@
 export * from "./ProfileImage";
-export * from "./ProfileAdditional";
+export * from "./ProfileBio";
+export * from "./ProfileTheme";

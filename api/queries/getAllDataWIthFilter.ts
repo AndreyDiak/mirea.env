@@ -1,18 +1,6 @@
-import { getDocs } from "firebase/firestore";
-import { DBQueries } from "../../typings/enums";
-import { QUERIES } from "./../../utils/createDBQuery";
+import { DocumentData, getDocs, Query } from "firebase/firestore";
 
-export const getAllDataWithFilter = async <T>(
-  collectionName: DBQueries,
-  fieldName: keyof T,
-  fieldValue: T[keyof T]
-): Promise<T[]> => {
-  const q = QUERIES.CREATE_SIMPLE_QUERY(collectionName, {
-    fieldName,
-    fieldValue,
-    opStr: "==",
-  });
-
+export const getAllDataWithFilter = async <T>(q: Query<DocumentData>): Promise<T[]> => {
   const snap = await getDocs(q);
 
   if (!snap.empty) {

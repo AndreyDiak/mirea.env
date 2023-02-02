@@ -1,29 +1,24 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { collection, doc, getDoc, onSnapshot, orderBy, query } from "firebase/firestore";
+import { Icon } from "@rneui/themed";
 
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { KeyboardAvoidingView, SafeAreaView, Text, View } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import { KeyboardAvoidingView, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
-import { ChatTitle, Messages, MessageForm } from "../components";
+import { ChatHeader, MessageForm, MessagesList } from "../components";
 
-import { db } from "../firebase";
 import type { ChatScreenNavigatorProp, DBMessage, RootStackParamList } from "../typings";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
 export const ChatScreen = () => {
-  const [title, setTitle] = useState("Загрузка...");
-  const [messages, setMessages] = useState<DBMessage[]>([]);
-  const [isReplyingOnMessage, setIsReplyingOnMessage] = useState(false);
-
-  const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState(false);
-  const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState(true);
-
-  const [selectedMessage, setSelectedMessage] = useState<DBMessage | null>(null);
+  const [isReplyingOnMessage, setIsReplyingOnMessage] = useState<boolean>(false);
+  const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState<boolean>(false);
+  const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState<boolean>(true);
+  const [selectedMessage, setSelectedMessage] = useState<DBMessage>(null);
   const tw = useTailwind();
 
   const {
-    params: { discipline, groupId, chatId },
+    params: { chatId, groupName },
   } = useRoute<ChatScreenRouteProp>();
   const navigation = useNavigation<ChatScreenNavigatorProp>();
 
@@ -34,51 +29,29 @@ export const ChatScreen = () => {
       headerTitle: () =>
         !isHeaderMenuVisible ? (
           <View>
-            <Text style={tw("text-xl font-semibold")}>{title}</Text>
+            <Text style={tw("text-xl font-semibold")}>{groupName}</Text>
           </View>
         ) : (
-          <ChatTitle
+          <ChatHeader
             message={selectedMessage}
-            onClose={onTitleClose}
+            onClose={headerClose}
             replyOnMessage={() => {
               setIsReplyingOnMessage(true);
               setIsHeaderMenuVisible(false);
             }}
           />
         ),
+      headerRight: () =>
+        isHeaderMenuVisible && (
+          <TouchableOpacity onPress={headerClose}>
+            <Icon name="close" type="material" size={30} color="#374151" />
+          </TouchableOpacity>
+        ),
     });
-  }, [title, isHeaderMenuVisible, selectedMessage]);
-
-  // set groupTitle
-  useEffect(() => {
-    const getGroupTitle = async () => {
-      const q = doc(db, "groups", groupId);
-      const snapshot = await getDoc(q);
-      const title = snapshot.data();
-      // @ts-ignore получаем название группы...
-      setTitle(title.name);
-    };
-    getGroupTitle();
-  }, []);
-
-  // subscribe to recieve messages...
-  const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp"));
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    const snapMessages = snapshot.docs.map(
-      (message) =>
-        ({
-          ...message.data(),
-          id: message.id,
-        } as DBMessage)
-    );
-    if (messages.length !== snapMessages.length) {
-      setMessages(snapMessages);
-      setIsScrollToBottomVisible(true);
-    }
-  });
+  }, [isHeaderMenuVisible, selectedMessage]);
 
   // closingTitle function...
-  const onTitleClose = () => {
+  const headerClose = () => {
     setIsHeaderMenuVisible(false);
     setSelectedMessage(null);
   };
@@ -87,9 +60,8 @@ export const ChatScreen = () => {
     <SafeAreaView style={tw("relative")}>
       <KeyboardAvoidingView style={tw("flex flex-col h-full")}>
         {/* Messages */}
-        <Messages
+        <MessagesList
           chatId={chatId}
-          messages={messages}
           isScrollToBottomVisible={isScrollToBottomVisible}
           setIsScrollToBottomVisible={setIsScrollToBottomVisible}
           selectedMessageId={selectedMessage?.id}
