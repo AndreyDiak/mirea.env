@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllData } from "../../api/queries/getAllData";
+import { Institute } from "../../typings";
 import { DBQueries } from "../../typings/enums";
 
 export const useInstitutes = () => {

@@ -1,82 +1,77 @@
 import { useNavigation } from "@react-navigation/native";
 import { Input } from "@rneui/themed";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import React, { useState } from "react";
 import { View } from "react-native";
+import { useDispatch } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 import { LoginForm } from "../components";
-import { db } from "../firebase";
+import { setEmail, setPassword } from "../features/authSlice";
+import type { AuthInfoScreenNavigatorProp } from "../typings";
+
+interface UserData {
+  email: string;
+  password: string;
+  repeatedPassword: string;
+}
 
 export const AuthInfoScreen = () => {
   const tw = useTailwind();
   const navigation = useNavigation<AuthInfoScreenNavigatorProp>();
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [secondPassword, setSecondPassword] = useState<string>("");
+  const [userData, setUserData] = useState<UserData>(null);
+
+  const dispatch = useDispatch();
+
   const [error, setError] = useState("");
-  // const [isStudent, setIsStudent] = useState<boolean>(true);
 
-  const register = async () => {
-    // creating a query to DB
-
-    if (email == "") {
+  const checkEmailAndPassword = async () => {
+    // check email
+    if (userData?.email === "") {
       setError("Введите почту");
       return;
     }
-
-    const q = query(
-      collection(db, "users"),
-      where("email", "==", email.toLowerCase())
-    );
-    // getting snapshot from DB
-    const querySnap = await getDocs(q);
-    // if email already exist...
-    if (querySnap.docs.length !== 0) {
-      setError("Такой пользователь уже существует");
+    // check password length
+    if (userData?.password.length < 6) {
+      setError("Пароль должен содержать минимум 6 символов...");
       return;
     }
-    // password checking...
-    if (password === secondPassword) {
-      if (password.length < 6) {
-        setError("Пароль должен содержать минимум 6 символов...");
-        return;
-      }
-      navigation.navigate("AuthBio", {
-        email,
-        password,
-      });
-    } else {
+    // check repeat password
+    if (userData?.password !== userData?.repeatedPassword) {
       setError("Пароли не совпадают");
+      return;
     }
+
+    dispatch(setEmail({ email: userData.email.toLowerCase() }));
+    dispatch(setPassword({ password: userData.password }));
+
+    navigation.navigate("AuthBio");
   };
 
   return (
-    <View
-      style={tw(
-        "w-full h-full bg-slate-100 flex flex-row items-center justify-center"
-      )}
-    >
-      <LoginForm handleSubmit={register} step="info" error={error}>
+    <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
+      <LoginForm handleSubmit={checkEmailAndPassword} step="info" error={error}>
         <View>
           <Input
             placeholder="Почта..."
-            value={email}
-            onChangeText={setEmail}
-            containerStyle={tw("")}
+            value={userData?.email}
+            onChangeText={(value) => {
+              setUserData({ ...userData, email: value });
+            }}
           />
           <Input
             placeholder="Пароль..."
-            value={password}
-            onChangeText={setPassword}
             secureTextEntry
-            containerStyle={tw("")}
+            value={userData?.password}
+            onChangeText={(value) => {
+              setUserData({ ...userData, password: value });
+            }}
           />
           <Input
             placeholder="Повторите пароль..."
-            value={secondPassword}
-            onChangeText={setSecondPassword}
             secureTextEntry
-            containerStyle={tw("")}
+            value={userData?.repeatedPassword}
+            onChangeText={(value) => {
+              setUserData({ ...userData, repeatedPassword: value });
+            }}
           />
         </View>
       </LoginForm>

@@ -1,61 +1,66 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
-import { auth, db } from "../../../firebase";
+import { addDoc } from "firebase/firestore";
+import { AuthState } from "../../../features/authSlice";
+import { auth } from "../../../firebase";
+import type { Student, SuperUser, Teacher, User } from "../../../typings";
+import { DBQueries, UType } from "../../../typings/enums";
+import { createCollection } from "../../../utils";
 
 interface Props {
-  data: NewUser;
-  isStudent: boolean;
-  group: Group;
-  disciplines: string[];
-  institutes: string[];
+  userData: AuthState;
   setError: (error: string) => void;
 }
 
-export const createUser = async ({
-  data,
-  isStudent,
-  group,
-  disciplines,
-  setError,
-  institutes,
-}: Props) => {
-  if (data.name === "") {
+export const createUser = async ({ userData, setError }: Props) => {
+  console.log({ userData });
+
+  if (userData.name === null || userData.name === "") {
     setError("Введите имя");
     return;
   }
-  if (data.female === "") {
+  if (userData.female === null || userData.female === "") {
     setError("Введите фамилию");
     return;
   }
-  if (isStudent && group === null) {
+  if (userData.type === UType.STUDENT && userData.group === null) {
     setError("Выберите группу");
     return;
   }
-  if (!isStudent && disciplines.length === 0) {
+  if (userData.type === UType.TEACHER && userData.disciplines?.length === 0) {
     setError("Выберите дисциплины");
     return;
   }
 
-  let user: SuperUser;
+  let user: Omit<Student, "userId"> | Omit<Teacher, "userId">;
 
-  if (isStudent) {
+  if (userData.type === UType.STUDENT) {
     user = {
-      ...(data as User),
-      groupId: group.id,
-      instituteId: institutes[0],
-      type: "student",
+      email: userData.email,
+      female: userData.female,
+      img: "",
+      name: userData.name,
+      password: userData.password,
+      theme: "blue",
+      groupId: userData.group.id,
+      instituteId: userData.institutes[0].id,
+      type: UType.STUDENT,
     };
   } else {
     user = {
-      ...(data as User),
-      disciplines,
-      institutes,
-      type: "teacher",
+      email: userData.email,
+      female: userData.female,
+      img: "",
+      name: userData.name,
+      password: userData.password,
+      theme: "blue",
+      institutes: userData.institutes.map((institute) => institute.id),
+      disciplines: userData.disciplines,
+      type: UType.TEACHER,
     };
   }
-  await createUserWithEmailAndPassword(auth, data.email, data.password)
+  await createUserWithEmailAndPassword(auth, userData.email, userData.password)
     .then(async () => {
-      await addDoc(collection(db, "users"), {
+      await addDoc(createCollection(DBQueries.USERS), {
         ...user,
       }).catch((e) => {
         console.log(e.message);

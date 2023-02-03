@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
+import type { AuthSteps, LoginScreenNavigatorProp } from "../../typings";
 
 type Props = {
   step: AuthSteps;

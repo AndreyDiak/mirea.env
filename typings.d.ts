@@ -116,8 +116,6 @@ interface User {
   userId: string;
 }
 
-type NewUser = Omit<User, "userId">;
-
 interface Student extends User {
   groupId: string;
   instituteId: string;
@@ -135,7 +133,7 @@ type SuperUser = Student | Teacher;
 type RootStackParamList = {
   Login: undefined;
   AuthInfo: undefined;
-  AuthBio: { email: string; password: string };
+  AuthBio: undefined;
   Main: undefined;
   Discipline: {
     discipline: Discipline;
