@@ -1,157 +1,102 @@
-import { doc, getDoc } from "firebase/firestore";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+
+import { View } from "react-native";
+
+import { doc, getDoc } from "firebase/firestore";
 import { useTailwind } from "tailwind-rn/dist";
+
 import { db } from "../../firebase";
 import { AppTheme, DBMessage } from "../../typings";
 import { DBQueries } from "../../typings/enums";
-import {
-  returnDarkestHexCode,
-  returnHexCode,
-  returnLightenHexCode,
-} from "../../utils/returnHexCodes";
+import { returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
 import { UserAvatar } from "../UserAvatar";
+import { MessageData } from "./MessageData";
+import { MessageReply } from "./MessageReply";
 
 type Props = {
-  message: DBMessage;
-  email: string;
-  chatId: string;
-  theme: AppTheme;
-  nextMessageEmail: string | null;
-  isBacklight: boolean;
-  setBacklighMessage: () => void;
+   message: DBMessage;
+   email: string;
+   chatId: string;
+   theme: AppTheme;
+   nextMessageEmail: string | null;
+   isBacklight: boolean;
+   setBackligthMessage: () => void;
 };
 
 export const Message: React.FC<Props> = React.memo(
-  ({ message, email, nextMessageEmail, isBacklight, chatId, theme, setBacklighMessage }) => {
-    const tw = useTailwind();
+   ({ message, email, nextMessageEmail, isBacklight, chatId, theme, setBackligthMessage }) => {
+      const tw = useTailwind();
 
-    const [replyingMessage, setReplyingMessage] = useState<DBMessage | null>(null);
+      const [replyingMessage, setReplyingMessage] = useState<DBMessage>(null);
 
-    useEffect(() => {
-      const getReplyingMessage = async () => {
-        if (!!message.replyingMessage) {
-          const replyingMessageSnap = await getDoc(
-            doc(db, `${DBQueries.CHATS}/${chatId}/messages/${message.replyingMessage}`)
-          );
-          const replyingMessage = {
-            ...replyingMessageSnap.data(),
-            id: replyingMessageSnap.id,
-          } as DBMessage;
-          setReplyingMessage(replyingMessage);
-        }
-      };
-      getReplyingMessage();
-    }, []);
+      useEffect(() => {
+         const getReplyingMessage = async () => {
+            if (message.replyingId) {
+               const replyingMessageSnap = await getDoc(
+                  doc(db, `${DBQueries.CHATS}/${chatId}/messages/${message.replyingId}`),
+               );
+               setReplyingMessage({
+                  ...replyingMessageSnap.data(),
+                  id: replyingMessageSnap.id,
+               } as DBMessage);
+            }
+         };
+         getReplyingMessage();
+      }, [chatId, message.replyingId]);
 
-    return (
-      <View
-        style={[
-          [
-            tw(`flex flex-row px-6 ${message.email === email ? "justify-end" : "justify-start"}`),
-            {
-              backgroundColor: isBacklight ? returnLightenHexCode(theme) : "transparent",
-            },
-          ],
-        ]}
-      >
-        <View
-          key={message.id}
-          style={[
-            tw(
-              `rounded-lg px-3 pt-3 pb-2 relative
-          ${
-            nextMessageEmail === message.email
-              ? "mb-2"
-              : `mb-6 ${message.email === email ? "pr-6" : "pl-6"}`
-          }`
-            ),
-            {
-              backgroundColor: message.email === email ? "white" : returnHexCode(theme),
-            },
-          ]}
-        >
-          {/* Replying message... */}
-          {!!replyingMessage && (
-            <TouchableOpacity onPress={setBacklighMessage}>
-              <View style={tw("flex flex-row pt-1")}>
-                <View
-                  style={[
-                    tw(`w-0.5 h-full mr-2`),
-                    {
-                      backgroundColor: returnDarkestHexCode(theme),
-                    },
-                  ]}
-                ></View>
-                <View>
-                  <Text
-                    style={tw(
-                      `font-semibold ${message.email === email ? "text-gray-800" : "text-white"}`
-                    )}
-                  >
-                    {replyingMessage.displayName}
-                  </Text>
-                  <Text
-                    style={tw(`${message.email === email ? "text-gray-400" : "text-gray-100"}`)}
-                  >
-                    {replyingMessage.message}
-                  </Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-          )}
-          {/* Message Owner... */}
-          <Text
-            style={tw(
-              `${
-                message.email === email ? "right-2 text-gray-400" : "left-2 text-gray-200"
-              } absolute text-xs `
-            )}
-          >
-            {message.email === email
-              ? "Вы"
-              : message.type === "student"
-              ? "студент"
-              : "преподаватель"}
-          </Text>
-          {/* Message Text... */}
-          <View style={tw("flex flex-row items-end w-full")}>
-            <Text
-              style={[
-                tw(
-                  `${message.email === email ? "text-gray-600" : "text-white"} 
-              font-semibold text-sm mr-2`
-                ),
-                { maxWidth: "85%" },
-              ]}
-            >
-              {message.message}
-            </Text>
-            {/* Message Date... */}
-            <Text
-              style={tw(
-                `text-xs -mb-1 ${message.email === email ? "" : "text-right text-gray-800"}`
-              )}
-            >
-              {message.timestamp // @ts-ignore
-                ? moment(message.timestamp.toDate()).format("LT")
-                : "..."}
-            </Text>
-          </View>
-          {/* Message Owner Avatar... */}
-          {nextMessageEmail !== message.email && (
+      return (
+         <View
+            style={{
+               display: "flex",
+               flexDirection: "row",
+               paddingHorizontal: 20,
+               justifyContent: message.email === email ? "flex-end" : "flex-start",
+               backgroundColor: isBacklight ? returnLightenHexCode(theme) : "transparent",
+            }}
+         >
             <View
-              style={tw(
-                `absolute -bottom-5 
-            ${message.email === email ? "-right-7" : "-left-3"}`
-              )}
+               key={message.id}
+               style={{
+                  padding: 7,
+                  borderRadius: 7,
+                  paddingTop: message.email === email ? 5 : 15,
+                  paddingLeft:
+                     // eslint-disable-next-line no-nested-ternary
+                     message.email === email ? 10 : nextMessageEmail === message.email ? 10 : 25,
+                  paddingRight:
+                     // eslint-disable-next-line no-nested-ternary
+                     message.email === email ? (nextMessageEmail === message.email ? 10 : 25) : 10,
+                  marginBottom: nextMessageEmail === message.email ? 5 : 15,
+                  backgroundColor: message.email === email ? "white" : returnHexCode(theme),
+               }}
             >
-              <UserAvatar title={message.displayName[0]} source={message.photoUrl} size={"small"} />
+               {/* Replying message... */}
+               <MessageReply
+                  reply={replyingMessage}
+                  messageEmail={message.email}
+                  email={email}
+                  setBackligthMessage={setBackligthMessage}
+               />
+
+               <MessageData message={message} email={email} />
+
+               {/* Message Owner Avatar... */}
+               {nextMessageEmail !== message.email && (
+                  <View
+                     style={tw(
+                        `absolute -bottom-5 
+            ${message.email === email ? "-right-7" : "-left-3"}`,
+                     )}
+                  >
+                     <UserAvatar
+                        title={message.displayName[0]}
+                        source={message.photoUrl}
+                        size="small"
+                     />
+                  </View>
+               )}
             </View>
-          )}
-        </View>
-      </View>
-    );
-  }
+         </View>
+      );
+   },
 );

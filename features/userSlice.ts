@@ -1,24 +1,26 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { RootState } from "../store";
 import { SuperUser } from "../typings";
 
 export interface UserState {
-  user: SuperUser | null;
+   user: SuperUser | null;
 }
 
 const initialState: UserState = {
-  user: null,
+   user: null,
 };
 
 export const userSlice = createSlice({
-  name: "user",
-  initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<SuperUser | null>) => {
-      state.user = action.payload;
-    },
-  },
+   name: "user",
+   initialState,
+   reducers: {
+      setUser: (state, action: PayloadAction<SuperUser | null>) => {
+         state.user = action.payload;
+      },
+   },
 });
 
 export const selectUser = (state: RootState) => state.user.user;
