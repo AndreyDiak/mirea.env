@@ -1,31 +1,33 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
 import { RootState } from "../store";
 import { SuperUser } from "../typings";
 
 export interface UserState {
-  user: SuperUser | null;
+   user: SuperUser | null;
 }
 
 const initialState: UserState = {
-  user: null,
+   user: null,
 };
 
-export const counterSlice = createSlice({
-  name: "counter",
-  initialState,
-  reducers: {
-    setUser: (state, action: PayloadAction<SuperUser | null>) => {
-      state.user = action.payload;
-    },
-  },
+export const userSlice = createSlice({
+   name: "user",
+   initialState,
+   reducers: {
+      setUser: (state, action: PayloadAction<SuperUser | null>) => {
+         state.user = action.payload;
+      },
+   },
 });
 
-export const selectUser = (state: RootState) => state.userPage.user;
+export const selectUser = (state: RootState) => state.user.user;
 
-export const selectUserTheme = (state: RootState) => state.userPage.user.theme;
+export const selectUserTheme = (state: RootState) => state.user.user.theme;
 
 // Action creators are generated for each case reducer function
-export const { setUser } = counterSlice.actions;
+export const { setUser } = userSlice.actions;
 
-export default counterSlice.reducer;
+export default userSlice.reducer;

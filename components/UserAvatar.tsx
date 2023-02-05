@@ -1,40 +1,36 @@
-import { View, Text } from "react-native";
 import React from "react";
-import { useTailwind } from "tailwind-rn/dist";
+
 import { Avatar } from "@rneui/themed";
+import { useTailwind } from "tailwind-rn/dist";
 
 type Props = {
-  title?: string;
-  source?: string;
-  size?: string;
+   title?: string;
+   source?: string;
+   size?: ("small" | "medium" | "large" | "xlarge") | number;
 };
 
-export const UserAvatar: React.FC<Props> = React.memo(
-  ({ title, source, size }) => {
-    const tw = useTailwind();
+export const UserAvatar: React.FC<Props> = React.memo(({ title, source, size }) => {
+   const tw = useTailwind();
 
-    return !!source ? (
+   return source ? (
       <Avatar
-        // @ts-ignore
-        size={size || "medium"}
-        source={{ uri: source }}
-        rounded
-        avatarStyle={tw("")}
-        overlayContainerStyle={tw("bg-blue-400")}
-        titleStyle={tw("text-white")}
-        containerStyle={tw("mr-4 mb-1")}
+         size={size || "medium"}
+         source={{ uri: source }}
+         rounded
+         avatarStyle={tw("")}
+         overlayContainerStyle={tw("bg-blue-400")}
+         titleStyle={tw("text-white")}
+         containerStyle={tw("mr-4 mb-1")}
       />
-    ) : (
+   ) : (
       <Avatar
-        title={title}
-        // @ts-ignore
-        size={size || "medium"}
-        rounded
-        avatarStyle={tw("")}
-        overlayContainerStyle={tw("bg-blue-400")}
-        titleStyle={tw("text-white")}
-        containerStyle={tw("mr-4 mb-1")}
+         title={title}
+         size={size || "medium"}
+         rounded
+         avatarStyle={tw("")}
+         overlayContainerStyle={tw("bg-blue-400")}
+         titleStyle={tw("text-white")}
+         containerStyle={tw("mr-4 mb-1")}
       />
-    );
-  }
-);
+   );
+});
