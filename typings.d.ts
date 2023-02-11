@@ -13,8 +13,8 @@ interface Timestamp {
 interface Group {
    id: string;
    name: string;
-   instituteId: string;
-   disciplines: string[];
+   instituteId: string; // id института к которому подключена группа (может быть только 1)
+   disciplines: string[]; // id дисциплин к которым подключена группа
 }
 
 interface Chat {
@@ -86,14 +86,14 @@ interface Notification {
    isChecked: boolean;
    text: string;
    title: string;
-   userId: string;
+   id: string;
    notificationId: string;
 }
 
 interface Favorite {
    id: string;
    materialId: string;
-   userId: string;
+   id: string;
 }
 
 interface Favorites {
@@ -114,7 +114,7 @@ interface User {
    password: string;
    img: string;
    theme: AppTheme;
-   userId: string;
+   id: string;
 }
 
 interface Student extends User {

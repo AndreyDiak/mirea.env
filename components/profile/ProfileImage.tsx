@@ -12,12 +12,12 @@ import { db, storage } from "../../firebase";
 import { UserAvatar } from "../UserAvatar";
 
 interface Props {
-   userId: string;
+   id: string;
    userImg: string;
    userName: string;
 }
 
-export const ProfileImage: React.FC<Props> = React.memo(({ userId, userImg, userName }) => {
+export const ProfileImage: React.FC<Props> = React.memo(({ id, userImg, userName }) => {
    const tw = useTailwind();
    const [profileImage, setProfileImage] = useState<string>(null);
 
@@ -45,12 +45,12 @@ export const ProfileImage: React.FC<Props> = React.memo(({ userId, userImg, user
                xhr.send(null);
             });
 
-            const imageRef = ref(storage, `users/${userId}/image`);
+            const imageRef = ref(storage, `users/${id}/image`);
             // @ts-ignore
             await uploadBytes(imageRef, blob)
                .then(async () => {
                   const downloadUrl = await getDownloadURL(imageRef);
-                  await updateDoc(doc(db, "users", userId), {
+                  await updateDoc(doc(db, "users", id), {
                      img: downloadUrl,
                   }).then(() => ToastAndroid.show("Фото обновлено!", 1000));
                })

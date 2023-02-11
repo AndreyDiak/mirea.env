@@ -5,50 +5,57 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox, Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-type Props = {
+import type { Discipline, Group, Institute } from "../../typings";
+
+// варианты того, что мы можем выбирать
+type Item = Group | Institute | Discipline;
+
+interface Props<T> {
    title: string;
-   attr: "userId" | "disciplineId" | "instituteId" | "groupId";
-   list: (Group | Discipline | Institute | Group)[];
-   selectedItem: Group | Teacher | Institute | Discipline | null;
-   setSelectedItem: (item: any) => void;
-};
+   list: T[];
+   selectedItem: T;
+   setSelectedItem: (item: T) => void;
+}
 
-export function CheckListSingle({ attr, title, list, selectedItem, setSelectedItem }: Props) {
-   const tw = useTailwind();
-   const [isListVisible, setIsListVisible] = useState(false);
+export const CheckListSingle: React.FC<Props<Item>> = React.memo(
+   ({ title, list, selectedItem, setSelectedItem }) => {
+      const tw = useTailwind();
+      const [isListVisible, setIsListVisible] = useState(false);
 
-   return (
-      <View style={tw("mb-4")}>
-         <View style={tw("flex flex-row w-full items-center justify-between")}>
-            <Text style={tw("text-center font-semibold")}>{title}</Text>
-            <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
-               <Icon
-                  name={!isListVisible ? "expand-more" : "expand-less"}
-                  color="#60a5fa"
-                  containerStyle={tw("bg-gray-50 rounded-full p-1")}
-               />
-            </TouchableOpacity>
-         </View>
+      const handleClick = (item: Item) => {
+         setSelectedItem(item);
+         setIsListVisible(false);
+      };
 
-         {isListVisible && (
-            <FlatList
-               data={list.sort((prev, next) => prev.name.localeCompare(next.name))}
-               scrollEnabled
-               style={tw("max-h-[200px]")}
-               renderItem={({ item, index }) => (
-                  <View>
+      return (
+         <View style={tw("mb-4")}>
+            <View style={tw("flex flex-row w-full items-center justify-between")}>
+               <Text style={tw("text-center font-semibold")}>{title}</Text>
+               <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
+                  <Icon
+                     name={!isListVisible ? "expand-more" : "expand-less"}
+                     color="#60a5fa"
+                     containerStyle={tw("bg-gray-50 rounded-full p-1")}
+                  />
+               </TouchableOpacity>
+            </View>
+
+            {isListVisible && (
+               <FlatList
+                  data={list.sort((prev, next) => prev.name.localeCompare(next.name))}
+                  scrollEnabled
+                  style={tw("max-h-[250px]")}
+                  renderItem={({ item, index }) => (
                      <CheckBox
                         key={index}
                         title={item.name}
-                        // @ts-ignore right attr...
-                        checked={!!selectedItem && item[attr] === selectedItem[attr]}
-                        onPress={() => setSelectedItem(item)}
-                        containerStyle={tw("")}
+                        checked={item.id === selectedItem?.id}
+                        onPress={() => handleClick(item)}
                      />
-                  </View>
-               )}
-            />
-         )}
-      </View>
-   );
-}
+                  )}
+               />
+            )}
+         </View>
+      );
+   },
+);

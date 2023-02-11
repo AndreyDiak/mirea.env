@@ -22,7 +22,7 @@ export const useUser = (initialUser: any) => {
          dispatch(
             setUser({
                ...userSnap?.docs[0].data(),
-               userId: userSnap?.docs[0].id,
+               id: userSnap?.docs[0].id,
             } as SuperUser),
          );
       }

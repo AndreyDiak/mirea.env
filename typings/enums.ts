@@ -7,6 +7,7 @@ export const enum DBQueries {
    GROUPS = "groups", // все группы
    INSTITUTES = "institutes", // все институты
    MATERIALS = "materials", // все материалы
+   TIMETABLES = "timetable", // расписание для групп
    // NOTIFICATIONS = "notifications",  работать не будет(
    FAVORITES = "favorites", // избранное пользователей
    REVIEWS = "reviews", // отзывы

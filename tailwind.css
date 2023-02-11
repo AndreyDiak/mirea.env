@@ -195,12 +195,16 @@
   height: 2.5rem
 }
 
-.max-h-\[400px\] {
-  max-height: 400px
+.max-h-\[300px\] {
+  max-height: 300px
 }
 
 .max-h-\[200px\] {
   max-height: 200px
+}
+
+.max-h-\[250px\] {
+  max-height: 250px
 }
 
 .max-h-\[350px\] {
@@ -331,6 +335,11 @@
 .bg-blue-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(96 165 250 / var(--tw-bg-opacity))
+}
+
+.bg-gray-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity))
 }
 
 .bg-slate-100 {

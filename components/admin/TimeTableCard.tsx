@@ -38,14 +38,13 @@ export function TimeTableCard({ name, lessons, current, index, setLessons }: Pro
          </View>
          {isCardVisible && (
             <ScrollView>
-               {current.map((lesson, index) => (
-                  <View>
-                     <Input
-                        value={lesson}
-                        placeholder={`${index + 1} lesson...`}
-                        onChangeText={(text) => changeText(text, index)}
-                     />
-                  </View>
+               {current.map((lesson, _index) => (
+                  <Input
+                     key={lesson}
+                     value={lesson}
+                     placeholder={`${_index + 1} lesson...`}
+                     onChangeText={(text) => changeText(text, _index)}
+                  />
                ))}
             </ScrollView>
          )}

@@ -85,7 +85,7 @@ export const Message: React.FC<Props> = React.memo(
                   <View
                      style={tw(
                         `absolute -bottom-5 
-            ${message.email === email ? "-right-7" : "-left-3"}`,
+                        ${message.email === email ? "-right-7" : "-left-3"}`,
                      )}
                   >
                      <UserAvatar

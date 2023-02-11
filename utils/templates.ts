@@ -1,7 +1,7 @@
 import { Student, Teacher, User } from "../typings";
 import { UType } from "../typings/enums";
 
-type TemplateUser = Omit<User, "userId" | "email" | "password">;
+type TemplateUser = Omit<User, "id" | "email" | "password">;
 
 type TemplateStudent = Pick<Student, "groupId" | "instituteId" | "type"> & TemplateUser;
 

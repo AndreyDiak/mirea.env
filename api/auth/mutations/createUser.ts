@@ -32,7 +32,7 @@ export const createUser = async ({ userData, setError }: Props) => {
       return;
    }
 
-   let user: Omit<Student, "userId"> | Omit<Teacher, "userId">;
+   let user: Omit<Student, "id"> | Omit<Teacher, "id">;
 
    if (userData.type === UType.STUDENT) {
       user = {

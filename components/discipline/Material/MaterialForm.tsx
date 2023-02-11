@@ -53,7 +53,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
       }
 
       setIsLoading(true);
-      await addMaterial(formTitle, formText, user.userId, disciplineId, documents);
+      await addMaterial(formTitle, formText, user.id, disciplineId, documents);
 
       setIsLoading(false);
       setDocuments([]);

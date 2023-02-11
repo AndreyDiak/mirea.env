@@ -7,10 +7,10 @@ import type { Favorite } from "../../../typings";
 import { DBQueries } from "../../../typings/enums";
 import { QUERIES } from "../../../utils/createDBQuery";
 
-export const handleFavorite = async (userId: string, materialId: string, isInFavorite: boolean) => {
+export const handleFavorite = async (id: string, materialId: string, isInFavorite: boolean) => {
    if (!isInFavorite) {
       const data: Omit<Favorite, "id"> = {
-         userId,
+         id,
          materialId,
       };
       await addDoc(collection(db, DBQueries.FAVORITES), data);
@@ -19,8 +19,8 @@ export const handleFavorite = async (userId: string, materialId: string, isInFav
       const favorites = await getDocs(
          QUERIES.CREATE_MULTIPLE_QUERY<Favorite>(DBQueries.FAVORITES, [
             {
-               fieldName: "userId",
-               fieldValue: userId,
+               fieldName: "id",
+               fieldValue: id,
                opStr: "==",
             },
             {
