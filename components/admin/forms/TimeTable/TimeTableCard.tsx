@@ -1,33 +1,32 @@
 import React, { useState } from "react";
 
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 import { Card, Icon, Input } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-type Props = {
-   name: string;
+interface Props {
+   dayName: string;
    lessons: string[][];
-   current: string[];
-   index: number;
+   dayIndex: number;
    setLessons: (lessons: string[][]) => void;
-};
+}
 
-export function TimeTableCard({ name, lessons, current, index, setLessons }: Props) {
+export function TimeTableCard({ dayName, lessons, dayIndex, setLessons }: Props) {
    const tw = useTailwind();
    const [isCardVisible, setIsCardVisible] = useState(false);
 
    // Обновляем поле с названием предмета...
    const changeText = (lessonName: string, lessonIndex: number) => {
       const newTimeTable = [...lessons];
-      newTimeTable[index][lessonIndex] = lessonName;
+      newTimeTable[dayIndex][lessonIndex] = lessonName;
       setLessons(newTimeTable);
    };
 
    return (
       <Card>
          <View style={tw("flex flex-row justify-between items-center")}>
-            <Text>{name}</Text>
+            <Text>{dayName}</Text>
             <TouchableOpacity onPress={() => setIsCardVisible(!isCardVisible)}>
                <Icon
                   name={!isCardVisible ? "expand-more" : "expand-less"}
@@ -37,16 +36,19 @@ export function TimeTableCard({ name, lessons, current, index, setLessons }: Pro
             </TouchableOpacity>
          </View>
          {isCardVisible && (
-            <ScrollView>
-               {current.map((lesson, _index) => (
-                  <Input
-                     key={lesson}
-                     value={lesson}
-                     placeholder={`${_index + 1} lesson...`}
-                     onChangeText={(text) => changeText(text, _index)}
-                  />
-               ))}
-            </ScrollView>
+            <FlatList
+               data={lessons[dayIndex]}
+               renderItem={({ item: lesson, index }) => {
+                  return (
+                     <Input
+                        key={index}
+                        value={lesson}
+                        placeholder={`${index + 1} lesson`}
+                        onChangeText={(text) => changeText(text, index)}
+                     />
+                  );
+               }}
+            />
          )}
       </Card>
    );

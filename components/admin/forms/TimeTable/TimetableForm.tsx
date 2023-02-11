@@ -6,12 +6,12 @@ import { Card } from "@rneui/themed";
 import { addDoc } from "firebase/firestore";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { useGroups, useInstitutes } from "../../hooks/login";
-import { Group, Institute } from "../../typings";
-import { DBQueries, LFilter } from "../../typings/enums";
-import { createCollection } from "../../utils";
-import { Button } from "../Button";
-import { CheckListSingle } from "./CheckListSingle";
+import { useGroups, useInstitutes } from "../../../../hooks/login";
+import { Group, Institute } from "../../../../typings";
+import { DBQueries, LFilter } from "../../../../typings/enums";
+import { createCollection } from "../../../../utils";
+import { Button } from "../../../Button";
+import { CheckListSingle } from "../../checklist/CheckListSingle";
 import { TimeTableCard } from "./TimeTableCard";
 
 const lessonsTemplate: string[][] = [
@@ -48,6 +48,9 @@ export function TimetableForm() {
          })),
       });
       setLoading(false);
+      setLessons(lessonsTemplate);
+      setSelectedInstitute(null);
+      setSelectedGroup(null);
    };
 
    // TODO разобраться с логикой, происходит постоянный ререндер
@@ -78,7 +81,7 @@ export function TimetableForm() {
                   />
                </>
             )}
-
+            {/* TODO разобраться с логикой и сделать более грамотно  */}
             {selectedInstitute && selectedGroup && (
                <>
                   <Text style={tw("text-center mb-4")}>
@@ -87,13 +90,12 @@ export function TimetableForm() {
                   <FlatList
                      data={days}
                      style={tw("max-h-[300px] mb-4")}
-                     renderItem={({ item, index }) => (
+                     renderItem={({ item: day, index }) => (
                         <TimeTableCard
                            key={index}
-                           name={item}
+                           dayName={day}
                            lessons={lessons}
-                           current={lessons[index]}
-                           index={index}
+                           dayIndex={index}
                            setLessons={setLessons}
                         />
                      )}

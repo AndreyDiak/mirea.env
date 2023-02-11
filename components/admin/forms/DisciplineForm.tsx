@@ -12,8 +12,8 @@ import { Institute, Teacher } from "../../../typings";
 import { DBQueries } from "../../../typings/enums";
 import { DOCS, createCollection } from "../../../utils";
 import { Button } from "../../Button";
-import { CheckListMulitple } from "../CheckListMulitple";
-import { CheckListSingle } from "../CheckListSingle";
+import { CheckListMulitple } from "../checklist/CheckListMulitple";
+import { CheckListSingle } from "../checklist/CheckListSingle";
 
 /* мы подгружаем все институты, после чего, выбираем один
  * подгружаем всех преподов, которые подключены к этому институту
@@ -71,7 +71,6 @@ export function DisciplineForm() {
                selectedItem={selectedInstitute}
                setSelectedItem={setSelectedInstitute as (institute: Institute) => void}
             />
-            {/* Groups CheckList... */}
             <Card.Divider />
             {/* Teachers CheckList... */}
             {selectedInstitute && !TLoading && (

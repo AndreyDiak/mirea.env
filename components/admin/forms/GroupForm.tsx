@@ -11,7 +11,7 @@ import type { Institute } from "../../../typings";
 import { DBQueries } from "../../../typings/enums";
 import { createCollection } from "../../../utils";
 import { Button } from "../../Button";
-import { CheckListSingle } from "../CheckListSingle";
+import { CheckListSingle } from "../checklist/CheckListSingle";
 
 export function GroupForm() {
    const [groupName, setGroupName] = useState("");

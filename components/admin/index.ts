@@ -1,2 +1,2 @@
 export * from "./forms";
-export * from "./TimetableForm";
+export * from "./forms/TimeTable/TimetableForm";

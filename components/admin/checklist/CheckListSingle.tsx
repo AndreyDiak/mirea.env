@@ -5,7 +5,7 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { CheckBox, Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-import type { Discipline, Group, Institute } from "../../typings";
+import type { Discipline, Group, Institute } from "../../../typings";
 
 // варианты того, что мы можем выбирать
 type Item = Group | Institute | Discipline;
