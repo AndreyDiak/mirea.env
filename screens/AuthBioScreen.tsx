@@ -42,8 +42,8 @@ export function AuthBioScreen() {
       await createUser({
          userData: {
             ...userData,
-            name,
-            female,
+            name: name.trim(),
+            female: female.trim(),
          },
          setError,
       });

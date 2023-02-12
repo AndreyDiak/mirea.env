@@ -7,7 +7,7 @@ import { addDoc } from "firebase/firestore";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useGroups, useInstitutes } from "../../../../hooks/login";
-import { Group, Institute } from "../../../../typings";
+import { Day, Group, Institute } from "../../../../typings";
 import { DBQueries, LFilter } from "../../../../typings/enums";
 import { createCollection } from "../../../../utils";
 import { Button } from "../../../Button";
@@ -23,7 +23,7 @@ const lessonsTemplate: string[][] = [
    ["", "", "", "", "", ""], // Суббота
 ];
 
-const days = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
+const days: Day[] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
 export function TimetableForm() {
    const tw = useTailwind();

@@ -7,3 +7,4 @@ export * from "./discipline";
 export * from "./login";
 export * from "./messages";
 export * from "./profile";
+export * from "./timetable";
