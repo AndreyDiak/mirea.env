@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
 import type { DBMessage } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { DOCS } from "../../utils";
 
 interface Props {
@@ -35,7 +35,7 @@ export const ChatHeader: React.FC<Props> = React.memo(
 
       const deleteMessage = async () => {
          await deleteDoc(
-            DOCS.CREATE_DOC(DBQueries.CHATS, `${chatId}/messages/${selectedMessage.id}`),
+            DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${selectedMessage.id}`),
          ).then(() => {
             ToastAndroid.show("Сообщение удалено", 1000);
          });

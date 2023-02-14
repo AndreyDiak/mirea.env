@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import type { Chat, ChatPreview, Group } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useChats = (disciplineId: string) => {
@@ -13,7 +13,7 @@ export const useChats = (disciplineId: string) => {
    useEffect(() => {
       const getData = async () => {
          setLoading(true);
-         const q = QUERIES.CREATE_SIMPLE_QUERY<Chat>(DBQueries.CHATS, {
+         const q = QUERIES.CREATE_SIMPLE_QUERY<Chat>(DB_PATHS.CHATS, {
             fieldName: "disciplineId",
             fieldValue: disciplineId,
             opStr: "==",
@@ -21,7 +21,7 @@ export const useChats = (disciplineId: string) => {
          const snap = await getAllDataWithFilter<Chat>(q);
          const DBChats: ChatPreview[] = await Promise.all(
             snap.map(async (chat) => {
-               const group = await getDataById<Group>(chat.groupId, DBQueries.GROUPS);
+               const group = await getDataById<Group>(chat.groupId, DB_PATHS.GROUPS);
                return {
                   id: chat.id, // chatId -> id
                   groupId: chat.groupId,

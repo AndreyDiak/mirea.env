@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
 import { Group, Institute } from "../../typings";
-import { DBQueries, LFilter } from "../../typings/enums";
+import { DB_PATHS, LFilter } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useGroups = (institutes: Institute[], filter: LFilter) => {
@@ -13,7 +13,7 @@ export const useGroups = (institutes: Institute[], filter: LFilter) => {
       const getData = async () => {
          if (!!institutes.length && filter === LFilter.GROUPS) {
             setLoading(true);
-            const q = QUERIES.CREATE_SIMPLE_QUERY<Group>(DBQueries.GROUPS, {
+            const q = QUERIES.CREATE_SIMPLE_QUERY<Group>(DB_PATHS.GROUPS, {
                fieldName: "instituteId",
                fieldValue: institutes[0].id,
                opStr: "==",

@@ -13,15 +13,15 @@ import { MaterialMenu } from "./MaterialMenu";
 
 type Props = {
    material: Material;
-   id: string | undefined;
+   userId: string | undefined;
    userType: string | undefined;
    userTheme: AppTheme;
 };
 
-export const MaterialCard: React.FC<Props> = React.memo(({ material, id }) => {
+export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {
    const tw = useTailwind();
 
-   const isFavorite = useFavorite(id, material.id);
+   const isFavorite = useFavorite(userId, material.id);
 
    return (
       <Card key={material.id}>
@@ -33,8 +33,8 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, id }) => {
 
          <Card.Divider />
          {/* Icons / Favorites / Comments / Share */}
-         <MaterialMenu id={id} material={material} isFavorite={isFavorite} />
-         {material.ownerId === id && (
+         <MaterialMenu id={userId} material={material} isFavorite={isFavorite} />
+         {material.ownerId === userId && (
             <TouchableOpacity onPress={() => deleteMaterial(material.id)}>
                <Text style={tw("text-red-400 underline text-center")}>Удалить</Text>
             </TouchableOpacity>

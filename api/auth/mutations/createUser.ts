@@ -4,7 +4,7 @@ import { addDoc } from "firebase/firestore";
 import { AuthState } from "../../../features/authSlice";
 import { auth } from "../../../firebase";
 import type { Student, Teacher } from "../../../typings";
-import { DBQueries, UType } from "../../../typings/enums";
+import { DB_PATHS, UType } from "../../../typings/enums";
 import { createCollection } from "../../../utils";
 
 interface Props {
@@ -61,7 +61,7 @@ export const createUser = async ({ userData, setError }: Props) => {
    }
    await createUserWithEmailAndPassword(auth, userData.email, userData.password)
       .then(async () => {
-         await addDoc(createCollection(DBQueries.USERS), {
+         await addDoc(createCollection(DB_PATHS.USERS), {
             ...user,
          }).catch((e) => {
             setError(e.message);

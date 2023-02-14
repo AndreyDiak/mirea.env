@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { useGroups, useInstitutes } from "../../../../hooks/login";
 import { Day, Group, Institute } from "../../../../typings";
-import { DBQueries, LFilter } from "../../../../typings/enums";
+import { DB_PATHS, LFilter } from "../../../../typings/enums";
 import { createCollection } from "../../../../utils";
 import { Button } from "../../../Button";
 import { CheckListSingle } from "../../checklist/CheckListSingle";
@@ -40,7 +40,7 @@ export function TimetableForm() {
          return;
       }
       setLoading(true);
-      await addDoc(createCollection(DBQueries.TIMETABLES), {
+      await addDoc(createCollection(DB_PATHS.TIMETABLES), {
          groupId: selectedGroup.id,
          timetable: lessons.map((lesson, index) => ({
             day: days[index],

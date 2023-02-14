@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
 import { TimeTable } from "../../typings";
-import { DBQueries, UType } from "../../typings/enums";
+import { DB_PATHS, UType } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useTimetable = () => {
@@ -17,7 +17,7 @@ export const useTimetable = () => {
       const getData = async () => {
          if (user.type === UType.STUDENT) {
             setLoading(true);
-            const q = QUERIES.CREATE_SIMPLE_QUERY<TimeTable>(DBQueries.TIMETABLES, {
+            const q = QUERIES.CREATE_SIMPLE_QUERY<TimeTable>(DB_PATHS.TIMETABLES, {
                fieldName: "groupId",
                fieldValue: user.groupId,
                opStr: "==",

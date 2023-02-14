@@ -7,7 +7,7 @@ import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
 import type { Chat, ChatPreview, Group, Student } from "../../typings";
-import { DBQueries, UType } from "../../typings/enums";
+import { DB_PATHS, UType } from "../../typings/enums";
 import { QUERIES, createCollection } from "../../utils";
 
 export const useChat = (disciplineId: string) => {
@@ -21,7 +21,7 @@ export const useChat = (disciplineId: string) => {
             setLoading(true);
             // eslint-disable-next-line @typescript-eslint/no-shadow
             let chat: ChatPreview = null;
-            const q = QUERIES.CREATE_MULTIPLE_QUERY<Chat>(DBQueries.CHATS, [
+            const q = QUERIES.CREATE_MULTIPLE_QUERY<Chat>(DB_PATHS.CHATS, [
                {
                   fieldName: "disciplineId",
                   fieldValue: disciplineId,
@@ -43,12 +43,12 @@ export const useChat = (disciplineId: string) => {
                };
             } else {
                // создаем новый чат...
-               await addDoc(createCollection(DBQueries.CHATS), {
+               await addDoc(createCollection(DB_PATHS.CHATS), {
                   disciplineId,
                   groupId: user.groupId,
                }).then(async (res) => {
                   const chatId = res.id;
-                  const NewDBchat = await getDataById<Chat>(chatId, DBQueries.CHATS);
+                  const NewDBchat = await getDataById<Chat>(chatId, DB_PATHS.CHATS);
                   chat = {
                      id: chatId,
                      groupId: NewDBchat.groupId,
@@ -57,7 +57,7 @@ export const useChat = (disciplineId: string) => {
                });
             }
 
-            const groupName = await getDataById<Group>(chat.groupId, DBQueries.GROUPS);
+            const groupName = await getDataById<Group>(chat.groupId, DB_PATHS.GROUPS);
             chat.groupName = groupName.name;
             setChat(chat);
             setLoading(false);

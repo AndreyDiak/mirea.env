@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
 import { Institute, Teacher } from "../../typings";
-import { DBQueries, UType } from "../../typings/enums";
+import { DB_PATHS, UType } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useTeachers = (institute: Institute) => {
@@ -14,7 +14,7 @@ export const useTeachers = (institute: Institute) => {
          if (institute) {
             setLoading(true);
             const DBTeachers = await getAllDataWithFilter<Teacher>(
-               QUERIES.CREATE_MULTIPLE_QUERY<Teacher>(DBQueries.USERS, [
+               QUERIES.CREATE_MULTIPLE_QUERY<Teacher>(DB_PATHS.USERS, [
                   {
                      fieldName: "type",
                      fieldValue: UType.TEACHER,

@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { getDataById, getMaterialById } from "../../api";
 import { selectUser } from "../../features/userSlice";
 import type { Discipline, Favorite, Favorites } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useFavorites = () => {
@@ -14,7 +14,7 @@ export const useFavorites = () => {
 
    const [favorites, setFavorites] = useState<Favorites[]>([]);
 
-   const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DBQueries.FAVORITES, {
+   const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DB_PATHS.FAVORITES, {
       fieldName: "id",
       fieldValue: user.id,
       opStr: "==",
@@ -30,7 +30,7 @@ export const useFavorites = () => {
                if (material) {
                   const discipline = await getDataById<Discipline>(
                      material.disciplineId,
-                     DBQueries.DISCIPLINES,
+                     DB_PATHS.DISCIPLINES,
                   );
                   return {
                      disciplineName: discipline?.name,

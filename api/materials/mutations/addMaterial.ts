@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { storage } from "../../../firebase";
 import { NewDocument } from "../../../typings";
-import { DBQueries } from "../../../typings/enums";
+import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, createCollection } from "../../../utils/createDBQuery";
 
 export const addMaterial = async (
@@ -13,7 +13,7 @@ export const addMaterial = async (
    disciplineId: string,
    documents: NewDocument[],
 ) => {
-   await addDoc(createCollection(DBQueries.MATERIALS), {
+   await addDoc(createCollection(DB_PATHS.MATERIALS), {
       title,
       text,
       ownerId,
@@ -23,7 +23,7 @@ export const addMaterial = async (
    }).then(async (snap) => {
       if (documents.length) {
          documents.map(async (document) => {
-            await addDoc(createCollection(DBQueries.SOURCES), {
+            await addDoc(createCollection(DB_PATHS.SOURCES), {
                title: document.name,
                materialId: snap.id,
             }).then(async (newDoc) => {
@@ -46,7 +46,7 @@ export const addMaterial = async (
                await uploadBytes(docRef, blob).then(async () => {
                   const downloadUrl = await getDownloadURL(docRef);
 
-                  await updateDoc(DOCS.CREATE_DOC(DBQueries.SOURCES, newDoc.id), {
+                  await updateDoc(DOCS.CREATE_DOC(DB_PATHS.SOURCES, newDoc.id), {
                      document: downloadUrl,
                   }).then(() => console.log("docs added!"));
                });

@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { useInstitutes } from "../../../hooks/login";
 import type { Institute } from "../../../typings";
-import { DBQueries } from "../../../typings/enums";
+import { DB_PATHS } from "../../../typings/enums";
 import { createCollection } from "../../../utils";
 import { Button } from "../../Button";
 import { CheckListSingle } from "../checklist/CheckListSingle";
@@ -26,7 +26,7 @@ export function GroupForm() {
          return;
       }
       setLoading(true);
-      await addDoc(createCollection(DBQueries.GROUPS), {
+      await addDoc(createCollection(DB_PATHS.GROUPS), {
          name: groupName,
          instituteId: selectedInstitute.id,
       }).then(() => {

@@ -103,7 +103,7 @@ interface Notification {
 }
 
 interface Favorite {
-   id: string;
+   userId: string;
    materialId: string;
    id: string;
 }

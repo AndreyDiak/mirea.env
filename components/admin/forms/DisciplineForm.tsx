@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { useInstitutes } from "../../../hooks/login";
 import { useTeachers } from "../../../hooks/login/useTeachers";
 import { Institute, Teacher } from "../../../typings";
-import { DBQueries } from "../../../typings/enums";
+import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, createCollection } from "../../../utils";
 import { Button } from "../../Button";
 import { CheckListMulitple } from "../checklist/CheckListMulitple";
@@ -34,14 +34,14 @@ export function DisciplineForm() {
       if (disciplineName === "" || selectedInstitute === null) {
          return;
       }
-      await addDoc(createCollection(DBQueries.DISCIPLINES), {
+      await addDoc(createCollection(DB_PATHS.DISCIPLINES), {
          name: disciplineName,
          instituteId: "",
       }).then(async (response) => {
          if (teachers.length !== 0) {
             await Promise.all(
                teachers.map(async (teacher) => {
-                  await updateDoc(DOCS.CREATE_DOC(DBQueries.USERS, teacher.id), {
+                  await updateDoc(DOCS.CREATE_DOC(DB_PATHS.USERS, teacher.id), {
                      disciplines: [...teacher.disciplines, response.id],
                   });
                }),
