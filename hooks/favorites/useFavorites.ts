@@ -15,7 +15,7 @@ export const useFavorites = () => {
    const [favorites, setFavorites] = useState<Favorites[]>([]);
 
    const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DB_PATHS.FAVORITES, {
-      fieldName: "id",
+      fieldName: "userId",
       fieldValue: user.id,
       opStr: "==",
    });

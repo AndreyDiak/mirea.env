@@ -1,2 +1,2 @@
 export * from "./TimeTableLessons";
-export * from "./TimetableHeader";
+export * from "./TimeTableHeader";

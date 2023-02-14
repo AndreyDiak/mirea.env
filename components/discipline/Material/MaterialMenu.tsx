@@ -10,12 +10,12 @@ import { handleFavorite } from "../../../api";
 import type { DisciplineScreenNavigatorProp, Material } from "../../../typings";
 
 interface Props {
-   id: string;
+   userId: string;
    material: Material;
    isFavorite: boolean;
 }
 
-export const MaterialMenu: React.FC<Props> = React.memo(({ id, material, isFavorite }) => {
+export const MaterialMenu: React.FC<Props> = React.memo(({ userId, material, isFavorite }) => {
    const tw = useTailwind();
    const navigation = useNavigation<DisciplineScreenNavigatorProp>();
    // еще не реализовано
@@ -31,7 +31,7 @@ export const MaterialMenu: React.FC<Props> = React.memo(({ id, material, isFavor
          {/* Add / Remove to Favorites... */}
          <TouchableOpacity
             style={tw("mr-4")}
-            onPress={() => handleFavorite(id, material.id, isFavorite)}
+            onPress={() => handleFavorite(userId, material.id, isFavorite)}
          >
             {isFavorite ? (
                <Icon name="favorite" type="material" size={25} color="#f87171" />

@@ -33,7 +33,7 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
 
          <Card.Divider />
          {/* Icons / Favorites / Comments / Share */}
-         <MaterialMenu id={userId} material={material} isFavorite={isFavorite} />
+         <MaterialMenu userId={userId} material={material} isFavorite={isFavorite} />
          {material.ownerId === userId && (
             <TouchableOpacity onPress={() => deleteMaterial(material.id)}>
                <Text style={tw("text-red-400 underline text-center")}>Удалить</Text>
