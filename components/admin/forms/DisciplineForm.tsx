@@ -4,7 +4,6 @@ import { View } from "react-native";
 
 import { Card, Input } from "@rneui/themed";
 import { addDoc, updateDoc } from "firebase/firestore";
-import { useTailwind } from "tailwind-rn/dist";
 
 import { useInstitutes } from "../../../hooks/login";
 import { useTeachers } from "../../../hooks/login/useTeachers";

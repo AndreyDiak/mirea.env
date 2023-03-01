@@ -116,7 +116,7 @@ export function MessagesList({
             }}
             onEndReached={() => setIsScrollToBottomVisible(false)}
             showsVerticalScrollIndicator={false}
-            // TODO у каждого пользователя должна хронится инфа
+            // TODO у каждого пользователя должна хранится инфа
             // на каком смс он закончил читать группу
             // initialScrollIndex
             renderItem={({ item: message, index }) => (

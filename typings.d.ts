@@ -2,8 +2,6 @@ import { UType } from "./typings/enums";
 
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
-type UserType = "student" | "teacher" | "admin";
-
 interface Timestamp {
    toDate(): import("moment").MomentInput;
    seconds: number;
