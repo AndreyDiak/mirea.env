@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../firebase";
-import { DBQueries } from "../typings/enums";
+import { DB_PATHS } from "../typings/enums";
 
 interface WhereParam<T> {
    fieldName: keyof T;
@@ -27,7 +27,7 @@ export const createCollection = (name: string) => collection(db, name);
 
 export const QUERIES = {
    CREATE_SIMPLE_QUERY: <T>(
-      collectionName: DBQueries,
+      collectionName: DB_PATHS,
       whereParam: WhereParam<T>,
    ): Query<DocumentData> =>
       query(
@@ -35,7 +35,7 @@ export const QUERIES = {
          where(whereParam.fieldName as string, whereParam.opStr, whereParam.fieldValue),
       ),
    CREATE_MULTIPLE_QUERY: <T>(
-      collectionName: DBQueries,
+      collectionName: DB_PATHS,
       whereParam: WhereParam<T>[], // максимум 2 where
    ): Query<DocumentData> =>
       query(
@@ -44,7 +44,7 @@ export const QUERIES = {
          where(whereParam[1].fieldName as string, whereParam[1].opStr, whereParam[1].fieldValue),
       ),
    CREATE_SIMPLE_QUERY_ORDERED: <T>(
-      collectionName: DBQueries,
+      collectionName: DB_PATHS,
       whereParam: WhereParam<T>, // максимум 2 where
       orderByParam: OrderByParam<T>,
    ): Query<DocumentData> =>
@@ -54,7 +54,7 @@ export const QUERIES = {
          orderBy(orderByParam.fieldValue as string),
       ),
    CREATE_MULTIPLE_QUERY_ORDERED: <T>(
-      collectionName: DBQueries,
+      collectionName: DB_PATHS,
       whereParam: WhereParam<T>[],
       orderByParam: OrderByParam<T>,
    ): Query<DocumentData> =>
@@ -67,6 +67,6 @@ export const QUERIES = {
 };
 
 export const DOCS = {
-   CREATE_DOC: (collectionName: DBQueries, docId: string): DocumentReference<DocumentData> =>
+   CREATE_DOC: (collectionName: DB_PATHS, docId: string): DocumentReference<DocumentData> =>
       doc(db, `${collectionName}/${docId}`),
 };

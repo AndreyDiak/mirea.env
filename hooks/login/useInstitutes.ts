@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllData } from "../../api/queries/getAllData";
 import { Institute } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 
 export const useInstitutes = () => {
    const [institutes, setInstitutes] = useState<Institute[]>([]);
@@ -11,7 +11,7 @@ export const useInstitutes = () => {
    useEffect(() => {
       const getData = async () => {
          setLoading(true);
-         const DBInstitutes = await getAllData<Institute>(DBQueries.INSTITUTES);
+         const DBInstitutes = await getAllData<Institute>(DB_PATHS.INSTITUTES);
 
          setInstitutes(DBInstitutes);
          setLoading(false);

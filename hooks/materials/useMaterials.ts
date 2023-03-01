@@ -1,12 +1,12 @@
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import type { Material } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useMaterials = (disciplineId: string) => {
    const q = QUERIES.CREATE_SIMPLE_QUERY_ORDERED<Material>(
-      DBQueries.MATERIALS,
+      DB_PATHS.MATERIALS,
       {
          fieldName: "disciplineId",
          fieldValue: disciplineId,

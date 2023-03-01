@@ -4,7 +4,7 @@ import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore"
 
 import { db } from "../../../firebase";
 import type { Favorite } from "../../../typings";
-import { DBQueries } from "../../../typings/enums";
+import { DB_PATHS } from "../../../typings/enums";
 import { QUERIES } from "../../../utils/createDBQuery";
 
 export const handleFavorite = async (userId: string, materialId: string, isInFavorite: boolean) => {
@@ -13,11 +13,11 @@ export const handleFavorite = async (userId: string, materialId: string, isInFav
          userId,
          materialId,
       };
-      await addDoc(collection(db, DBQueries.FAVORITES), data);
+      await addDoc(collection(db, DB_PATHS.FAVORITES), data);
       ToastAndroid.show("Добавлено в избранные", 1000);
    } else {
       const favorites = await getDocs(
-         QUERIES.CREATE_MULTIPLE_QUERY<Favorite>(DBQueries.FAVORITES, [
+         QUERIES.CREATE_MULTIPLE_QUERY<Favorite>(DB_PATHS.FAVORITES, [
             {
                fieldName: "userId",
                fieldValue: userId,
@@ -30,7 +30,7 @@ export const handleFavorite = async (userId: string, materialId: string, isInFav
             },
          ]),
       );
-      await deleteDoc(doc(db, `${DBQueries.FAVORITES}/${favorites.docs[0].id}`));
+      await deleteDoc(doc(db, `${DB_PATHS.FAVORITES}/${favorites.docs[0].id}`));
       ToastAndroid.show("Удалено из избранных", 1000);
    }
 };

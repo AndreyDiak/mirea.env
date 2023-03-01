@@ -21,7 +21,7 @@ export const ThemeCard: React.FC<Props> = React.memo(({ theme, isBordered }) => 
    const user = useSelector(selectUser);
 
    const setUserTheme = async () => {
-      await updateDoc(doc(db, `users/${user?.userId}`), {
+      await updateDoc(doc(db, `users/${user?.id}`), {
          theme,
       });
       ToastAndroid.show("Тема обновлена", 1000);

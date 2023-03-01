@@ -1,11 +1,11 @@
 import { collection, getDoc, getDocs, query } from "firebase/firestore";
 
 import { db } from "../../../firebase";
-import { DBQueries } from "../../../typings/enums";
+import { DB_PATHS } from "../../../typings/enums";
 import { DOCS } from "../../../utils/createDBQuery";
 
 export const getMaterialById = async (mId: string) => {
-   const q = DOCS.CREATE_DOC(DBQueries.MATERIALS, mId);
+   const q = DOCS.CREATE_DOC(DB_PATHS.MATERIALS, mId);
 
    const snap = await getDoc(q);
    if (snap.exists()) {

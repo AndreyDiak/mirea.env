@@ -12,7 +12,7 @@ import { Comment, Loader } from "../components";
 import { selectUser } from "../features/userSlice";
 import { useMaterialComments } from "../hooks";
 import type { CommentsScreenNavigatorProp, RootStackParamList } from "../typings";
-import { DBQueries } from "../typings/enums";
+import { DB_PATHS } from "../typings/enums";
 import { createCollection, returnHexCode } from "../utils";
 
 type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
@@ -68,7 +68,7 @@ export function CommentsScreen() {
          return;
       }
       Keyboard.dismiss();
-      await addDoc(createCollection(DBQueries.COMMENTS), {
+      await addDoc(createCollection(DB_PATHS.COMMENTS), {
          email: user?.email,
          text: commentText,
          timestamp: serverTimestamp(),

@@ -22,7 +22,6 @@ export function DisciplineCard({ discipline }: Props) {
    const navigation = useNavigation<DisciplineScreenNavigatorProp>();
    const user = useSelector(selectUser);
 
-   // TODO сделать хуком
    const { chat, loading } = useChat(discipline.id);
 
    return (

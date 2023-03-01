@@ -2,8 +2,6 @@ import { UType } from "./typings/enums";
 
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
-type UserType = "student" | "teacher" | "admin";
-
 interface Timestamp {
    toDate(): import("moment").MomentInput;
    seconds: number;
@@ -13,8 +11,8 @@ interface Timestamp {
 interface Group {
    id: string;
    name: string;
-   instituteId: string;
-   disciplines: string[];
+   instituteId: string; // id института к которому подключена группа (может быть только 1)
+   disciplines: string[]; // id дисциплин к которым подключена группа
 }
 
 interface Chat {
@@ -37,6 +35,18 @@ interface Institute {
    id: string;
    name: string;
    shortName: string;
+}
+
+type Day = "Понедельник" | "Вторник" | "Среда" | "Четверг" | "Пятница" | "Суббота";
+
+interface LessonDay {
+   day: Day;
+   lessons: string[];
+}
+
+interface TimeTable {
+   groupId: string;
+   timetable: LessonDay[];
 }
 
 interface Material {
@@ -86,14 +96,14 @@ interface Notification {
    isChecked: boolean;
    text: string;
    title: string;
-   userId: string;
+   id: string;
    notificationId: string;
 }
 
 interface Favorite {
-   id: string;
-   materialId: string;
    userId: string;
+   materialId: string;
+   id: string;
 }
 
 interface Favorites {
@@ -114,7 +124,7 @@ interface User {
    password: string;
    img: string;
    theme: AppTheme;
-   userId: string;
+   id: string;
 }
 
 interface Student extends User {

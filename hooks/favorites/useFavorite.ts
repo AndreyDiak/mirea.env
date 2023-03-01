@@ -1,10 +1,10 @@
 import { useCollection } from "react-firebase-hooks/firestore";
 
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useFavorite = (userId: string, materialId: string) => {
-   const q = QUERIES.CREATE_MULTIPLE_QUERY(DBQueries.FAVORITES, [
+   const q = QUERIES.CREATE_MULTIPLE_QUERY(DB_PATHS.FAVORITES, [
       {
          fieldName: "userId",
          fieldValue: userId,

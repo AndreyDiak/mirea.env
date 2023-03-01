@@ -1,3 +1,2 @@
-export * from "./AddDisciplineForm";
-export * from "./AddGroupForm";
-export * from "./AddTimetableForm";
+export * from "./forms";
+export * from "./forms/TimeTable/TimetableForm";

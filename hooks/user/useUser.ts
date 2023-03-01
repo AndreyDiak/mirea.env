@@ -5,12 +5,12 @@ import { useDispatch } from "react-redux";
 
 import { setUser } from "../../features/userSlice";
 import { SuperUser, User } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useUser = (initialUser: any) => {
    const dispatch = useDispatch();
-   const q = QUERIES.CREATE_SIMPLE_QUERY<User>(DBQueries.USERS, {
+   const q = QUERIES.CREATE_SIMPLE_QUERY<User>(DB_PATHS.USERS, {
       fieldName: "email",
       fieldValue: initialUser?.email || "",
       opStr: "==",
@@ -22,7 +22,7 @@ export const useUser = (initialUser: any) => {
          dispatch(
             setUser({
                ...userSnap?.docs[0].data(),
-               userId: userSnap?.docs[0].id,
+               id: userSnap?.docs[0].id,
             } as SuperUser),
          );
       }

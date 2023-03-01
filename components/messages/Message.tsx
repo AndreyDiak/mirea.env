@@ -7,7 +7,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { db } from "../../firebase";
 import { AppTheme, DBMessage } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
 import { UserAvatar } from "../UserAvatar";
 import { MessageData } from "./MessageData";
@@ -33,7 +33,7 @@ export const Message: React.FC<Props> = React.memo(
          const getReplyingMessage = async () => {
             if (message.replyingId) {
                const replyingMessageSnap = await getDoc(
-                  doc(db, `${DBQueries.CHATS}/${chatId}/messages/${message.replyingId}`),
+                  doc(db, `${DB_PATHS.CHATS}/${chatId}/messages/${message.replyingId}`),
                );
                setReplyingMessage({
                   ...replyingMessageSnap.data(),
@@ -85,7 +85,7 @@ export const Message: React.FC<Props> = React.memo(
                   <View
                      style={tw(
                         `absolute -bottom-5 
-            ${message.email === email ? "-right-7" : "-left-3"}`,
+                        ${message.email === email ? "-right-7" : "-left-3"}`,
                      )}
                   >
                      <UserAvatar

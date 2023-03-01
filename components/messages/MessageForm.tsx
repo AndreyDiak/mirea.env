@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMessage } from "../../api";
 import { selectUser } from "../../features/userSlice";
 import type { DBMessage } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { DOCS, returnHexCode } from "../../utils";
 
 interface EditedMessage {
@@ -61,7 +61,7 @@ export const MessageForm: React.FC<Props> = React.memo(
          setLoading(true);
          if (isMessageEdited) {
             await updateDoc(
-               DOCS.CREATE_DOC(DBQueries.CHATS, `${chatId}/messages/${editedMessageData.id}`),
+               DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${editedMessageData.id}`),
                {
                   text: message,
                },

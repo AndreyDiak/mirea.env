@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
 import type { Discipline, Institute } from "../../typings";
-import { DBQueries, LFilter } from "../../typings/enums";
+import { DB_PATHS, LFilter } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useDisciplines = (institutes: Institute[], filter: LFilter) => {
@@ -17,7 +17,7 @@ export const useDisciplines = (institutes: Institute[], filter: LFilter) => {
             const initialDisiciplines: Record<string, Discipline[]> = {};
             await Promise.all(
                institutes.map(async (institute) => {
-                  const q = QUERIES.CREATE_SIMPLE_QUERY<Discipline>(DBQueries.DISCIPLINES, {
+                  const q = QUERIES.CREATE_SIMPLE_QUERY<Discipline>(DB_PATHS.DISCIPLINES, {
                      fieldName: "instituteId",
                      fieldValue: institute.id,
                      opStr: "==",

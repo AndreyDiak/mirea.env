@@ -80,9 +80,9 @@ export function DisciplineScreen() {
                      <MaterialCard
                         key={material.id}
                         material={material}
-                        userId={user?.userId}
-                        userType={user?.type}
-                        userTheme={user?.theme}
+                        userId={user.id}
+                        userType={user.type}
+                        userTheme={user.theme}
                      />
                   );
                }}

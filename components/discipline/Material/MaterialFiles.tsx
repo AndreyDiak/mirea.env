@@ -18,7 +18,7 @@ interface Props {
 export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
    const tw = useTailwind();
    const theme = useSelector(selectUserTheme);
-   const { sources, loading, error } = useMaterialDocuments(materialId);
+   const { sources, loading } = useMaterialDocuments(materialId);
    if (sources.length === 0 && loading) {
       return <Loader text="Загрузка..." theme={theme} />;
    }
@@ -30,7 +30,7 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
             {sources.map((document) => (
                <TouchableOpacity
                   key={document.id}
-                  onPress={async () => await Linking.openURL(document.document)}
+                  onPress={async () => Linking.openURL(document.document)}
                >
                   <Text
                      style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(theme) }]}
@@ -41,4 +41,5 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
             ))}
          </View>
       );
+   return null;
 });

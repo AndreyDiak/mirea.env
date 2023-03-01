@@ -6,20 +6,17 @@ import { useSelector } from "react-redux";
 import { getDataById, getMaterialById } from "../../api";
 import { selectUser } from "../../features/userSlice";
 import type { Discipline, Favorite, Favorites } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
-
-// TODO переделать по типу useMaterials
 
 export const useFavorites = () => {
    const user = useSelector(selectUser);
-   // const [loading, setLoading] = useState<boolean>(false);
-   const [favorites, setFavorites] = useState<Favorites[]>([]);
-   // const q = query(collection(db, `users/${user.userId}/favorites`));
 
-   const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DBQueries.FAVORITES, {
+   const [favorites, setFavorites] = useState<Favorites[]>([]);
+
+   const q = QUERIES.CREATE_SIMPLE_QUERY<Favorite>(DB_PATHS.FAVORITES, {
       fieldName: "userId",
-      fieldValue: user.userId,
+      fieldValue: user.id,
       opStr: "==",
    });
 
@@ -33,7 +30,7 @@ export const useFavorites = () => {
                if (material) {
                   const discipline = await getDataById<Discipline>(
                      material.disciplineId,
-                     DBQueries.DISCIPLINES,
+                     DB_PATHS.DISCIPLINES,
                   );
                   return {
                      disciplineName: discipline?.name,
@@ -49,8 +46,6 @@ export const useFavorites = () => {
       };
       getData();
    }, [snapshot]);
-
-   // });
 
    return {
       favorites,

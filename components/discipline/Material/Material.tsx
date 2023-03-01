@@ -28,7 +28,7 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
          <Card.Title style={tw("font-bold text-lg")}>{material.title}</Card.Title>
          <Card.Divider />
          <Text style={tw("mb-4")}>{material.text}</Text>
-         {/* TODO переделать на отдельную загрузку */}
+
          <MaterialFiles materialId={material.id} />
 
          <Card.Divider />

@@ -6,7 +6,7 @@ import { Card } from "@rneui/themed";
 import { signOut } from "firebase/auth";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { AddDisciplineForm, AddGroupForm, AddTimetableForm } from "../components";
+import { DisciplineForm, GroupForm, TimetableForm } from "../components";
 import { auth } from "../firebase";
 
 export function AdminScreen() {
@@ -15,6 +15,7 @@ export function AdminScreen() {
    const [isTimetableFormVisible, setIsTimetableFormVisible] = useState(false);
    const [isDisciplineFormVisible, setIsDisciplineFormVisible] = useState(false);
    const [isGroupFormVisible, setIsGroupFormVisible] = useState(false);
+   const [isInstituteFormVisible, setIsInstituteFormVisible] = useState(false);
    const [isMenuVisible, setIsMenuVisible] = useState(false);
 
    const openMenu = () => {
@@ -35,7 +36,7 @@ export function AdminScreen() {
          </View>
 
          {/* Variants */}
-         <View style={tw("")}>
+         <View>
             <Card>
                <View style={tw("flex flex-row justify-between items-center mb-2")}>
                   <View>
@@ -81,15 +82,25 @@ export function AdminScreen() {
                            <Text style={tw("text-blue-400")}>Добавить группу</Text>
                         </TouchableOpacity>
                      </View>
+                     <View style={tw("mb-2")}>
+                        <TouchableOpacity
+                           onPress={() => {
+                              setIsInstituteFormVisible(true);
+                              setIsMenuVisible(true);
+                           }}
+                        >
+                           <Text style={tw("text-blue-400")}>Добавить институт</Text>
+                        </TouchableOpacity>
+                     </View>
                   </View>
                )}
             </Card>
          </View>
          {/* Forms */}
          <View>
-            {isGroupFormVisible && <AddGroupForm />}
-            {isDisciplineFormVisible && <AddDisciplineForm />}
-            {isTimetableFormVisible && <AddTimetableForm />}
+            {isGroupFormVisible && <GroupForm />}
+            {isDisciplineFormVisible && <DisciplineForm />}
+            {isTimetableFormVisible && <TimetableForm />}
          </View>
       </View>
    );

@@ -1,9 +1,9 @@
 import { collection, getDocs, query } from "firebase/firestore";
 
 import { db } from "../../firebase";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 
-export const getAllData = async <T>(collectionName: DBQueries): Promise<T[]> => {
+export const getAllData = async <T>(collectionName: DB_PATHS): Promise<T[]> => {
    const q = query(collection(db, collectionName));
    const snap = await getDocs(q);
 

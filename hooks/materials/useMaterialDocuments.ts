@@ -1,11 +1,11 @@
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import type { Source } from "../../typings";
-import { DBQueries } from "../../typings/enums";
+import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useMaterialDocuments = (materialId: string) => {
-   const q = QUERIES.CREATE_SIMPLE_QUERY<Source>(DBQueries.SOURCES, {
+   const q = QUERIES.CREATE_SIMPLE_QUERY<Source>(DB_PATHS.SOURCES, {
       fieldName: "materialId",
       fieldValue: materialId,
       opStr: "==",

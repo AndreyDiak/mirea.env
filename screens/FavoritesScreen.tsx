@@ -82,8 +82,8 @@ export function FavoritesScreen() {
                         <MaterialCard
                            key={favorite.index}
                            material={favorite.item}
-                           userId={user.userId}
-                           userTheme={user?.theme}
+                           userId={user.id}
+                           userTheme={user.theme}
                            userType={user.type}
                         />
                      )}

@@ -1,5 +1,5 @@
 // пути до коллекций БД
-export const enum DBQueries {
+export const enum DB_PATHS {
    CHATS = "chats", // чаты групп
    COMMENTS = "comments", // комменты к материалам
    SOURCES = "sources", // прикрепленные файлы к материалам
@@ -7,6 +7,7 @@ export const enum DBQueries {
    GROUPS = "groups", // все группы
    INSTITUTES = "institutes", // все институты
    MATERIALS = "materials", // все материалы
+   TIMETABLES = "timetable", // расписание для групп
    // NOTIFICATIONS = "notifications",  работать не будет(
    FAVORITES = "favorites", // избранное пользователей
    REVIEWS = "reviews", // отзывы

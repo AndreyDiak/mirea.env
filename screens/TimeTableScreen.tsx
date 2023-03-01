@@ -1,23 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
-import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUser } from "../features/userSlice";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { Error, Loader, TimeTableHeader, TimeTableLessons } from "../components";
+import { selectUserTheme } from "../features/userSlice";
+import { useTimetable } from "../hooks/timetable/useTimetable";
 
 export function TimeTableScreen() {
    const tw = useTailwind();
-   const user = useSelector(selectUser);
+
+   const [dayIndex, setDayIndex] = useState(0);
+
+   const theme = useSelector(selectUserTheme);
+
+   const { timeTable, loading } = useTimetable();
+
+   if (timeTable === null && loading) {
+      return <Loader text="Загрузка расписания" theme={theme} />;
+   }
+
+   if (timeTable === null) {
+      return <Error text="Расписание не найдено" theme={theme} />;
+   }
+
    return (
-      <View style={tw("w-full h-full flex flex-row items-center justify-center")}>
-         <View>
-            <Text style={tw("text-lg")}>Находится в разработке...</Text>
-            <Icon name="pending" type="material" color={returnHexCode(user.theme)} size={30} />
-         </View>
+      <View style={tw("w-full h-full py-8")}>
+         <TimeTableHeader
+            timetable={timeTable.timetable}
+            dayIndex={dayIndex}
+            setDayIndex={setDayIndex}
+         />
+         <TimeTableLessons timetable={timeTable.timetable} dayIndex={dayIndex} />
       </View>
    );
 }

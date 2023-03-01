@@ -33,8 +33,7 @@ export function ProfileScreen() {
          {/* Avatar + email */}
          <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
             <View style={tw("flex flex-row items-center justify-between")}>
-               {/* TODO включить обратно */}
-               <ProfileImage userId={user.userId} userImg={user.img} userName={user.name} />
+               <ProfileImage id={user.id} userImg={user.img} userName={user.name} />
                <View>
                   <Text style={[tw("text-gray-800 text-xl font-semibold")]}>{user.email}</Text>
                </View>
@@ -48,6 +47,7 @@ export function ProfileScreen() {
                {/* Name + Female */}
                <ProfileBio name={user.name} female={user.female} theme={user.theme} />
                <Card.Divider />
+               {/* Choose user theme */}
                <ProfileTheme />
                {/* User type */}
                <View style={tw("mb-4")}>
