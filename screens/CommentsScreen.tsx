@@ -13,7 +13,7 @@ import { selectUser } from "../features/userSlice";
 import { useMaterialComments } from "../hooks";
 import type { CommentsScreenNavigatorProp, RootStackParamList } from "../typings";
 import { DB_PATHS } from "../typings/enums";
-import { createCollection, returnHexCode } from "../utils";
+import { createCollection, isEmpty, returnHexCode } from "../utils";
 
 type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -37,12 +37,12 @@ export function CommentsScreen() {
 
    const { comments, loading } = useMaterialComments(material.id);
 
-   if (comments.length === 0 && loading) {
+   if (isEmpty(comments) && loading) {
       return <Loader text="Загрузка комментариев" theme={user.theme} />;
    }
 
    const renderCommentsList = () => {
-      if (comments.length === 0) {
+      if (isEmpty(comments)) {
          return <Text style={tw("text-center my-2")}>Напишите первый комментарий...</Text>;
       }
       return (
@@ -64,7 +64,7 @@ export function CommentsScreen() {
    };
 
    const addComment = async () => {
-      if (commentText.length === 0) {
+      if (isEmpty(commentText)) {
          return;
       }
       Keyboard.dismiss();

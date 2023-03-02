@@ -8,6 +8,7 @@ import { selectUser } from "../../features/userSlice";
 import type { Discipline, Favorite, Favorites } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
+import { isEmpty } from "../../utils/isEmpty";
 
 export const useFavorites = () => {
    const user = useSelector(selectUser);
@@ -49,7 +50,7 @@ export const useFavorites = () => {
 
    return {
       favorites,
-      loading: loading || (snapshot.docs.length > 0 && favorites.length === 0),
+      loading: loading || (!isEmpty(snapshot.docs) && isEmpty(favorites)),
       error,
    };
 };

@@ -8,6 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserTheme } from "../../../features/userSlice";
 import { useMaterialDocuments } from "../../../hooks";
+import { isEmpty } from "../../../utils";
 import { returnHexCode } from "../../../utils/returnHexCodes";
 import { Loader } from "../../common";
 
@@ -19,22 +20,19 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
    const tw = useTailwind();
    const theme = useSelector(selectUserTheme);
    const { sources, loading } = useMaterialDocuments(materialId);
-   if (sources.length === 0 && loading) {
+
+   if (isEmpty(sources) && loading) {
       return <Loader text="Загрузка..." theme={theme} />;
    }
-   if (sources.length > 0)
+
+   if (!isEmpty(sources))
       return (
          <View style={tw("mb-2")}>
             <Card.Divider />
             <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
             {sources.map((document) => (
-               <TouchableOpacity
-                  key={document.id}
-                  onPress={async () => Linking.openURL(document.document)}
-               >
-                  <Text
-                     style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(theme) }]}
-                  >
+               <TouchableOpacity key={document.id} onPress={async () => Linking.openURL(document.document)}>
+                  <Text style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(theme) }]}>
                      {document.title}
                   </Text>
                </TouchableOpacity>

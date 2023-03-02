@@ -60,19 +60,16 @@ export const MessageForm: React.FC<Props> = React.memo(
       const sendMessage = async () => {
          setLoading(true);
          if (isMessageEdited) {
-            await updateDoc(
-               DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${editedMessageData.id}`),
-               {
-                  text: message,
-               },
-            ).then(() => {
+            await updateDoc(DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${editedMessageData.id}`), {
+               text: message,
+            }).then(() => {
                Keyboard.dismiss();
                setMessage("");
                setIsMessageEdited(false);
             });
          } else {
             await addMessage(chatId, {
-               text: message,
+               text: message.trimEnd(),
                displayName: user.name,
                email: user.email,
                type: user.type,

@@ -13,7 +13,7 @@ import { selectUser } from "../features/userSlice";
 import { useMaterials } from "../hooks";
 import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
 import { UType } from "../typings/enums";
-import { returnHexCode } from "../utils";
+import { isEmpty, returnHexCode } from "../utils";
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
@@ -40,7 +40,7 @@ export function DisciplineScreen() {
       return <Loader text="Загрузка материалов" theme={user.theme} />;
    }
 
-   if (materials.length === 0 && !loading && user.type === UType.STUDENT) {
+   if (isEmpty(materials) && !loading && user.type === UType.STUDENT) {
       return <Error text="Тут пока нет материалов..." theme={user.theme} />;
    }
 

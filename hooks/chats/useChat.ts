@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
-import type { Chat, ChatPreview, Group, Student } from "../../typings";
+import type { Chat, ChatPreview, Group } from "../../typings";
 import { DB_PATHS, UType } from "../../typings/enums";
 import { QUERIES, createCollection } from "../../utils";
 

@@ -9,7 +9,7 @@ import { Error, Loader, MaterialCard } from "../components";
 import { selectUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
 import type { Material } from "../typings";
-import { returnHexCode } from "../utils";
+import { isEmpty, returnHexCode } from "../utils";
 
 export function FavoritesScreen() {
    const tw = useTailwind();
@@ -33,7 +33,7 @@ export function FavoritesScreen() {
    if (loading) {
       return <Loader text="Загрузка избранных материалов" theme={user?.theme} />;
    }
-   if (Object.keys(favorites).length === 0) {
+   if (isEmpty(favorites)) {
       return <Error text="У вас нет избранных материалов" theme={user?.theme} />;
    }
 
