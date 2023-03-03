@@ -4,14 +4,12 @@ import { Text, View } from "react-native";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { returnHexCode } from "../../utils/returnHexCodes";
-
 interface Props {
    text: string;
    Icon: JSX.Element;
 }
 
-export const CenteredText: React.FC<Props> = ({ text, Icon }) => {
+export const CenteredText: React.FC<Props> = React.memo(({ text, Icon }) => {
    const tw = useTailwind();
 
    return (
@@ -22,4 +20,4 @@ export const CenteredText: React.FC<Props> = ({ text, Icon }) => {
          </View>
       </View>
    );
-};
+});

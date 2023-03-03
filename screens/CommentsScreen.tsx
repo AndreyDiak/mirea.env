@@ -25,7 +25,8 @@ export function CommentsScreen() {
    } = useRoute<CommentsScreenRouteProp>();
 
    const tw = useTailwind();
-   const [commentText, setCommentText] = useState("");
+   const [commentText, setCommentText] = useState<string>("");
+   const [loading, setLoading] = useState<boolean>(false);
 
    const flatListRef = useRef(null);
 
@@ -35,11 +36,29 @@ export function CommentsScreen() {
       });
    });
 
-   const { comments, loading } = useMaterialComments(material.id);
+   const { comments, loading: MLoading } = useMaterialComments(material.id);
 
-   if (isEmpty(comments) && loading) {
+   if (isEmpty(comments) && MLoading) {
       return <Loader text="Загрузка комментариев" theme={user.theme} />;
    }
+
+   const addComment = async () => {
+      if (isEmpty(commentText)) {
+         return;
+      }
+      setLoading(true);
+      Keyboard.dismiss();
+      await addDoc(createCollection(DB_PATHS.COMMENTS), {
+         email: user?.email,
+         text: commentText,
+         timestamp: serverTimestamp(),
+         materialId: material.id,
+      }).then(() => {
+         setCommentText("");
+         flatListRef.current?.scrollToEnd({ animating: true });
+      });
+      setLoading(false);
+   };
 
    const renderCommentsList = () => {
       if (isEmpty(comments)) {
@@ -63,22 +82,6 @@ export function CommentsScreen() {
       );
    };
 
-   const addComment = async () => {
-      if (isEmpty(commentText)) {
-         return;
-      }
-      Keyboard.dismiss();
-      await addDoc(createCollection(DB_PATHS.COMMENTS), {
-         email: user?.email,
-         text: commentText,
-         timestamp: serverTimestamp(),
-         materialId: material.id,
-      }).then(() => {
-         setCommentText("");
-         flatListRef.current?.scrollToEnd({ animating: true });
-      });
-   };
-
    return (
       <View style={tw("flex flex-col h-full w-full py-4")}>
          <Card containerStyle={tw("my-0")}>
@@ -94,7 +97,7 @@ export function CommentsScreen() {
                onChangeText={setCommentText}
                style={tw("bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg")}
             />
-            <TouchableOpacity onPress={addComment}>
+            <TouchableOpacity disabled={loading} onPress={addComment}>
                <Icon name="send" type="material" color={returnHexCode(user.theme)} size={30} />
             </TouchableOpacity>
          </View>

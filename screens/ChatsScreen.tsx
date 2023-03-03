@@ -59,9 +59,7 @@ export function ChatsScreen() {
                            })
                         }
                      >
-                        <Text style={[tw("underline"), { color: returnHexCode(user.theme) }]}>
-                           Перейти
-                        </Text>
+                        <Text style={[tw("underline"), { color: returnHexCode(user.theme) }]}>Перейти</Text>
                      </TouchableOpacity>
                   </View>
                </Card>
