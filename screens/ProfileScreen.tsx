@@ -76,10 +76,7 @@ export function ProfileScreen() {
             }}
          >
             <Text
-               style={[
-                  tw("px-2 py-1 rounded-md text-lg underline"),
-                  { color: returnHexCode(user.theme) },
-               ]}
+               style={[tw("px-2 py-1 rounded-md text-lg underline"), { color: returnHexCode(user.theme) }]}
             >
                Выйти из аккаунта
             </Text>

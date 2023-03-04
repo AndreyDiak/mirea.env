@@ -22,9 +22,7 @@ export const Comment: React.FC<Props> = React.memo(({ comment, index, isLast }) 
             <Text style={tw("text-right text-xs")}>{comment.email}</Text>
          </View>
          {!isLast && (
-            <View
-               style={tw(`flex flex-row px-8 ${index % 2 === 0 ? "justify-start" : "justify-end"}`)}
-            >
+            <View style={tw(`flex flex-row px-8 ${index % 2 === 0 ? "justify-start" : "justify-end"}`)}>
                <View style={tw("bg-gray-300 w-0.5 rounded-md h-4 my-1")} />
             </View>
          )}

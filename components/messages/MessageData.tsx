@@ -21,6 +21,7 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email, isNext
    return (
       <>
          {/* Message Owner... */}
+
          {!isNextMessageOwner && (
             <Text
                style={tw(
@@ -30,6 +31,8 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email, isNext
                {isMyMessage ? "Вы" : message.displayName}
             </Text>
          )}
+
+
 
          <View style={tw("flex flex-row items-end w-full")}>
             {/* Message Text... */}

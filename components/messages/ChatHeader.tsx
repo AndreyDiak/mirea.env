@@ -34,11 +34,11 @@ export const ChatHeader: React.FC<Props> = React.memo(
       };
 
       const deleteMessage = async () => {
-         await deleteDoc(
-            DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${selectedMessage.id}`),
-         ).then(() => {
-            ToastAndroid.show("Сообщение удалено", 1000);
-         });
+         await deleteDoc(DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${selectedMessage.id}`)).then(
+            () => {
+               ToastAndroid.show("Сообщение удалено", 1000);
+            },
+         );
          onClose();
       };
 

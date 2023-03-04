@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { FlatList, Text, View } from "react-native";
 
@@ -20,31 +20,36 @@ interface Props {
 export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) => {
    const tw = useTailwind();
    const dispatch = useDispatch();
+
    const { institutes, loading: ILoading } = useInstitutes();
    const { disciplines, loading: DLoading } = useDisciplines(institutes, filter);
    const myDisciplines = useSelector(selectUserDisciplines);
+
    const toggleMyDisciplines = (discipline: Discipline) => {
       dispatch(setDisciplines({ discipline }));
    };
+
+   const totalDisciplinesCount = useMemo(
+      () => (disciplines ? Object.values(disciplines).reduce((total, d) => total + d.length, 0) : 0),
+      [disciplines],
+   );
 
    const renderData = () => {
       if (ILoading || DLoading) {
          return <Loader text="Загрузка доступных дисциплин" theme="blue" />;
       }
-      const totalDisciplinesCount = disciplines
-         ? Object.values(disciplines).reduce((total, d) => total + d.length, 0)
-         : 0;
 
       if (totalDisciplinesCount === 0) {
          return <Error text="Дисциплины не найдены" theme="blue" />;
       }
+
       return (
          <FlatList
             data={Object.keys(disciplines)}
             scrollEnabled
             showsVerticalScrollIndicator={false}
             renderItem={({ item: IName, index }) => {
-               if (disciplines[IName].length > 0)
+               if (disciplines[IName].length > 0) {
                   return (
                      <View key={index} style={tw("mb-1")}>
                         <View style={{ backgroundColor: returnHexCode("blue") }}>
@@ -57,6 +62,7 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
                            showsVerticalScrollIndicator={false}
                            renderItem={({ item: discipline }) => {
                               const isSelected = myDisciplines.some((myD) => myD === discipline.id);
+
                               return (
                                  <CheckBox
                                     key={index}
@@ -69,6 +75,8 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
                         />
                      </View>
                   );
+               }
+               return null;
             }}
          />
       );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -18,12 +18,12 @@ export function AdminScreen() {
    const [isInstituteFormVisible, setIsInstituteFormVisible] = useState(false);
    const [isMenuVisible, setIsMenuVisible] = useState(false);
 
-   const openMenu = () => {
+   const openMenu = useCallback(() => {
       setIsMenuVisible(false);
       setIsDisciplineFormVisible(false);
       setIsGroupFormVisible(false);
       setIsTimetableFormVisible(false);
-   };
+   }, []);
 
    return (
       <View style={tw("pt-10 px-4")}>

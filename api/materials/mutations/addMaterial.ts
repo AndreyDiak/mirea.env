@@ -32,7 +32,7 @@ export const addMaterial = async (
                   xhr.onload = () => {
                      resolve(xhr.response);
                   };
-                  xhr.onerror = (e) => {
+                  xhr.onerror = () => {
                      reject(new TypeError("Network request failed"));
                   };
                   xhr.responseType = "blob";
@@ -42,13 +42,12 @@ export const addMaterial = async (
 
                const docRef = ref(storage, `materials/${disciplineId}/${document.name}`);
 
-               // @ts-ignore
-               await uploadBytes(docRef, blob).then(async () => {
+               await uploadBytes(docRef, blob as Blob | Uint8Array | ArrayBuffer).then(async () => {
                   const downloadUrl = await getDownloadURL(docRef);
 
                   await updateDoc(DOCS.CREATE_DOC(DB_PATHS.SOURCES, newDoc.id), {
                      document: downloadUrl,
-                  }).then(() => console.log("docs added!"));
+                  });
                });
             });
          });

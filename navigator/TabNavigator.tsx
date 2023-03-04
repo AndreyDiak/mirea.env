@@ -21,6 +21,7 @@ function TabNavigator() {
          screenOptions={({ route }) => ({
             tabBarActiveTintColor: "#60a5fa",
             tabBarInactiveTintColor: "#9ca3af",
+            // eslint-disable-next-line react/no-unstable-nested-components, consistent-return
             tabBarLabel: ({ focused }) => {
                if (route.name === "Profile") {
                   return (
@@ -71,6 +72,7 @@ function TabNavigator() {
                   );
                }
             },
+            // eslint-disable-next-line react/no-unstable-nested-components, consistent-return
             tabBarIcon: ({ focused }) => {
                if (route.name === "Profile") {
                   return (
@@ -115,21 +117,9 @@ function TabNavigator() {
             },
          })}
       >
-         <Tab.Screen
-            name="Disciplines"
-            options={{ headerShown: false }}
-            component={DisciplinesScreen}
-         />
-         <Tab.Screen
-            name="Timetable"
-            options={{ headerShown: false }}
-            component={TimeTableScreen}
-         />
-         <Tab.Screen
-            name="Favorites"
-            options={{ headerShown: false }}
-            component={FavoritesScreen}
-         />
+         <Tab.Screen name="Disciplines" options={{ headerShown: false }} component={DisciplinesScreen} />
+         <Tab.Screen name="Timetable" options={{ headerShown: false }} component={TimeTableScreen} />
+         <Tab.Screen name="Favorites" options={{ headerShown: false }} component={FavoritesScreen} />
          {/* {notifications.length ? (
         <Tab.Screen
           name="Notifications"

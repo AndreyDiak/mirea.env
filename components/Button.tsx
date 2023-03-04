@@ -14,11 +14,7 @@ export function Button({ title, callback, disabled }: Props) {
    const tw = useTailwind();
 
    return (
-      <TouchableOpacity
-         disabled={disabled}
-         style={tw("flex flex-row justify-center")}
-         onPress={callback}
-      >
+      <TouchableOpacity disabled={disabled} style={tw("flex flex-row justify-center")} onPress={callback}>
          <Text
             style={tw(
                `px-3 py-2 text-white rounded-md font-semibold text-lg ${

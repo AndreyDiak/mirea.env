@@ -48,10 +48,7 @@ export const LoginDialog: React.FC<Props> = React.memo(({ isVisible, toggleVisib
             <Dialog.Title title={titleMap[filter]} titleStyle={tw("text-center")} />
             {renderList()}
             <View style={tw("flex flex-row justify-center")}>
-               <TouchableOpacity
-                  disabled={!submitButtonDisabled}
-                  onPress={() => toggleVisible(!isVisible)}
-               >
+               <TouchableOpacity disabled={!submitButtonDisabled} onPress={() => toggleVisible(!isVisible)}>
                   <Text
                      style={tw(
                         `${

@@ -28,11 +28,7 @@ export function TimeTableScreen() {
 
    return (
       <View style={tw("w-full h-full py-8")}>
-         <TimeTableHeader
-            timetable={timeTable.timetable}
-            dayIndex={dayIndex}
-            setDayIndex={setDayIndex}
-         />
+         <TimeTableHeader timetable={timeTable.timetable} dayIndex={dayIndex} setDayIndex={setDayIndex} />
          <TimeTableLessons timetable={timeTable.timetable} dayIndex={dayIndex} />
       </View>
    );

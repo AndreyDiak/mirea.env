@@ -13,8 +13,6 @@ export function DisciplinesScreen() {
    const tw = useTailwind();
    const user = useSelector(selectUser);
 
-   console.log({ user });
-
    const { disciplines, loading } = useDisciplines();
 
    if (loading) {
@@ -24,9 +22,7 @@ export function DisciplinesScreen() {
    return (
       <View style={tw("py-8 h-full")}>
          <View>
-            <Text style={tw("text-center font-bold text-xl text-gray-800 mb-2")}>
-               Ваши дисциплины
-            </Text>
+            <Text style={tw("text-center font-bold text-xl text-gray-800 mb-2")}>Ваши дисциплины</Text>
          </View>
          <ScrollView>
             {disciplines.map((discipline) => (

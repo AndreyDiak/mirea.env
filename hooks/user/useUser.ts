@@ -8,6 +8,7 @@ import { SuperUser, User } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils/createDBQuery";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useUser = (initialUser: any) => {
    const dispatch = useDispatch();
    const q = QUERIES.CREATE_SIMPLE_QUERY<User>(DB_PATHS.USERS, {

@@ -17,4 +17,6 @@ export const getAllData = async <T>(collectionName: DB_PATHS): Promise<T[]> => {
       );
       return data;
    }
+
+   return [];
 };

@@ -18,13 +18,16 @@ export function ChatScreen() {
    const [isMessageEdited, setIsMessageEdited] = useState<boolean>(false);
    const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState<boolean>(true);
    const [selectedMessage, setSelectedMessage] = useState<DBMessage>(null);
+
    const [editedMessageData, setEditedMessageData] = useState({
       text: "",
       id: "",
    });
+
    const {
       params: { chatId, groupName },
    } = useRoute<ChatScreenRouteProp>();
+
    const navigation = useNavigation<ChatScreenNavigatorProp>();
 
    const headerClose = () => {
@@ -86,8 +89,8 @@ export function ChatScreen() {
             <MessagesList
                chatId={chatId}
                isScrollToBottomVisible={isScrollToBottomVisible}
-               setIsScrollToBottomVisible={setIsScrollToBottomVisible}
                selectedMessageId={selectedMessage?.id}
+               setIsScrollToBottomVisible={setIsScrollToBottomVisible}
                setSelectedMessage={setSelectedMessage}
                setIsHeaderMenuVisible={setIsHeaderMenuVisible}
             />
@@ -96,10 +99,10 @@ export function ChatScreen() {
                setIsReplyingOnMessage={setIsReplyingOnMessage}
                setIsScrollToBottomVisible={setIsScrollToBottomVisible}
                setActiveMessage={setSelectedMessage}
+               setIsMessageEdited={setIsMessageEdited}
                isReplyingOnMessage={isReplyingOnMessage}
                activeMessage={selectedMessage}
                chatId={chatId}
-               setIsMessageEdited={setIsMessageEdited}
                editedMessageData={editedMessageData}
                isMessageEdited={isMessageEdited}
             />
