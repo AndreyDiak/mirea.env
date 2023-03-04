@@ -88,11 +88,7 @@ export const Message: React.FC<Props> = React.memo(
                         ${message.email === email ? "-right-7" : "-left-3"}`,
                      )}
                   >
-                     <UserAvatar
-                        title={message.displayName[0]}
-                        source={message.photoUrl}
-                        size="small"
-                     />
+                     <UserAvatar title={message.displayName[0]} source={message.photoUrl} size="small" />
                   </View>
                )}
             </View>

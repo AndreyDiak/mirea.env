@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { selectUser } from "../../features/userSlice";
 import { useMessages } from "../../hooks";
 import type { DBMessage } from "../../typings";
-import { returnHexCode } from "../../utils";
+import { isEmpty, returnHexCode } from "../../utils";
 import { CenteredText } from "../common";
 import { Message } from "./Message";
 import { MessagesScrollToBottom } from "./MessagesScrollToBottom";
@@ -65,33 +65,23 @@ export function MessagesList({
       setSelectedMessage(message);
    };
 
-   if (loading && messages.length === 0) {
+   if (loading && isEmpty(messages)) {
       return (
          <CenteredText
             text="Загрузка сообщений"
             Icon={
-               <Icon
-                  name="chat-bubble-outline"
-                  type="material"
-                  color={returnHexCode(user.theme)}
-                  size={30}
-               />
+               <Icon name="chat-bubble-outline" type="material" color={returnHexCode(user.theme)} size={30} />
             }
          />
       );
    }
 
-   if (messages.length === 0) {
+   if (isEmpty(messages)) {
       return (
          <CenteredText
             text="Напишите первое сообщение!"
             Icon={
-               <Icon
-                  name="chat-bubble-outline"
-                  type="material"
-                  color={returnHexCode(user.theme)}
-                  size={30}
-               />
+               <Icon name="chat-bubble-outline" type="material" color={returnHexCode(user.theme)} size={30} />
             }
          />
       );
@@ -99,10 +89,7 @@ export function MessagesList({
 
    return (
       <>
-         <MessagesScrollToBottom
-            isVisible={isScrollToBottomVisible}
-            handleScroll={scrollToBottom}
-         />
+         <MessagesScrollToBottom isVisible={isScrollToBottomVisible} handleScroll={scrollToBottom} />
 
          <FlatList
             ref={flatListRef}
@@ -130,9 +117,7 @@ export function MessagesList({
                      email={user.email}
                      theme={user.theme}
                      nextMessageEmail={messages[index + 1]?.email ?? null}
-                     isBacklight={
-                        message.id === selectedMessageId || message.id === backligthMessage
-                     }
+                     isBacklight={message.id === selectedMessageId || message.id === backligthMessage}
                      chatId={chatId}
                      setBackligthMessage={() => {
                         setBackligntMessage(message.replyingId);

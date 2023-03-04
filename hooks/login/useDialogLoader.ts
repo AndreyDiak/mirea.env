@@ -1,11 +1,10 @@
+import { useMemo } from "react";
+
 import { useSelector } from "react-redux";
 
-import {
-   selectUserDisciplines,
-   selectUserGroup,
-   selectUserInstitutes,
-} from "../../features/authSlice";
+import { selectUserDisciplines, selectUserGroup, selectUserInstitutes } from "../../features/authSlice";
 import { LFilter } from "../../typings/enums";
+import { isEmpty } from "../../utils";
 import { useDisciplines } from "./useDisciplines";
 import { useGroups } from "./useGroups";
 import { useInstitutes } from "./useInstitutes";
@@ -21,17 +20,18 @@ export const useDialogLoader = (filter: LFilter) => {
 
    const { groups, loading: GLoading } = useGroups(myInstitutes, filter);
 
-   const totalDisciplinesCount = disciplines
-      ? Object.values(disciplines).reduce((total, d) => total + d.length, 0)
-      : 0;
+   const totalDisciplinesCount = useMemo(
+      () => (disciplines ? Object.values(disciplines).reduce((total, d) => total + d.length, 0) : 0),
+      [disciplines],
+   );
 
-   const isDisabled =
-      (filter === LFilter.DISCIPLINES && myDisciplines.length > 0 && totalDisciplinesCount > 0) ||
-      (filter === LFilter.GROUPS && myGroup !== null && groups.length > 0) ||
-      (filter === LFilter.INSTITUTES && myInstitutes.length > 0 && institutes.length > 0) ||
-      (filter === LFilter.DISCIPLINES && totalDisciplinesCount === 0 && !DLoading) ||
-      (filter === LFilter.GROUPS && groups.length === 0 && !GLoading) ||
-      (filter === LFilter.INSTITUTES && institutes.length === 0 && !ILoading);
+   const loaderStatus =
+      (filter === LFilter.DISCIPLINES && !isEmpty(myDisciplines) && !isEmpty(totalDisciplinesCount)) ||
+      (filter === LFilter.GROUPS && !isEmpty(myGroup) && !isEmpty(groups)) ||
+      (filter === LFilter.INSTITUTES && !isEmpty(myInstitutes) && !isEmpty(institutes)) ||
+      (filter === LFilter.DISCIPLINES && isEmpty(totalDisciplinesCount) && !DLoading) ||
+      (filter === LFilter.GROUPS && isEmpty(groups) && !GLoading) ||
+      (filter === LFilter.INSTITUTES && isEmpty(institutes) && !ILoading);
 
-   return isDisabled;
+   return loaderStatus;
 };

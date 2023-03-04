@@ -15,6 +15,7 @@ import {
    setUserType,
 } from "../features/authSlice";
 import { LFilter, UType } from "../typings/enums";
+import { isEmpty } from "../utils";
 
 export function AuthBioScreen() {
    const tw = useTailwind();
@@ -53,11 +54,7 @@ export function AuthBioScreen() {
       <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
          <LoginForm handleSubmit={registerHandler} step="bio" error={error}>
             <View style={tw("")}>
-               <LoginDialog
-                  isVisible={isDialogVisible}
-                  filter={filter}
-                  toggleVisible={setIsDialogVisible}
-               />
+               <LoginDialog isVisible={isDialogVisible} filter={filter} toggleVisible={setIsDialogVisible} />
                <Input placeholder="Ваше имя..." value={name} onChangeText={setName} />
                <Input placeholder="Ваша фамилия..." value={female} onChangeText={setFemale} />
                <CheckBox
@@ -89,14 +86,14 @@ export function AuthBioScreen() {
                   <View style={tw("text-blue-400 text-lg py-2")}>
                      {userData.type === UType.STUDENT ? (
                         <LoginDialogOpen
-                           isSelected={!userData.group}
+                           isSelected={!isEmpty(userData.group)}
                            text="Выбрать группу"
                            subText={`Группа: ${userData.group?.name}`}
                            openDialog={() => toggleDialog(LFilter.GROUPS)}
                         />
                      ) : (
                         <LoginDialogOpen
-                           isSelected={userData.disciplines?.length === 0}
+                           isSelected={isEmpty(userData.disciplines)}
                            text="Выбрать предметы"
                            subText={`Выбрано: (${userData.disciplines?.length}) `}
                            openDialog={() => toggleDialog(LFilter.DISCIPLINES)}

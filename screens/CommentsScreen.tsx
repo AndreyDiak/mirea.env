@@ -13,7 +13,7 @@ import { selectUser } from "../features/userSlice";
 import { useMaterialComments } from "../hooks";
 import type { CommentsScreenNavigatorProp, RootStackParamList } from "../typings";
 import { DB_PATHS } from "../typings/enums";
-import { createCollection, returnHexCode } from "../utils";
+import { createCollection, isEmpty, returnHexCode } from "../utils";
 
 type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
@@ -25,7 +25,8 @@ export function CommentsScreen() {
    } = useRoute<CommentsScreenRouteProp>();
 
    const tw = useTailwind();
-   const [commentText, setCommentText] = useState("");
+   const [commentText, setCommentText] = useState<string>("");
+   const [loading, setLoading] = useState<boolean>(false);
 
    const flatListRef = useRef(null);
 
@@ -35,14 +36,32 @@ export function CommentsScreen() {
       });
    });
 
-   const { comments, loading } = useMaterialComments(material.id);
+   const { comments, loading: MLoading } = useMaterialComments(material.id);
 
-   if (comments.length === 0 && loading) {
+   if (isEmpty(comments) && MLoading) {
       return <Loader text="Загрузка комментариев" theme={user.theme} />;
    }
 
+   const addComment = async () => {
+      if (isEmpty(commentText)) {
+         return;
+      }
+      setLoading(true);
+      Keyboard.dismiss();
+      await addDoc(createCollection(DB_PATHS.COMMENTS), {
+         email: user?.email,
+         text: commentText,
+         timestamp: serverTimestamp(),
+         materialId: material.id,
+      }).then(() => {
+         setCommentText("");
+         flatListRef.current?.scrollToEnd({ animating: true });
+      });
+      setLoading(false);
+   };
+
    const renderCommentsList = () => {
-      if (comments.length === 0) {
+      if (isEmpty(comments)) {
          return <Text style={tw("text-center my-2")}>Напишите первый комментарий...</Text>;
       }
       return (
@@ -63,22 +82,6 @@ export function CommentsScreen() {
       );
    };
 
-   const addComment = async () => {
-      if (commentText.length === 0) {
-         return;
-      }
-      Keyboard.dismiss();
-      await addDoc(createCollection(DB_PATHS.COMMENTS), {
-         email: user?.email,
-         text: commentText,
-         timestamp: serverTimestamp(),
-         materialId: material.id,
-      }).then(() => {
-         setCommentText("");
-         flatListRef.current?.scrollToEnd({ animating: true });
-      });
-   };
-
    return (
       <View style={tw("flex flex-col h-full w-full py-4")}>
          <Card containerStyle={tw("my-0")}>
@@ -94,7 +97,7 @@ export function CommentsScreen() {
                onChangeText={setCommentText}
                style={tw("bg-white px-3 py-2 w-10/12 mr-4 mx-auto rounded-lg")}
             />
-            <TouchableOpacity onPress={addComment}>
+            <TouchableOpacity disabled={loading} onPress={addComment}>
                <Icon name="send" type="material" color={returnHexCode(user.theme)} size={30} />
             </TouchableOpacity>
          </View>

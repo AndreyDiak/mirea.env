@@ -5,7 +5,7 @@ import { AuthState } from "../../../features/authSlice";
 import { auth } from "../../../firebase";
 import type { Student, Teacher } from "../../../typings";
 import { DB_PATHS, UType } from "../../../typings/enums";
-import { createCollection } from "../../../utils";
+import { createCollection, isEmpty } from "../../../utils";
 
 interface Props {
    userData: AuthState;
@@ -15,19 +15,19 @@ interface Props {
 export const createUser = async ({ userData, setError }: Props) => {
    setError("Создание аккаунта...");
 
-   if (userData.name === null || userData.name === "") {
+   if (isEmpty(userData.name)) {
       setError("Введите имя");
       return;
    }
-   if (userData.female === null || userData.female === "") {
+   if (isEmpty(userData.female)) {
       setError("Введите фамилию");
       return;
    }
-   if (userData.type === UType.STUDENT && userData.group === null) {
+   if (userData.type === UType.STUDENT && isEmpty(userData.group)) {
       setError("Выберите группу");
       return;
    }
-   if (userData.type === UType.TEACHER && userData.disciplines?.length === 0) {
+   if (userData.type === UType.TEACHER && isEmpty(userData.disciplines)) {
       setError("Выберите дисциплины");
       return;
    }
