@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMaterial } from "../../../api";
 import { selectUser } from "../../../features/userSlice";
 import { NewDocument } from "../../../typings";
-import { returnHexCode } from "../../../utils";
+import { isEmpty, returnHexCode } from "../../../utils";
 
 type Props = {
    disciplineId: string;
@@ -63,7 +63,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    };
 
    return (
-      <View>
+      <View style={tw("mt-24")}>
          <Card>
             <Input
                label="Тема"
@@ -81,7 +81,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
             />
             {error && <Text style={tw("text-red-400 text-center mb-4")}>{error}</Text>}
             {/* documents list */}
-            {documents.length > 0 && (
+            {!isEmpty(documents) && (
                <>
                   <Card.Divider />
                   <Card.Title>Список материалов...</Card.Title>

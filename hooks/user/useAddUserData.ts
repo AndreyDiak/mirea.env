@@ -23,7 +23,7 @@ export const useAddUserData = () => {
          } else if (user.type === UType.TEACHER) {
             setLoading(true);
             const list = await Promise.all(
-               user.disciplines.map(async (dId) => {
+               user?.disciplines.map(async (dId) => {
                   const discipline = await getDataById<Discipline>(dId, DB_PATHS.DISCIPLINES);
                   return discipline.name;
                }),

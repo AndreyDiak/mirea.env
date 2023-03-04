@@ -30,10 +30,10 @@ export function ChatScreen() {
 
    const navigation = useNavigation<ChatScreenNavigatorProp>();
 
-   const headerClose = () => {
+   const headerClose = useCallback(() => {
       setIsHeaderMenuVisible(false);
       setSelectedMessage(null);
-   };
+   }, []);
 
    const renderTitle = useCallback(() => {
       if (isHeaderMenuVisible) {
@@ -62,7 +62,7 @@ export function ChatScreen() {
             <Text style={tw("text-xl font-semibold")}>{groupName}</Text>
          </View>
       );
-   }, [chatId, groupName, isHeaderMenuVisible, selectedMessage, tw]);
+   }, [chatId, groupName, headerClose, isHeaderMenuVisible, selectedMessage, tw]);
 
    const renderClose = useCallback(() => {
       if (isHeaderMenuVisible) {
@@ -73,7 +73,7 @@ export function ChatScreen() {
          );
       }
       return null;
-   }, [isHeaderMenuVisible]);
+   }, [headerClose, isHeaderMenuVisible]);
 
    useLayoutEffect(() => {
       navigation.setOptions({

@@ -99,16 +99,25 @@ export function MessagesList({
 
          <FlatList
             ref={flatListRef}
-            style={tw("w-full flex-1 pt-2 mb-16")}
+            style={tw("w-full flex-1 py-2 mb-16")}
             data={messages}
             scrollEnabled
-            onScrollEndDrag={() => {
-               if (!isScrollToBottomVisible) {
-                  setIsScrollToBottomVisible(true);
+            // добавляем кнопку если добавились сообщения
+            onContentSizeChange={() => {
+               setIsScrollToBottomVisible(true);
+            }}
+            // когда мы доскролили убираем кнопку
+            // onScrollEndDrag={() => {
+            //    if (!isScrollToBottomVisible) {
+            //       setIsScrollToBottomVisible(true);
+            //    }
+            // }}
+            onEndReachedThreshold={0.2}
+            onEndReached={() => {
+               if (isScrollToBottomVisible) {
+                  setIsScrollToBottomVisible(false);
                }
             }}
-            onEndReached={() => setIsScrollToBottomVisible(false)}
-            showsVerticalScrollIndicator={false}
             // TODO у каждого пользователя должна хранится инфа
             // на каком смс он закончил читать группу
             // initialScrollIndex
@@ -125,6 +134,7 @@ export function MessagesList({
                      nextMessageEmail={messages[index + 1]?.email ?? null}
                      isBacklight={message.id === selectedMessageId || message.id === backligthMessage}
                      chatId={chatId}
+                     isLastMessage={index === messages.length - 1}
                      setBackligthMessage={() => {
                         setBackligntMessage(message.replyingId);
                         scrollToIndex(message.replyingId);
