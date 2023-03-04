@@ -26,12 +26,7 @@ export function LoginScreen() {
       <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
          <LoginForm step="auth" handleSubmit={signIn} error={error}>
             <View style={tw("")}>
-               <Input
-                  placeholder="Почта..."
-                  value={login}
-                  onChangeText={setLogin}
-                  containerStyle={tw(``)}
-               />
+               <Input placeholder="Почта..." value={login} onChangeText={setLogin} containerStyle={tw(``)} />
                <Input
                   placeholder="Пароль..."
                   value={password}

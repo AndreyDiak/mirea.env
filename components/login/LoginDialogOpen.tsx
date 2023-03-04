@@ -11,20 +11,18 @@ interface Props {
    openDialog: () => void;
 }
 
-export const LoginDialogOpen: React.FC<Props> = React.memo(
-   ({ isSelected, text, subText, openDialog }) => {
-      const tw = useTailwind();
-      return isSelected ? (
-         <Text style={tw("text-blue-400 text-lg text-center")} onPress={openDialog}>
-            {text}
+export const LoginDialogOpen: React.FC<Props> = React.memo(({ isSelected, text, subText, openDialog }) => {
+   const tw = useTailwind();
+   return isSelected ? (
+      <Text style={tw("text-blue-400 text-lg text-center")} onPress={openDialog}>
+         {text}
+      </Text>
+   ) : (
+      <View style={tw("flex flex-row flex-wrap justify-center")}>
+         <Text>{subText} </Text>
+         <Text style={tw("text-blue-400 underline")} onPress={openDialog}>
+            Изменить
          </Text>
-      ) : (
-         <View style={tw("flex flex-row flex-wrap justify-center")}>
-            <Text>{subText} </Text>
-            <Text style={tw("text-blue-400 underline")} onPress={openDialog}>
-               Изменить
-            </Text>
-         </View>
-      );
-   },
-);
+      </View>
+   );
+});

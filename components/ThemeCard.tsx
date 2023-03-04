@@ -37,9 +37,7 @@ export const ThemeCard: React.FC<Props> = React.memo(({ theme, isBordered }) => 
                   borderWidth: 2,
                   borderStyle: "solid",
                   borderColor:
-                     user?.theme === theme && isBordered
-                        ? returnDarkenHexCode(theme)
-                        : "transparent",
+                     user?.theme === theme && isBordered ? returnDarkenHexCode(theme) : "transparent",
                },
             ]}
          />

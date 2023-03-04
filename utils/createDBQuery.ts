@@ -26,10 +26,7 @@ interface OrderByParam<T> {
 export const createCollection = (name: string) => collection(db, name);
 
 export const QUERIES = {
-   CREATE_SIMPLE_QUERY: <T>(
-      collectionName: DB_PATHS,
-      whereParam: WhereParam<T>,
-   ): Query<DocumentData> =>
+   CREATE_SIMPLE_QUERY: <T>(collectionName: DB_PATHS, whereParam: WhereParam<T>): Query<DocumentData> =>
       query(
          createCollection(collectionName),
          where(whereParam.fieldName as string, whereParam.opStr, whereParam.fieldValue),

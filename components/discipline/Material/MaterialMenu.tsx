@@ -29,10 +29,7 @@ export const MaterialMenu: React.FC<Props> = React.memo(({ userId, material, isF
    return (
       <View style={tw("flex flex-row justify-end items-center mb-2")}>
          {/* Add / Remove to Favorites... */}
-         <TouchableOpacity
-            style={tw("mr-4")}
-            onPress={() => handleFavorite(userId, material.id, isFavorite)}
-         >
+         <TouchableOpacity style={tw("mr-4")} onPress={() => handleFavorite(userId, material.id, isFavorite)}>
             {isFavorite ? (
                <Icon name="favorite" type="material" size={25} color="#f87171" />
             ) : (
@@ -40,10 +37,7 @@ export const MaterialMenu: React.FC<Props> = React.memo(({ userId, material, isF
             )}
          </TouchableOpacity>
          {/* Open comments... */}
-         <TouchableOpacity
-            style={tw("mr-4")}
-            onPress={() => navigation.navigate("Comments", { material })}
-         >
+         <TouchableOpacity style={tw("mr-4")} onPress={() => navigation.navigate("Comments", { material })}>
             <Icon name="comment" type="material" size={25} color="gray" />
          </TouchableOpacity>
          {/* Reply */}

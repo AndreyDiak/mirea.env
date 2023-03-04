@@ -32,8 +32,8 @@ export function TimetableForm() {
    const [selectedInstitute, setSelectedInstitute] = useState<Institute>(null);
    const [selectedGroup, setSelectedGroup] = useState<Group>(null);
    const [loading, setLoading] = useState<boolean>(false);
-   const { institutes, loading: ILoading } = useInstitutes();
-   const { groups, loading: GLoading } = useGroups([selectedInstitute], LFilter.GROUPS);
+   const { institutes } = useInstitutes();
+   const { groups } = useGroups([selectedInstitute], LFilter.GROUPS);
 
    const loadTimeTable = async () => {
       if (!selectedGroup) {

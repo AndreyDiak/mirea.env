@@ -25,12 +25,7 @@ export const MessagesScrollToBottom: React.FC<Props> = React.memo(({ isVisible, 
                "bg-white w-16 h-16 flex items-center justify-center rounded-full absolute right-5 bottom-20 z-10",
             )}
          >
-            <Icon
-               name="keyboard-arrow-down"
-               type="material"
-               color={returnHexCode(theme)}
-               size={40}
-            />
+            <Icon name="keyboard-arrow-down" type="material" color={returnHexCode(theme)} size={40} />
          </TouchableOpacity>
       );
    }

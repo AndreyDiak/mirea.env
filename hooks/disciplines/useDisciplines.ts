@@ -32,7 +32,7 @@ export const useDisciplines = () => {
             } else {
                const DBdisciplines: Discipline[] = [];
                await Promise.all(
-                  user.disciplines.map(async (d) => {
+                  user?.disciplines.map(async (d) => {
                      const discipline = await getDataById<Discipline>(d, DB_PATHS.DISCIPLINES);
                      DBdisciplines.push(discipline);
                   }),

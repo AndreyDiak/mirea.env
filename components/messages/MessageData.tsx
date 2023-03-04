@@ -21,9 +21,7 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email }) => {
       <>
          {/* Message Owner... */}
          <Text
-            style={tw(
-               `${isMyMessage ? "right-2 text-gray-400" : "left-2 text-gray-200"} absolute text-xs`,
-            )}
+            style={tw(`${isMyMessage ? "right-2 text-gray-400" : "left-2 text-gray-200"} absolute text-xs`)}
          >
             {isMyMessage ? "Вы" : message.displayName}
          </Text>
@@ -41,11 +39,7 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email }) => {
                {message.text}
             </Text>
             {/* Message Date... */}
-            <Text
-               style={tw(
-                  `text-xs -mb-1 ${isMyMessage ? "text-gray-800" : "text-right text-gray-100"}`,
-               )}
-            >
+            <Text style={tw(`text-xs -mb-1 ${isMyMessage ? "text-gray-800" : "text-right text-gray-100"}`)}>
                {message.timestamp ? moment(message.timestamp.toDate()).format("LT") : "..."}
             </Text>
          </View>

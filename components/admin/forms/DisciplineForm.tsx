@@ -25,7 +25,7 @@ export function DisciplineForm() {
    const [selectedInstitute, setSelectedInstitute] = useState<Institute>(null);
    const [selectedTeachers, setSelectedTeachers] = useState<Teacher[]>([]);
 
-   const { institutes, loading: ILoading } = useInstitutes();
+   const { institutes } = useInstitutes();
 
    const { teachers, loading: TLoading } = useTeachers(selectedInstitute);
 
@@ -63,9 +63,7 @@ export function DisciplineForm() {
             />
             {/* Institute CheckList */}
             <CheckListSingle
-               title={`Выбрать институт ${
-                  selectedInstitute ? `(${selectedInstitute?.shortName})` : ""
-               }`}
+               title={`Выбрать институт ${selectedInstitute ? `(${selectedInstitute?.shortName})` : ""}`}
                list={institutes}
                selectedItem={selectedInstitute}
                setSelectedItem={setSelectedInstitute as (institute: Institute) => void}

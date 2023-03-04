@@ -87,10 +87,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
                   <Card.Title>Список материалов...</Card.Title>
 
                   {documents.map((document, index) => (
-                     <View
-                        key={document.uri}
-                        style={tw("flex flex-row justify-between items-center mb-2")}
-                     >
+                     <View key={document.uri} style={tw("flex flex-row justify-between items-center mb-2")}>
                         <Text style={tw("text-xs mb-2 w-5/6")}>{document.name}</Text>
                         <TouchableOpacity
                            onPress={() =>

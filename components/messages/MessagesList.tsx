@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 import { FlatList, TouchableOpacity } from "react-native";
 
@@ -37,21 +37,24 @@ export function MessagesList({
 
    const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
    const { messages, loading } = useMessages(chatId);
-   const scrollToIndex = (activeMessageIndex: string | null) => {
-      if (activeMessageIndex) {
-         flatListRef.current.scrollToIndex({
-            animating: true,
-            index: messages.findIndex((msg) => msg.id === activeMessageIndex),
-         });
-      }
-   };
+
+   const scrollToIndex = useCallback(
+      (activeMessageIndex: string | null) => {
+         if (activeMessageIndex) {
+            flatListRef.current.scrollToIndex({
+               animating: true,
+               index: messages.findIndex((msg) => msg.id === activeMessageIndex),
+            });
+         }
+      },
+      [messages],
+   );
 
    // scrollToBottom function
-   const scrollToBottom = () => {
+   const scrollToBottom = useCallback(() => {
       flatListRef.current.scrollToEnd({ animating: true });
       setIsScrollToBottomVisible(false);
-      // setBackligntMessage(null);
-   };
+   }, [setIsScrollToBottomVisible]);
 
    // onMessagePress function...
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,10 +63,13 @@ export function MessagesList({
    };
 
    // onMessageLongPress function...
-   const onMessageLongPress = (message: DBMessage) => {
-      setIsHeaderMenuVisible(true);
-      setSelectedMessage(message);
-   };
+   const onMessageLongPress = useCallback(
+      (message: DBMessage) => {
+         setIsHeaderMenuVisible(true);
+         setSelectedMessage(message);
+      },
+      [setIsHeaderMenuVisible, setSelectedMessage],
+   );
 
    if (loading && isEmpty(messages)) {
       return (
