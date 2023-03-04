@@ -10,9 +10,10 @@ import { DBMessage } from "../../typings";
 interface Props {
    message: DBMessage;
    email: string;
+   isNextMessageOwner: boolean;
 }
 
-export const MessageData: React.FC<Props> = React.memo(({ message, email }) => {
+export const MessageData: React.FC<Props> = React.memo(({ message, email, isNextMessageOwner }) => {
    const tw = useTailwind();
 
    const isMyMessage = useMemo(() => message.email === email, [message.email, email]);
@@ -20,11 +21,19 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email }) => {
    return (
       <>
          {/* Message Owner... */}
-         <Text
-            style={tw(`${isMyMessage ? "right-2 text-gray-400" : "left-2 text-gray-200"} absolute text-xs`)}
-         >
-            {isMyMessage ? "Вы" : message.displayName}
-         </Text>
+
+         {!isNextMessageOwner && (
+            <Text
+               style={tw(
+                  `${isMyMessage ? "right-2 text-gray-400" : "left-2 text-gray-200"} absolute text-xs`,
+               )}
+            >
+               {isMyMessage ? "Вы" : message.displayName}
+            </Text>
+         )}
+
+
+
          <View style={tw("flex flex-row items-end w-full")}>
             {/* Message Text... */}
             <Text

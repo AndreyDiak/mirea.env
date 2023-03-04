@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-import { Keyboard, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Keyboard, Text, TouchableOpacity, View } from "react-native";
 
 import { Icon } from "@rneui/themed";
 import { updateDoc } from "firebase/firestore";
@@ -12,13 +12,14 @@ import { selectUser } from "../../features/userSlice";
 import type { DBMessage } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { DOCS, returnHexCode } from "../../utils";
+import { CustomInputField } from "../common/form/CustomInputField";
 
 interface EditedMessage {
    text: string;
    id: string;
 }
 
-type Props = {
+interface Props {
    setIsReplyingOnMessage: (isReply: boolean) => void;
    setIsScrollToBottomVisible: (isVisible: boolean) => void;
    setIsMessageEdited: (isEdited: boolean) => void;
@@ -28,12 +29,11 @@ type Props = {
    isMessageEdited: boolean;
    activeMessage: DBMessage | null;
    chatId: string;
-};
+}
 
 export const MessageForm: React.FC<Props> = React.memo(
    ({
       setIsReplyingOnMessage,
-      setIsScrollToBottomVisible,
       setActiveMessage,
       setIsMessageEdited,
       editedMessageData,
@@ -108,26 +108,14 @@ export const MessageForm: React.FC<Props> = React.memo(
                   </TouchableOpacity>
                </View>
             )}
-
-            <View style={tw("flex flex-row items-center")}>
-               {/* Reply message or Reply Post from discipline... */}
-               <TextInput
-                  ref={messageRef}
-                  onFocus={() => setIsScrollToBottomVisible(false)}
-                  style={tw("bg-white flex-1 mr-4 p-3 h-12 text-[18px]")}
-                  placeholder="Введите текст..."
-                  value={message}
-                  onChangeText={setMessage}
-               />
-               <TouchableOpacity disabled={loading} onPress={sendMessage} style={tw("pr-2")}>
-                  <Icon
-                     name="send"
-                     type="material"
-                     color={!loading ? returnHexCode(user.theme) : "#9ca3af"}
-                     size={30}
-                  />
-               </TouchableOpacity>
-            </View>
+            {/* Поле ввода текста сообщения */}
+            <CustomInputField
+               value={message}
+               loading={loading}
+               ref={messageRef}
+               setValue={setMessage}
+               onSubmit={sendMessage}
+            />
          </View>
       );
    },
