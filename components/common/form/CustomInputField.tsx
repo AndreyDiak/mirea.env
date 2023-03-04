@@ -12,6 +12,7 @@ import { returnHexCode } from "../../../utils";
 interface Props {
    value: string;
    loading: boolean;
+   placeholder?: string;
    ref?: React.MutableRefObject<any>;
    setValue: (value: string) => void;
    onSubmit: () => void;
@@ -19,18 +20,18 @@ interface Props {
 }
 
 export const CustomInputField: React.FC<Props> = React.memo(
-   ({ value, loading, ref, setValue, onSubmit, onFocus }) => {
+   ({ value, loading, ref, placeholder, setValue, onSubmit, onFocus }) => {
       const tw = useTailwind();
       const theme = useSelector(selectUserTheme);
 
       return (
-         <View style={tw("flex flex-row items-center")}>
+         <View style={tw("flex flex-row items-center absolute bottom-0")}>
             {/* Reply message or Reply Post from discipline... */}
             <TextInput
                ref={ref}
                onFocus={onFocus}
                style={tw("bg-white flex-1 mr-4 p-3 h-12 text-[18px]")}
-               placeholder="Введите текст..."
+               placeholder={placeholder ?? "Введите текст..."}
                value={value}
                onChangeText={setValue}
             />
