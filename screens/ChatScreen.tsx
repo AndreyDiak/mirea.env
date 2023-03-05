@@ -83,7 +83,7 @@ export function ChatScreen() {
    }, [groupName, isHeaderMenuVisible, navigation, renderClose, renderTitle, selectedMessage, tw]);
 
    return (
-      <SafeAreaView style={tw("relative")}>
+      <SafeAreaView style={tw("relative h-full")}>
          <KeyboardAvoidingView style={tw("flex flex-col h-full")}>
             {/* Messages */}
             <MessagesList
