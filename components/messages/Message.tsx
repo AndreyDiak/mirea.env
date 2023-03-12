@@ -13,21 +13,36 @@ import { UserAvatar } from "../UserAvatar";
 import { MessageData } from "./MessageData";
 import { MessageReply } from "./MessageReply";
 
-type Props = {
+interface Props {
    message: DBMessage;
    email: string;
    chatId: string;
    theme: AppTheme;
    nextMessageEmail: string | null;
    isBacklight: boolean;
+   isLastMessage: boolean;
    setBackligthMessage: () => void;
-};
+}
 
 export const Message: React.FC<Props> = React.memo(
-   ({ message, email, nextMessageEmail, isBacklight, chatId, theme, setBackligthMessage }) => {
+   ({ message, email, nextMessageEmail, isBacklight, chatId, theme, setBackligthMessage, isLastMessage }) => {
       const tw = useTailwind();
 
       const [replyingMessage, setReplyingMessage] = useState<DBMessage>(null);
+
+      const isNextMessageOwner = nextMessageEmail === message.email;
+      const isMessageOwner = message.email === email;
+
+      if (isLastMessage) {
+         console.log("");
+      }
+      /**
+       * гайд по отступам в messages
+       * paddingTop -> 15 - если это ласт смс пользователя, 5 - в остальных случаях
+       * marginBottom -> 15 - если это ласт смс пользователя, 5 - в остальных случаях
+       * paddingLeft -> 10 если владелец сообщения или это не последнее сообщение в списке, 25 - если ласт сообщение (не мое)
+       * paddingRight -> 10 если не владелец сообщения или это не последнее сообщение в списке, 25 - если ласт сообщение (мое)
+       */
 
       useEffect(() => {
          const getReplyingMessage = async () => {
@@ -50,7 +65,8 @@ export const Message: React.FC<Props> = React.memo(
                display: "flex",
                flexDirection: "row",
                paddingHorizontal: 20,
-               justifyContent: message.email === email ? "flex-end" : "flex-start",
+               paddingVertical: 1,
+               justifyContent: isMessageOwner ? "flex-end" : "flex-start",
                backgroundColor: isBacklight ? returnLightenHexCode(theme) : "transparent",
             }}
          >
@@ -59,15 +75,12 @@ export const Message: React.FC<Props> = React.memo(
                style={{
                   padding: 7,
                   borderRadius: 7,
-                  paddingTop: message.email === email ? 5 : 15,
-                  paddingLeft:
-                     // eslint-disable-next-line no-nested-ternary
-                     message.email === email ? 10 : nextMessageEmail === message.email ? 10 : 25,
-                  paddingRight:
-                     // eslint-disable-next-line no-nested-ternary
-                     message.email === email ? (nextMessageEmail === message.email ? 10 : 25) : 10,
-                  marginBottom: nextMessageEmail === message.email ? 5 : 15,
-                  backgroundColor: message.email === email ? "white" : returnHexCode(theme),
+                  paddingTop: isNextMessageOwner ? 5 : 15,
+                  // eslint-disable-next-line no-nested-ternary
+                  marginBottom: isLastMessage ? 25 : isNextMessageOwner ? 5 : 15,
+                  paddingLeft: isMessageOwner || isNextMessageOwner ? 10 : 25,
+                  paddingRight: !isMessageOwner || isNextMessageOwner ? 10 : 25,
+                  backgroundColor: isMessageOwner ? "white" : returnHexCode(theme),
                }}
             >
                {/* Replying message... */}
@@ -78,14 +91,14 @@ export const Message: React.FC<Props> = React.memo(
                   setBackligthMessage={setBackligthMessage}
                />
 
-               <MessageData message={message} email={email} />
+               <MessageData message={message} email={email} isNextMessageOwner={isNextMessageOwner} />
 
                {/* Message Owner Avatar... */}
-               {nextMessageEmail !== message.email && (
+               {!isNextMessageOwner && (
                   <View
                      style={tw(
                         `absolute -bottom-5 
-                        ${message.email === email ? "-right-7" : "-left-3"}`,
+                        ${isMessageOwner ? "-right-7" : "-left-3"}`,
                      )}
                   >
                      <UserAvatar title={message.displayName[0]} source={message.photoUrl} size="small" />

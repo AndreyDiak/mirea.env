@@ -28,38 +28,40 @@ export function DisciplineScreen() {
       params: { discipline },
    } = useRoute<DisciplineScreenRouteProp>();
 
+   const { materials, loading } = useMaterials(discipline.id);
+
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
       });
    }, [discipline, navigation]);
 
-   const { materials, loading } = useMaterials(discipline.id);
+   const isStudent = user.type === UType.STUDENT;
 
    if (loading) {
       return <Loader text="Загрузка материалов" theme={user.theme} />;
    }
 
-   if (isEmpty(materials) && !loading && user.type === UType.STUDENT) {
+   if (isEmpty(materials) && !loading && isStudent) {
       return <Error text="Тут пока нет материалов..." theme={user.theme} />;
    }
 
    return (
-      <SafeAreaView style={tw("flex flex-col px-4")}>
-         {user?.type === "teacher" && (
+      <SafeAreaView style={tw("flex flex-col px-4 relative")}>
+         {!isStudent && (
             <View style={tw("")}>
                <TouchableOpacity
                   style={tw("flex flex-row justify-end")}
                   onPress={() => setIsFormVisible(!isFormVisible)}
                >
                   <View style={tw("flex flex-row items-center")}>
-                     <Text style={{ color: returnHexCode(user?.theme || "blue") }}>
+                     <Text style={{ color: returnHexCode(user.theme) }}>
                         {isFormVisible ? "Закрыть" : "Добавить материалы"}
                      </Text>
                      <Icon
                         name={!isFormVisible ? "expand-more" : "expand-less"}
                         type="material"
-                        color={returnHexCode(user?.theme || "blue")}
+                        color={returnHexCode(user.theme)}
                         size={25}
                      />
                   </View>
@@ -69,7 +71,8 @@ export function DisciplineScreen() {
                )}
             </View>
          )}
-         <View>
+         {/* рендрим все материалы */}
+         {!isFormVisible && (
             <FlatList
                style={tw("")}
                data={materials.reverse()}
@@ -87,7 +90,7 @@ export function DisciplineScreen() {
                   );
                }}
             />
-         </View>
+         )}
       </SafeAreaView>
    );
 }

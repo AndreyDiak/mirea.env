@@ -69,7 +69,7 @@ interface DBMessage {
    type: string;
    photoUrl: string;
    id: string;
-   replyingId: string;
+   replyingId?: string;
 }
 
 interface DBComment {
