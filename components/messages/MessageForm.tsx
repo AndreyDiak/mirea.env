@@ -46,8 +46,6 @@ export const MessageForm: React.FC<Props> = React.memo(
       const [loading, setLoading] = useState<boolean>(false);
       const user = useSelector(selectUser);
 
-      const messageRef = useRef(null);
-
       // sendMessage function
       const sendMessage = async () => {
          setLoading(true);
@@ -87,7 +85,6 @@ export const MessageForm: React.FC<Props> = React.memo(
             <CustomInputField
                value={message}
                loading={loading}
-               ref={messageRef}
                isReplying={isReplyingOnMessage}
                replyData={{
                   replyMessage: activeMessage,

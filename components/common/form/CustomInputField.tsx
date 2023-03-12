@@ -15,7 +15,6 @@ interface Props {
    value: string;
    loading: boolean;
    placeholder?: string;
-   ref?: React.MutableRefObject<any>;
    isReplying?: boolean;
    replyData?: {
       replyMessage: DBMessage | null;
