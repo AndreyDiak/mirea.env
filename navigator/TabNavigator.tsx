@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
 import { TabStackParamList } from "../typings";
-import { returnHexCode } from "../utils/returnHexCodes";
+import { returnHexCode, returnLightenAppTheme } from "../utils/returnHexCodes";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
 
@@ -19,6 +19,9 @@ function TabNavigator() {
    return (
       <Tab.Navigator
          screenOptions={({ route }) => ({
+            headerTintColor: "red",
+            tabBarInactiveBackgroundColor: returnLightenAppTheme(user.appTheme),
+            tabBarActiveBackgroundColor: returnLightenAppTheme(user.appTheme),
             tabBarActiveTintColor: "#60a5fa",
             tabBarInactiveTintColor: "#9ca3af",
             // eslint-disable-next-line react/no-unstable-nested-components, consistent-return

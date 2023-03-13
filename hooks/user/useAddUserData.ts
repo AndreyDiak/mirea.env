@@ -4,12 +4,13 @@ import { useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
 import { selectUser } from "../../features/userSlice";
-import { Discipline, Group, Student, Teacher } from "../../typings";
+import { Discipline, Group, Institute, Student, Teacher } from "../../typings";
 import { DB_PATHS, UType } from "../../typings/enums";
 
 export const useAddUserData = () => {
    const user = useSelector(selectUser);
    const [gName, setGName] = useState<string>(""); // group name
+   const [institutes, setInstitutes] = useState<string[]>([]);
    const [dList, setDList] = useState<string[]>([]); // list of disciplines
    const [loading, setLoading] = useState<boolean>(false);
 
@@ -18,7 +19,9 @@ export const useAddUserData = () => {
          if (user.type === UType.STUDENT) {
             setLoading(true);
             const group = await getDataById<Group>(user.groupId, DB_PATHS.GROUPS);
+            const institute = await getDataById<Institute>(user.instituteId, DB_PATHS.INSTITUTES);
             setGName(group.name);
+            setInstitutes([institute.shortName]);
             setLoading(false);
          } else if (user.type === UType.TEACHER) {
             setLoading(true);
@@ -38,6 +41,7 @@ export const useAddUserData = () => {
 
    return {
       groupName: gName,
+      institutes,
       disciplinesList: dList,
       loading,
       uType: user.type,

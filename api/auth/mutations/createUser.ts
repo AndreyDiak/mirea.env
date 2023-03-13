@@ -4,7 +4,7 @@ import { addDoc } from "firebase/firestore";
 import { AuthState } from "../../../features/authSlice";
 import { auth } from "../../../firebase";
 import type { Student, Teacher } from "../../../typings";
-import { DB_PATHS, UType } from "../../../typings/enums";
+import { APP_THEME, DB_PATHS, UType } from "../../../typings/enums";
 import { createCollection, isEmpty } from "../../../utils";
 
 interface Props {
@@ -42,6 +42,7 @@ export const createUser = async ({ userData, setError }: Props) => {
          name: userData.name,
          password: userData.password,
          theme: "blue",
+         appTheme: APP_THEME.LIGHT,
          groupId: userData.group.id,
          instituteId: userData.institutes[0].id,
          type: UType.STUDENT,
@@ -54,6 +55,7 @@ export const createUser = async ({ userData, setError }: Props) => {
          name: userData.name,
          password: userData.password,
          theme: "blue",
+         appTheme: APP_THEME.LIGHT,
          institutes: userData.institutes.map((institute) => institute.id),
          disciplines: userData.disciplines,
          type: UType.TEACHER,

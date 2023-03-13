@@ -46,10 +46,6 @@
   bottom: 5rem
 }
 
-.bottom-16 {
-  bottom: 4rem
-}
-
 .bottom-0 {
   bottom: 0px
 }
@@ -103,12 +99,8 @@
   margin-top: 1rem
 }
 
-.mb-4 {
-  margin-bottom: 1rem
-}
-
-.mt-1 {
-  margin-top: 0.25rem
+.mb-16 {
+  margin-bottom: 4rem
 }
 
 .mr-2 {
@@ -119,8 +111,8 @@
   margin-bottom: -0.25rem
 }
 
-.mb-16 {
-  margin-bottom: 4rem
+.mb-4 {
+  margin-bottom: 1rem
 }
 
 .-mr-4 {
@@ -145,6 +137,10 @@
 
 .mt-24 {
   margin-top: 6rem
+}
+
+.mb-12 {
+  margin-bottom: 3rem
 }
 
 .block {
@@ -331,6 +327,11 @@
   border-radius: 9999px
 }
 
+.rounded-b-3xl {
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem
+}
+
 .border {
   border-width: 1px
 }
@@ -364,9 +365,9 @@
   background-color: rgb(254 226 226 / var(--tw-bg-opacity))
 }
 
-.bg-slate-200 {
+.bg-gray-700 {
   --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity))
+  background-color: rgb(55 65 81 / var(--tw-bg-opacity))
 }
 
 .bg-gray-50 {
@@ -387,6 +388,21 @@
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity))
+}
+
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 41 55 / var(--tw-bg-opacity))
+}
+
+.bg-slate-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(30 41 59 / var(--tw-bg-opacity))
+}
+
+.bg-red-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity))
 }
 
 .p-6 {
@@ -458,6 +474,11 @@
   padding-right: 2rem
 }
 
+.px-12 {
+  padding-left: 3rem;
+  padding-right: 3rem
+}
+
 .pt-10 {
   padding-top: 2.5rem
 }
@@ -468,10 +489,6 @@
 
 .pt-12 {
   padding-top: 3rem
-}
-
-.pb-4 {
-  padding-bottom: 1rem
 }
 
 .pt-1 {
@@ -499,6 +516,11 @@
   line-height: 1.75rem
 }
 
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem
@@ -511,11 +533,6 @@
 
 .text-\[44px\] {
   font-size: 44px
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem
 }
 
 .text-\[18px\] {
@@ -562,6 +579,11 @@
   color: rgb(31 41 55 / var(--tw-text-opacity))
 }
 
+.text-gray-400 {
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity))
+}
+
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity))
@@ -575,11 +597,6 @@
 .text-red-400 {
   --tw-text-opacity: 1;
   color: rgb(248 113 113 / var(--tw-text-opacity))
-}
-
-.text-gray-400 {
-  --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity))
 }
 
 .text-gray-200 {

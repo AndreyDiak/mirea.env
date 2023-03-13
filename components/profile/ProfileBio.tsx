@@ -15,16 +15,16 @@ interface Props {
    theme: AppTheme;
 }
 
-export const ProfileBio: React.FC<Props> = React.memo(({ name, female, theme }) => {
+export const ProfileBio: React.FC<Props> = React.memo(({ theme }) => {
    const tw = useTailwind();
 
-   const { groupName, disciplinesList, loading, uType } = useAddUserData();
+   const { groupName, disciplinesList, loading, uType, institutes } = useAddUserData();
 
-   const renderGroupName = () => {
+   const renderLoadingItem = (item: string) => {
       if (loading) {
          return <Text style={tw("text-xl")}>Загрузка...</Text>;
       }
-      return <Text style={tw("text-xl font-bold")}>{groupName}</Text>;
+      return <Text style={tw("text-xl font-bold text-white")}>{item}</Text>;
    };
 
    const renderDisciplinesList = () => {
@@ -43,9 +43,15 @@ export const ProfileBio: React.FC<Props> = React.memo(({ name, female, theme }) 
    const renderData = () => {
       if (uType === UType.STUDENT) {
          return (
-            <View>
-               <Text style={tw("mb-2 text-gray-800")}>Ваша группа</Text>
-               {renderGroupName()}
+            <View style={tw("")}>
+               <View style={tw("flex flex-row  items-center justify-between")}>
+                  <Text style={tw("text-white font-semibold text-lg")}>Институт</Text>
+                  {renderLoadingItem(institutes[0])}
+               </View>
+               <View style={tw("flex flex-row w-full items-center justify-between")}>
+                  <Text style={tw("text-white font-semibold text-lg")}>Группа</Text>
+                  {renderLoadingItem(groupName)}
+               </View>
             </View>
          );
       }
@@ -58,15 +64,7 @@ export const ProfileBio: React.FC<Props> = React.memo(({ name, female, theme }) 
    };
 
    return (
-      <View style={tw("flex flex-row items-center justify-between flex-wrap mb-4")}>
-         <View>
-            <View>
-               <Text style={tw("text-lg text-gray-800")}>{name}</Text>
-            </View>
-            <View>
-               <Text style={tw("text-lg text-gray-800")}>{female}</Text>
-            </View>
-         </View>
+      <View style={tw("px-2 w-full mb-4")}>
          {/* Group or Disciplines */}
          {renderData()}
       </View>

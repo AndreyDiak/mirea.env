@@ -9,7 +9,7 @@ import { db } from "../../firebase";
 import { AppTheme, DBMessage } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
-import { UserAvatar } from "../UserAvatar";
+import { UserChatAvatar } from "../common";
 import { MessageData } from "./MessageData";
 import { MessageReply } from "./MessageReply";
 
@@ -101,7 +101,7 @@ export const Message: React.FC<Props> = React.memo(
                         ${isMessageOwner ? "-right-7" : "-left-3"}`,
                      )}
                   >
-                     <UserAvatar title={message.displayName[0]} source={message.photoUrl} size="small" />
+                     <UserChatAvatar title={message.displayName[0]} source={message.photoUrl} size="small" />
                   </View>
                )}
             </View>

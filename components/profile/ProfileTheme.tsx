@@ -4,7 +4,7 @@ import { View } from "react-native";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { ThemeCard } from "../ThemeCard";
+import { ThemeCard } from "../common/ThemeCard";
 
 export const ProfileTheme: React.FC = React.memo(() => {
    const tw = useTailwind();
