@@ -1,4 +1,4 @@
-import { UType } from "./typings/enums";
+import { APP_THEME, UType } from "./typings/enums";
 
 type AppTheme = "blue" | "violet" | "emerald" | "rose";
 
@@ -124,6 +124,7 @@ interface User {
    password: string;
    img: string;
    theme: AppTheme;
+   appTheme: APP_THEME;
    id: string;
 }
 

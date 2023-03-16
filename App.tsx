@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { TailwindProvider } from "tailwind-rn";
 
 import { Loader } from "./components";
+import { GlobalModal } from "./components/common/modal/GlobalModal";
 import RootNavigator from "./navigator/RootNavigator";
 import { store } from "./store";
 // eslint-disable-next-line import/extensions
@@ -27,13 +28,13 @@ export default function App() {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore TaiwindProvider Type Defenition...
       <TailwindProvider utilities={utilities}>
-         {/* <ToastProvider> */}
-         <NavigationContainer>
-            <Provider store={store}>
-               <RootNavigator />
-            </Provider>
-         </NavigationContainer>
-         {/* </ToastProvider> */}
+         <Provider store={store}>
+            <GlobalModal>
+               <NavigationContainer>
+                  <RootNavigator />
+               </NavigationContainer>
+            </GlobalModal>
+         </Provider>
       </TailwindProvider>
    );
 }

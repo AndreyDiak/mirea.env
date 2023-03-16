@@ -9,7 +9,7 @@ type Props = {
    size?: ("small" | "medium" | "large" | "xlarge") | number;
 };
 
-export const UserAvatar: React.FC<Props> = React.memo(({ title, source, size }) => {
+export const UserChatAvatar: React.FC<Props> = React.memo(({ title, source, size }) => {
    const tw = useTailwind();
 
    return source ? (

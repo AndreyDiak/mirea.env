@@ -2,24 +2,47 @@ import React from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { Card, Dialog } from "@rneui/themed";
+import { Icon, Input } from "@rneui/themed";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { LinearGradient } from "expo-linear-gradient";
 import { signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { ProfileBio, ProfileImage, ProfileSkeleton, ProfileTheme } from "../components";
+import {
+   MODAL_TYPES,
+   ProfileBio,
+   ProfileImage,
+   ProfileMainTheme,
+   ProfileSkeleton,
+   ProfileTheme,
+   useGlobalModalContext,
+} from "../components";
+import { ProfileFeedbackModal } from "../components/profile/ProfileFeedbackModal";
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { UType } from "../typings/enums";
-import { returnHexCode } from "../utils";
+import { returnAppTheme, returnDarkenHexCode, returnHexCode } from "../utils";
+
+const userTypeToStringMap: Record<UType, string> = {
+   student: "Студент",
+   teacher: "Преподаватель",
+   admin: "Админ",
+};
 
 export function ProfileScreen() {
    const tw = useTailwind();
 
    const user = useSelector(selectUser);
 
-   const handleFeedbackModal = () => {
-      // open feedback modal
+   const { openModal } = useGlobalModalContext();
+
+   const openFeedbackModal = () => {
+      openModal(MODAL_TYPES.SIMPLE_MODAL, {
+         title: "Обратная связь",
+         // eslint-disable-next-line react/no-unstable-nested-components
+         children: ProfileFeedbackModal,
+      });
    };
 
    if (user === null) {
@@ -27,47 +50,72 @@ export function ProfileScreen() {
    }
 
    return (
-      <View style={tw("flex flex-col h-full relative")}>
-         {/* Feedback dialog */}
-         <Dialog isVisible={false} />
-         {/* Avatar + email */}
-         <View style={tw("px-8 pt-12 pb-4 bg-slate-200")}>
-            <View style={tw("flex flex-row items-center justify-between")}>
-               <ProfileImage id={user.id} userImg={user.img} userName={user.name} />
-               <View>
-                  <Text style={[tw("text-gray-800 text-xl font-semibold")]}>{user.email}</Text>
-               </View>
-            </View>
-         </View>
-         {/* Name + Type */}
-         <View style={tw("p-6")}>
-            <Text style={tw("text-center text-lg")}>Личные данные</Text>
-
-            <Card containerStyle={tw("rounded-sm")}>
-               {/* Name + Female */}
-               <ProfileBio name={user.name} female={user.female} theme={user.theme} />
-               <Card.Divider />
-               {/* Choose user theme */}
-               <ProfileTheme />
-               {/* User type */}
-               <View style={tw("mb-4")}>
-                  <Text>Уровень доступа </Text>
-                  <Text style={tw("text-lg font-bold mt-1")}>
-                     {user.type === UType.STUDENT ? "Студент" : "Преподаватель"}
-                  </Text>
-               </View>
-
-               <Card.Divider />
-
-               {/* Feedback */}
-               <TouchableOpacity onPress={handleFeedbackModal}>
-                  <Text style={[tw("text-center"), { color: returnHexCode(user.theme) }]}>
-                     Оставить отзыв
-                  </Text>
+      <View
+         style={[
+            tw("flex flex-col h-full relative"),
+            {
+               backgroundColor: returnAppTheme(user.appTheme),
+            },
+         ]}
+      >
+         <LinearGradient
+            colors={[returnHexCode(user.theme), returnDarkenHexCode(user.theme)]}
+            style={tw("w-full pt-12 px-4 rounded-b-3xl flex items-center mb-12")}
+            end={{
+               x: 1,
+               y: 0.5,
+            }}
+         >
+            <View style={tw("flex flex-row justify-between items-center w-full")}>
+               <Text style={tw("text-white font-semibold text-lg")}>Профиль</Text>
+               {/* feedback  */}
+               <TouchableOpacity onPress={openFeedbackModal}>
+                  <Icon name="info" color="white" size={30} />
                </TouchableOpacity>
-            </Card>
+            </View>
+            <ProfileImage id={user.id} userImg={user.img} userName={user.name} />
+         </LinearGradient>
+         {/* </View> */}
+         {/* Name + Second name + Role */}
+         <View style={tw("flex flex-col w-full justify-center items-center")}>
+            <Text
+               style={[
+                  tw("font-bold text-xl"),
+                  {
+                     color: returnHexCode(user.theme),
+                  },
+               ]}
+            >
+               {user.name} {user.female}
+            </Text>
+            <Text style={tw("text-gray-400 font-semibold text-lg")}>{userTypeToStringMap[user.type]}</Text>
          </View>
-         {/* Sign out */}
+         <View style={tw("px-4 my-4")}>
+            <LinearGradient
+               colors={[returnHexCode(user.theme), returnDarkenHexCode(user.theme)]}
+               style={tw("w-full py-4 px-4 flex items-center rounded-md")}
+               end={{
+                  x: 1,
+                  y: 0.5,
+               }}
+            >
+               <ProfileBio name={user.name} female={user.female} theme={user.theme} />
+               <ProfileMainTheme />
+            </LinearGradient>
+         </View>
+         <View>
+            <Text
+               style={[
+                  tw("text-center font-semibold text-lg mb-2"),
+                  {
+                     color: returnHexCode(user.theme),
+                  },
+               ]}
+            >
+               Тема элементов
+            </Text>
+            <ProfileTheme />
+         </View>
 
          <TouchableOpacity
             style={tw("flex flex-row justify-center absolute bottom-10 w-full")}

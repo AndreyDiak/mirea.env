@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useState } from "react";
 
-import { Text, ToastAndroid, TouchableOpacity, View } from "react-native";
+import { ToastAndroid, TouchableOpacity, View } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { useTailwind } from "tailwind-rn/dist";
 
 import { db, storage } from "../../firebase";
-import { UserAvatar } from "../UserAvatar";
+import { UserProfileAvatar } from "../common";
 
 interface Props {
    id: string;
@@ -18,7 +17,6 @@ interface Props {
 }
 
 export const ProfileImage: React.FC<Props> = React.memo(({ id, userImg, userName }) => {
-   const tw = useTailwind();
    const [profileImage, setProfileImage] = useState<string>(null);
 
    const pickImage = async () => {
@@ -62,13 +60,12 @@ export const ProfileImage: React.FC<Props> = React.memo(({ id, userImg, userName
    };
    return (
       <View>
-         {userImg !== "" || profileImage ? (
-            <UserAvatar source={profileImage || userImg} />
-         ) : (
-            <UserAvatar title={userName[0]} />
-         )}
          <TouchableOpacity onPress={pickImage}>
-            <Text style={tw("underline")}>Загрузить фото</Text>
+            {userImg !== "" || profileImage ? (
+               <UserProfileAvatar source={profileImage || userImg} />
+            ) : (
+               <UserProfileAvatar title={userName[0]} />
+            )}
          </TouchableOpacity>
       </View>
    );

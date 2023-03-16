@@ -1,4 +1,5 @@
 import { AppTheme } from "../typings";
+import { APP_THEME } from "../typings/enums";
 
 // type 100
 export const returnLightenHexCode = (theme: AppTheme) => {
@@ -61,5 +62,48 @@ export const returnDarkestHexCode = (theme: AppTheme) => {
          return "#5b21b6";
       default:
          return "#1e40af";
+   }
+};
+
+export const returnAppTheme = (theme: APP_THEME) => {
+   switch (theme) {
+      case APP_THEME.LIGHT:
+         return "#f8fafc";
+      case APP_THEME.DARK:
+         return "#1e293b";
+      default:
+         return "#f8fafc";
+   }
+};
+export const returnAppThemeText = (theme: APP_THEME) => {
+   switch (theme) {
+      case APP_THEME.DARK:
+         return "#f8fafc";
+      case APP_THEME.LIGHT:
+         return "#4b5563";
+      default:
+         return "#f8fafc";
+   }
+};
+
+export const returnLightenAppTheme = (theme: APP_THEME) => {
+   switch (theme) {
+      case APP_THEME.LIGHT:
+         return "#fff";
+      case APP_THEME.DARK:
+         return "#475569";
+      default:
+         return "#f8fafc";
+   }
+};
+
+export const returnDarkenAppTheme = (theme: APP_THEME) => {
+   switch (theme) {
+      case APP_THEME.LIGHT:
+         return "#e2e8f0";
+      case APP_THEME.DARK:
+         return "#1c1917";
+      default:
+         return "#e2e8f0";
    }
 };

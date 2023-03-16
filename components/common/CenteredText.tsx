@@ -2,7 +2,12 @@ import React from "react";
 
 import { Text, View } from "react-native";
 
+import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
+
+import { selectUserAppTheme } from "../../features/userSlice";
+import { APP_THEME } from "../../typings/enums";
+import { ScreenTemplate } from "./ScreenTemplate";
 
 interface Props {
    text: string;
@@ -12,12 +17,23 @@ interface Props {
 export const CenteredText: React.FC<Props> = React.memo(({ text, Icon }) => {
    const tw = useTailwind();
 
+   const appTheme = useSelector(selectUserAppTheme);
+
    return (
-      <View style={tw("h-full w-full flex justify-center items-center")}>
+      <ScreenTemplate style={tw("flex flex-row justify-center items-center")}>
          <View>
-            <Text style={tw("text-center mt-4 mb-2 text-xl")}>{text}</Text>
+            <Text
+               style={[
+                  tw("text-center mt-4 mb-2 text-xl font-semibold"),
+                  {
+                     color: appTheme === APP_THEME.LIGHT ? "black" : "white",
+                  },
+               ]}
+            >
+               {text}
+            </Text>
             {Icon}
          </View>
-      </View>
+      </ScreenTemplate>
    );
 });

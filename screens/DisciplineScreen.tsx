@@ -8,7 +8,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, MaterialCard, MaterialForm } from "../components";
+import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
 import { useMaterials } from "../hooks";
 import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
@@ -33,8 +33,9 @@ export function DisciplineScreen() {
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
+         headerStyle: {},
       });
-   }, [discipline, navigation]);
+   }, [discipline, navigation, user.appTheme]);
 
    const isStudent = user.type === UType.STUDENT;
 
@@ -47,50 +48,52 @@ export function DisciplineScreen() {
    }
 
    return (
-      <SafeAreaView style={tw("flex flex-col px-4 relative")}>
-         {!isStudent && (
-            <View style={tw("")}>
-               <TouchableOpacity
-                  style={tw("flex flex-row justify-end")}
-                  onPress={() => setIsFormVisible(!isFormVisible)}
-               >
-                  <View style={tw("flex flex-row items-center")}>
-                     <Text style={{ color: returnHexCode(user.theme) }}>
-                        {isFormVisible ? "Закрыть" : "Добавить материалы"}
-                     </Text>
-                     <Icon
-                        name={!isFormVisible ? "expand-more" : "expand-less"}
-                        type="material"
-                        color={returnHexCode(user.theme)}
-                        size={25}
-                     />
-                  </View>
-               </TouchableOpacity>
-               {isFormVisible && (
-                  <MaterialForm disciplineId={discipline.id} setIsFormVisible={setIsFormVisible} />
-               )}
-            </View>
-         )}
-         {/* рендрим все материалы */}
-         {!isFormVisible && (
-            <FlatList
-               style={tw("")}
-               data={materials.reverse()}
-               scrollEnabled
-               showsVerticalScrollIndicator={false}
-               renderItem={({ item: material }) => {
-                  return (
-                     <MaterialCard
-                        key={material.id}
-                        material={material}
-                        userId={user.id}
-                        userType={user.type}
-                        userTheme={user.theme}
-                     />
-                  );
-               }}
-            />
-         )}
-      </SafeAreaView>
+      <ScreenTemplate>
+         <SafeAreaView style={tw("flex flex-col px-4 relative")}>
+            {!isStudent && (
+               <View style={tw("")}>
+                  <TouchableOpacity
+                     style={tw("flex flex-row justify-end")}
+                     onPress={() => setIsFormVisible(!isFormVisible)}
+                  >
+                     <View style={tw("flex flex-row items-center")}>
+                        <Text style={{ color: returnHexCode(user.theme) }}>
+                           {isFormVisible ? "Закрыть" : "Добавить материалы"}
+                        </Text>
+                        <Icon
+                           name={!isFormVisible ? "expand-more" : "expand-less"}
+                           type="material"
+                           color={returnHexCode(user.theme)}
+                           size={25}
+                        />
+                     </View>
+                  </TouchableOpacity>
+                  {isFormVisible && (
+                     <MaterialForm disciplineId={discipline.id} setIsFormVisible={setIsFormVisible} />
+                  )}
+               </View>
+            )}
+            {/* рендрим все материалы */}
+            {!isFormVisible && (
+               <FlatList
+                  style={tw("")}
+                  data={materials.reverse()}
+                  scrollEnabled
+                  showsVerticalScrollIndicator={false}
+                  renderItem={({ item: material }) => {
+                     return (
+                        <MaterialCard
+                           key={material.id}
+                           material={material}
+                           userId={user.id}
+                           userType={user.type}
+                           userTheme={user.theme}
+                        />
+                     );
+                  }}
+               />
+            )}
+         </SafeAreaView>
+      </ScreenTemplate>
    );
 }

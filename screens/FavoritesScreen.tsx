@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, MaterialCard } from "../components";
+import { Error, Loader, MaterialCard, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
 import { useFavorites } from "../hooks";
 import type { Material } from "../typings";
@@ -38,25 +38,7 @@ export function FavoritesScreen() {
    }
 
    return (
-      <View style={tw("py-6 flex flex-col")}>
-         {/* Favorites filter */}
-         {/* <View style={tw("flex flex-row px-4 py-4 flex-wrap")}>
-        {["All", ...disciplines].map((discipline) => (
-          <TouchableOpacity
-            key={discipline}
-            onPress={() => setFilter(discipline)}
-            style={[
-              tw("rounded-lg px-3 py-1"),
-              {
-                backgroundColor: returnHexCode(user?.theme || 'blue'),
-              },
-            ]}
-          >
-            <Text style={tw("text-white")}>{discipline}</Text>
-          </TouchableOpacity>
-        ))}
-      </View> */}
-         {/* List of all favorites */}
+      <ScreenTemplate style={tw("py-6")}>
          <FlatList
             data={Object.keys(favorites)}
             showsVerticalScrollIndicator={false}
@@ -91,6 +73,7 @@ export function FavoritesScreen() {
                </View>
             )}
          />
-      </View>
+      </ScreenTemplate>
+      // </View>
    );
 }

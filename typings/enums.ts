@@ -25,3 +25,15 @@ export const enum UType {
    TEACHER = "teacher",
    ADMIN = "admin",
 }
+
+export const enum APP_THEME {
+   LIGHT = "light",
+   DARK = "dark",
+}
+
+export const enum ADMIN_MODE {
+   TIMETABLE = "timetable",
+   GROUP = "group",
+   INSTITUTE = "institute",
+   DISCIPLINE = "discipline",
+}

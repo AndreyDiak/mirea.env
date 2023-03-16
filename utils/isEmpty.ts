@@ -2,6 +2,10 @@
 type Data = Array<any> | object | number | string;
 
 export const isEmpty = (data: Data): boolean => {
+   // проверка на null и undefined
+   if (data === null || data === undefined) {
+      return true;
+   }
    // проверка если это массив
    if (Array.isArray(data)) {
       return data.length === 0;
@@ -18,8 +22,8 @@ export const isEmpty = (data: Data): boolean => {
    if (typeof data === "string") {
       return data === "";
    }
-   // другие типы данных null | undefined
-   if (data) {
+   // другие типы данных
+   if (!data) {
       return true;
    }
 
