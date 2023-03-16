@@ -123,19 +123,6 @@ function TabNavigator() {
          <Tab.Screen name="Disciplines" options={{ headerShown: false }} component={DisciplinesScreen} />
          <Tab.Screen name="Timetable" options={{ headerShown: false }} component={TimeTableScreen} />
          <Tab.Screen name="Favorites" options={{ headerShown: false }} component={FavoritesScreen} />
-         {/* {notifications.length ? (
-        <Tab.Screen
-          name="Notifications"
-          options={{ headerShown: false, tabBarBadge: notifications.length }}
-          component={NotificationsScreen}
-        />
-      ) : (
-        <Tab.Screen
-          name="Notifications"
-          options={{ headerShown: false }}
-          component={NotificationsScreen}
-        />
-      )} */}
          <Tab.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
       </Tab.Navigator>
    );

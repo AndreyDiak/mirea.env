@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
@@ -6,24 +6,41 @@ import { Card } from "@rneui/themed";
 import { signOut } from "firebase/auth";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { DisciplineForm, GroupForm, TimetableForm } from "../components";
+import { DisciplineForm, GroupForm, InstituteForm, TimetableForm } from "../components";
 import { auth } from "../firebase";
+import { useAdminMode } from "../hooks";
+import { ADMIN_MODE } from "../typings/enums";
+
+const modeToComponentMap: Record<ADMIN_MODE, JSX.Element> = {
+   [ADMIN_MODE.DISCIPLINE]: <DisciplineForm />,
+   [ADMIN_MODE.GROUP]: <GroupForm />,
+   [ADMIN_MODE.INSTITUTE]: <InstituteForm />,
+   [ADMIN_MODE.TIMETABLE]: <TimetableForm />,
+};
 
 export function AdminScreen() {
    const tw = useTailwind();
 
-   const [isTimetableFormVisible, setIsTimetableFormVisible] = useState(false);
-   const [isDisciplineFormVisible, setIsDisciplineFormVisible] = useState(false);
-   const [isGroupFormVisible, setIsGroupFormVisible] = useState(false);
-   const [isInstituteFormVisible, setIsInstituteFormVisible] = useState(false);
-   const [isMenuVisible, setIsMenuVisible] = useState(false);
+   const [isMenuVisible, setIsMenuVisible] = useState(true);
 
-   const openMenu = useCallback(() => {
+   const { mode, close, open } = useAdminMode();
+
+   const openForm = (newMode: ADMIN_MODE) => {
       setIsMenuVisible(false);
-      setIsDisciplineFormVisible(false);
-      setIsGroupFormVisible(false);
-      setIsTimetableFormVisible(false);
-   }, []);
+      open(newMode);
+   };
+
+   const closeForm = () => {
+      setIsMenuVisible(true);
+      close();
+   };
+
+   const renderForm = () => {
+      if (!mode) {
+         return null;
+      }
+      return modeToComponentMap[mode];
+   };
 
    return (
       <View style={tw("pt-10 px-4")}>
@@ -42,21 +59,20 @@ export function AdminScreen() {
                   <View>
                      <Text style={tw("text-lg")}>Список возможностей</Text>
                   </View>
-                  {isMenuVisible && (
-                     <TouchableOpacity onPress={openMenu}>
+                  {!isMenuVisible && (
+                     <TouchableOpacity onPress={closeForm}>
                         <Text style={tw("text-blue-400")}>Открыть</Text>
                      </TouchableOpacity>
                   )}
                </View>
 
-               {!isMenuVisible && (
+               {isMenuVisible && (
                   <View>
                      <Card.Divider />
                      <View style={tw("mb-2")}>
                         <TouchableOpacity
                            onPress={() => {
-                              setIsTimetableFormVisible(true);
-                              setIsMenuVisible(true);
+                              openForm(ADMIN_MODE.TIMETABLE);
                            }}
                         >
                            <Text style={tw("text-blue-400")}>Добавить расписание</Text>
@@ -65,8 +81,7 @@ export function AdminScreen() {
                      <View style={tw("mb-2")}>
                         <TouchableOpacity
                            onPress={() => {
-                              setIsDisciplineFormVisible(true);
-                              setIsMenuVisible(true);
+                              openForm(ADMIN_MODE.DISCIPLINE);
                            }}
                         >
                            <Text style={tw("text-blue-400")}>Добавить дисциплину</Text>
@@ -75,8 +90,7 @@ export function AdminScreen() {
                      <View style={tw("mb-2")}>
                         <TouchableOpacity
                            onPress={() => {
-                              setIsGroupFormVisible(true);
-                              setIsMenuVisible(true);
+                              openForm(ADMIN_MODE.GROUP);
                            }}
                         >
                            <Text style={tw("text-blue-400")}>Добавить группу</Text>
@@ -85,8 +99,7 @@ export function AdminScreen() {
                      <View style={tw("mb-2")}>
                         <TouchableOpacity
                            onPress={() => {
-                              setIsInstituteFormVisible(true);
-                              setIsMenuVisible(true);
+                              openForm(ADMIN_MODE.INSTITUTE);
                            }}
                         >
                            <Text style={tw("text-blue-400")}>Добавить институт</Text>
@@ -97,11 +110,7 @@ export function AdminScreen() {
             </Card>
          </View>
          {/* Forms */}
-         <View>
-            {isGroupFormVisible && <GroupForm />}
-            {isDisciplineFormVisible && <DisciplineForm />}
-            {isTimetableFormVisible && <TimetableForm />}
-         </View>
+         <View>{renderForm()}</View>
       </View>
    );
 }

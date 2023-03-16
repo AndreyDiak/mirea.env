@@ -5,3 +5,4 @@ export * from "./ColorBlock";
 export * from "./skeletons";
 export * from "./ScreenTemplate";
 export * from "./avatars";
+export * from "./modal";

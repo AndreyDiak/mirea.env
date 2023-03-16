@@ -2,15 +2,23 @@ import React from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { Icon } from "@rneui/themed";
+import { Icon, Input } from "@rneui/themed";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { LinearGradient } from "expo-linear-gradient";
 import { signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { ProfileBio, ProfileImage, ProfileSkeleton, ProfileTheme } from "../components";
-import { ProfileMainTheme } from "../components/profile/ProfileMainTheme";
+import {
+   MODAL_TYPES,
+   ProfileBio,
+   ProfileImage,
+   ProfileMainTheme,
+   ProfileSkeleton,
+   ProfileTheme,
+   useGlobalModalContext,
+} from "../components";
+import { ProfileFeedbackModal } from "../components/profile/ProfileFeedbackModal";
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { UType } from "../typings/enums";
@@ -27,8 +35,14 @@ export function ProfileScreen() {
 
    const user = useSelector(selectUser);
 
-   const handleFeedbackModal = () => {
-      // open feedback modal
+   const { openModal } = useGlobalModalContext();
+
+   const openFeedbackModal = () => {
+      openModal(MODAL_TYPES.SIMPLE_MODAL, {
+         title: "Обратная связь",
+         // eslint-disable-next-line react/no-unstable-nested-components
+         children: ProfileFeedbackModal,
+      });
    };
 
    if (user === null) {
@@ -44,8 +58,6 @@ export function ProfileScreen() {
             },
          ]}
       >
-         {/* Feedback icon + Avatar */}
-
          <LinearGradient
             colors={[returnHexCode(user.theme), returnDarkenHexCode(user.theme)]}
             style={tw("w-full pt-12 px-4 rounded-b-3xl flex items-center mb-12")}
@@ -57,7 +69,7 @@ export function ProfileScreen() {
             <View style={tw("flex flex-row justify-between items-center w-full")}>
                <Text style={tw("text-white font-semibold text-lg")}>Профиль</Text>
                {/* feedback  */}
-               <TouchableOpacity>
+               <TouchableOpacity onPress={openFeedbackModal}>
                   <Icon name="info" color="white" size={30} />
                </TouchableOpacity>
             </View>

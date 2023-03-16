@@ -33,8 +33,9 @@ export function DisciplineScreen() {
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
+         headerStyle: {},
       });
-   }, [discipline, navigation]);
+   }, [discipline, navigation, user.appTheme]);
 
    const isStudent = user.type === UType.STUDENT;
 

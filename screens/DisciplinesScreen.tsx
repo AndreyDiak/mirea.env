@@ -17,7 +17,7 @@ export function DisciplinesScreen() {
    const { disciplines, loading } = useDisciplines();
 
    if (loading) {
-      return <Loader text="Загрузка дисциплин" theme={user?.theme || "blue"} />;
+      return <Loader text="Загрузка дисциплин" theme={user.theme} />;
    }
 
    return (

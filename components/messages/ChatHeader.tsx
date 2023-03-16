@@ -10,8 +10,8 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
 import type { DBMessage } from "../../typings";
-import { DB_PATHS } from "../../typings/enums";
-import { DOCS } from "../../utils";
+import { APP_THEME, DB_PATHS } from "../../typings/enums";
+import { DOCS, returnAppThemeText } from "../../utils";
 
 interface Props {
    chatId: string;
@@ -47,22 +47,24 @@ export const ChatHeader: React.FC<Props> = React.memo(
          [selectedMessage?.email, user.email],
       );
 
+      const iconColor = user.appTheme === APP_THEME.LIGHT ? "#374151" : returnAppThemeText(user.appTheme);
+
       return (
          <View style={tw("flex flex-row")}>
             {isMyMessage ? (
                <TouchableOpacity onPress={editMessage} style={tw("mr-4")}>
-                  <Icon name="edit" type="material" size={30} color="#374151" />
+                  <Icon name="edit" type="material" size={30} color={iconColor} />
                </TouchableOpacity>
             ) : null}
             <TouchableOpacity onPress={copyToClipboard} style={tw("mr-4")}>
-               <Icon name="content-copy" type="material" size={30} color="#374151" />
+               <Icon name="content-copy" type="material" size={30} color={iconColor} />
             </TouchableOpacity>
             <TouchableOpacity onPress={replyOnMessage} style={tw("mr-4")}>
-               <Icon name="redo" type="material" size={30} color="#374151" />
+               <Icon name="redo" type="material" size={30} color={iconColor} />
             </TouchableOpacity>
             {isMyMessage ? (
                <TouchableOpacity onPress={deleteMessage} style={tw("mr-4")}>
-                  <Icon name="delete-outline" type="material" size={30} color="#374151" />
+                  <Icon name="delete-outline" type="material" size={30} color={iconColor} />
                </TouchableOpacity>
             ) : null}
          </View>
