@@ -11,7 +11,7 @@ import { ChatHeader, MessageForm, MessagesList, ScreenTemplate } from "../compon
 import { selectUserAppTheme } from "../features/userSlice";
 import type { ChatScreenNavigatorProp, DBMessage, RootStackParamList } from "../typings";
 import { APP_THEME } from "../typings/enums";
-import { returnAppThemeText, returnLightenAppTheme } from "../utils";
+import { returnAppThemeSecondary, returnAppThemeText } from "../utils";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
@@ -99,7 +99,7 @@ export function ChatScreen() {
          headerTitle: renderTitle,
          headerRight: renderClose,
          headerStyle: {
-            backgroundColor: returnLightenAppTheme(appTheme),
+            backgroundColor: returnAppThemeSecondary(appTheme),
          },
       });
    }, [appTheme, groupName, isHeaderMenuVisible, navigation, renderClose, renderTitle, selectedMessage, tw]);

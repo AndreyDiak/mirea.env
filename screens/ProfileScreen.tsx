@@ -2,7 +2,7 @@ import React from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { Icon, Input } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { LinearGradient } from "expo-linear-gradient";
 import { signOut } from "firebase/auth";
@@ -18,7 +18,7 @@ import {
    ProfileTheme,
    useGlobalModalContext,
 } from "../components";
-import { ProfileFeedbackModal } from "../components/profile/ProfileFeedbackModal";
+import { ProfileDisciplinesModal, ProfileFeedbackModal } from "../components/profile/modals";
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { UType } from "../typings/enums";
@@ -42,6 +42,14 @@ export function ProfileScreen() {
          title: "Обратная связь",
          // eslint-disable-next-line react/no-unstable-nested-components
          children: ProfileFeedbackModal,
+      });
+   };
+
+   const openDisciplineDialog = () => {
+      openModal(MODAL_TYPES.SIMPLE_MODAL, {
+         title: "Ваши дисциплины",
+         // eslint-disable-next-line react/no-unstable-nested-components
+         children: ProfileDisciplinesModal,
       });
    };
 
@@ -99,7 +107,7 @@ export function ProfileScreen() {
                   y: 0.5,
                }}
             >
-               <ProfileBio name={user.name} female={user.female} theme={user.theme} />
+               <ProfileBio openModal={openDisciplineDialog} />
                <ProfileMainTheme />
             </LinearGradient>
          </View>

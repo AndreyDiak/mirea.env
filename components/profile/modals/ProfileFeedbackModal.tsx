@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { Input } from "@rneui/themed";
 import { addDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserId } from "../../features/userSlice";
-import { DB_PATHS } from "../../typings/enums";
-import { createCollection } from "../../utils";
-import { Button } from "../Button";
+import { selectUserId } from "../../../features/userSlice";
+import { DB_PATHS } from "../../../typings/enums";
+import { createCollection } from "../../../utils";
+import { Button } from "../../Button";
 
 export function ProfileFeedbackModal() {
    const tw = useTailwind();
@@ -26,8 +26,7 @@ export function ProfileFeedbackModal() {
    };
 
    return (
-      <View style={tw("w-full")}>
-         {/* <Text style={[tw("text-sm text-gray-400 text-center")]}>Оставьте свой отзыв. Нам это важно!</Text> */}
+      <View>
          <Input
             containerStyle={tw("")}
             value={feedbackText}

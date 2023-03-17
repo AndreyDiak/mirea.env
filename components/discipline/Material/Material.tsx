@@ -11,7 +11,7 @@ import { selectUserAppTheme } from "../../../features/userSlice";
 import { useFavorite } from "../../../hooks";
 import type { AppTheme, Material } from "../../../typings";
 import { APP_THEME } from "../../../typings/enums";
-import { returnAppThemeText, returnDarkenAppTheme, returnLightenAppTheme } from "../../../utils";
+import { returnAppThemeSecondary, returnAppThemeText, returnAppThemeForBorder } from "../../../utils";
 import { MaterialFiles } from "./MaterialFiles";
 import { MaterialMenu } from "./MaterialMenu";
 
@@ -31,8 +31,8 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
       <Card
          key={material.id}
          containerStyle={{
-            backgroundColor: returnLightenAppTheme(userAppTheme),
-            borderColor: returnDarkenAppTheme(userAppTheme),
+            backgroundColor: returnAppThemeSecondary(userAppTheme),
+            borderColor: returnAppThemeForBorder(userAppTheme),
             borderWidth: userAppTheme === APP_THEME.LIGHT ? 1 : 0,
             borderRadius: 5,
          }}

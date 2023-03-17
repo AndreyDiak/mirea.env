@@ -7,7 +7,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 
 import { selectUserAppTheme } from "../../features/userSlice";
-import { returnAppTheme, returnLightenAppTheme } from "../../utils";
+import { returnAppTheme, returnAppThemeSecondary } from "../../utils";
 
 interface Props {
    children: JSX.Element;
@@ -22,7 +22,7 @@ export const ScreenTemplate: React.FC<Props> = React.memo(({ children, style }) 
    useLayoutEffect(() => {
       navigation.setOptions({
          headerStyle: {
-            backgroundColor: returnLightenAppTheme(appTheme),
+            backgroundColor: returnAppThemeSecondary(appTheme),
             // color: returnAppThemeText(appTheme),
          },
       });

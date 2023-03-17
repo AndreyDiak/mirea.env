@@ -11,7 +11,12 @@ import { selectUser } from "../../features/userSlice";
 import { useChat } from "../../hooks";
 import type { Discipline, DisciplineScreenNavigatorProp } from "../../typings";
 import { APP_THEME, UType } from "../../typings/enums";
-import { returnAppThemeText, returnDarkenAppTheme, returnHexCode, returnLightenAppTheme } from "../../utils";
+import {
+   returnAppThemeSecondary,
+   returnAppThemeText,
+   returnAppThemeForBorder,
+   returnHexCode,
+} from "../../utils";
 
 type Props = {
    discipline: Discipline;
@@ -27,8 +32,8 @@ export function DisciplineCard({ discipline }: Props) {
    return (
       <Card
          containerStyle={{
-            backgroundColor: returnLightenAppTheme(user.appTheme),
-            borderColor: returnDarkenAppTheme(user.appTheme),
+            backgroundColor: returnAppThemeSecondary(user.appTheme),
+            borderColor: returnAppThemeForBorder(user.appTheme),
             borderWidth: user.appTheme === APP_THEME.LIGHT ? 1 : 0,
             borderRadius: 5,
          }}

@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserAppTheme, selectUserTheme } from "../../../features/userSlice";
 import { DBMessage } from "../../../typings";
-import { returnAppThemeText, returnHexCode, returnLightenAppTheme } from "../../../utils";
+import { returnAppThemeSecondary, returnAppThemeText, returnHexCode } from "../../../utils";
 import { CustomReplyField } from "./CustomReplyField";
 
 interface Props {
@@ -51,7 +51,7 @@ export const CustomInputField: React.FC<Props> = React.memo(
                style={[
                   tw("w-full flex flex-row items-center"),
                   {
-                     backgroundColor: returnLightenAppTheme(appTheme),
+                     backgroundColor: returnAppThemeSecondary(appTheme),
                   },
                ]}
             >
