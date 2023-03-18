@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 
-import { View } from "react-native";
-
 import { Input } from "@rneui/themed";
 import { addDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
@@ -26,14 +24,9 @@ export function ProfileFeedbackModal() {
    };
 
    return (
-      <View>
-         <Input
-            containerStyle={tw("")}
-            value={feedbackText}
-            onChangeText={setFeedbackText}
-            placeholder="Введите текст"
-         />
+      <>
+         <Input value={feedbackText} onChangeText={setFeedbackText} placeholder="Введите текст" />
          <Button title="Отправить отзыв" callback={sendFeedback} />
-      </View>
+      </>
    );
 }

@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserAppTheme, selectUserId } from "../../features/userSlice";
 import { APP_THEME, DB_PATHS } from "../../typings/enums";
-import { DOCS, returnAppTheme, returnAppThemeSecondary, returnAppThemeForBorder } from "../../utils";
+import { DOCS, returnAppTheme, returnAppThemeForBorder, returnAppThemeSecondary } from "../../utils";
 import { ColorBlock } from "../common/ColorBlock";
 
 export const ProfileMainTheme: React.FC = React.memo(() => {

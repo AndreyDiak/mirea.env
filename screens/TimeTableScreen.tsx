@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 
-import { View } from "react-native";
-
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, TimeTableHeader, TimeTableLessons } from "../components";
+import { Error, Loader, ScreenTemplate, TimeTableHeader, TimeTableLessons } from "../components";
 import { selectUserTheme } from "../features/userSlice";
 import { useTimetable } from "../hooks/timetable/useTimetable";
 import { isEmpty } from "../utils";
@@ -28,9 +26,11 @@ export function TimeTableScreen() {
    }
 
    return (
-      <View style={tw("w-full h-full py-8")}>
-         <TimeTableHeader timetable={timeTable?.timetable} dayIndex={dayIndex} setDayIndex={setDayIndex} />
-         <TimeTableLessons timetable={timeTable?.timetable} dayIndex={dayIndex} />
-      </View>
+      <ScreenTemplate style={tw("py-8")}>
+         <>
+            <TimeTableHeader timetable={timeTable?.timetable} dayIndex={dayIndex} setDayIndex={setDayIndex} />
+            <TimeTableLessons timetable={timeTable?.timetable} dayIndex={dayIndex} />
+         </>
+      </ScreenTemplate>
    );
 }

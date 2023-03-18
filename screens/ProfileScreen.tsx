@@ -3,7 +3,6 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import { Icon } from "@rneui/themed";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { LinearGradient } from "expo-linear-gradient";
 import { signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
@@ -12,17 +11,19 @@ import { useTailwind } from "tailwind-rn/dist";
 import {
    MODAL_TYPES,
    ProfileBio,
+   ProfileDisciplinesModal,
+   ProfileFeedbackModal,
    ProfileImage,
    ProfileMainTheme,
    ProfileSkeleton,
    ProfileTheme,
    useGlobalModalContext,
 } from "../components";
-import { ProfileDisciplinesModal, ProfileFeedbackModal } from "../components/profile/modals";
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
+import { useTheme } from "../hooks";
 import { UType } from "../typings/enums";
-import { returnAppTheme, returnDarkenHexCode, returnHexCode } from "../utils";
+import { returnDarkenHexCode, returnHexCode } from "../utils";
 
 const userTypeToStringMap: Record<UType, string> = {
    student: "Студент",
@@ -37,10 +38,11 @@ export function ProfileScreen() {
 
    const { openModal } = useGlobalModalContext();
 
+   const { APP_THEME_MAIN, THEME_MAIN, THEME_DARKEN } = useTheme();
+
    const openFeedbackModal = () => {
       openModal(MODAL_TYPES.SIMPLE_MODAL, {
          title: "Обратная связь",
-         // eslint-disable-next-line react/no-unstable-nested-components
          children: ProfileFeedbackModal,
       });
    };
@@ -48,7 +50,6 @@ export function ProfileScreen() {
    const openDisciplineDialog = () => {
       openModal(MODAL_TYPES.SIMPLE_MODAL, {
          title: "Ваши дисциплины",
-         // eslint-disable-next-line react/no-unstable-nested-components
          children: ProfileDisciplinesModal,
       });
    };
@@ -62,7 +63,7 @@ export function ProfileScreen() {
          style={[
             tw("flex flex-col h-full relative"),
             {
-               backgroundColor: returnAppTheme(user.appTheme),
+               backgroundColor: APP_THEME_MAIN,
             },
          ]}
       >
@@ -90,7 +91,7 @@ export function ProfileScreen() {
                style={[
                   tw("font-bold text-xl"),
                   {
-                     color: returnHexCode(user.theme),
+                     color: THEME_MAIN,
                   },
                ]}
             >
@@ -100,7 +101,7 @@ export function ProfileScreen() {
          </View>
          <View style={tw("px-4 my-4")}>
             <LinearGradient
-               colors={[returnHexCode(user.theme), returnDarkenHexCode(user.theme)]}
+               colors={[THEME_MAIN, THEME_DARKEN]}
                style={tw("w-full py-4 px-4 flex items-center rounded-md")}
                end={{
                   x: 1,
@@ -116,7 +117,7 @@ export function ProfileScreen() {
                style={[
                   tw("text-center font-semibold text-lg mb-2"),
                   {
-                     color: returnHexCode(user.theme),
+                     color: THEME_MAIN,
                   },
                ]}
             >
@@ -131,9 +132,7 @@ export function ProfileScreen() {
                signOut(auth);
             }}
          >
-            <Text
-               style={[tw("px-2 py-1 rounded-md text-lg underline"), { color: returnHexCode(user.theme) }]}
-            >
+            <Text style={[tw("px-2 py-1 rounded-md text-lg underline"), { color: THEME_MAIN }]}>
                Выйти из аккаунта
             </Text>
          </TouchableOpacity>

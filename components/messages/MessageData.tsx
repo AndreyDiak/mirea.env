@@ -6,14 +6,17 @@ import moment from "moment";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { DBMessage } from "../../typings";
+import { APP_THEME } from "../../typings/enums";
+import { returnAppThemeText } from "../../utils";
 
 interface Props {
    message: DBMessage;
    email: string;
+   appTheme: APP_THEME;
    isNextMessageOwner: boolean;
 }
 
-export const MessageData: React.FC<Props> = React.memo(({ message, email, isNextMessageOwner }) => {
+export const MessageData: React.FC<Props> = React.memo(({ message, email, isNextMessageOwner, appTheme }) => {
    const tw = useTailwind();
 
    const isMyMessage = useMemo(() => message.email === email, [message.email, email]);
@@ -38,14 +41,21 @@ export const MessageData: React.FC<Props> = React.memo(({ message, email, isNext
                   fontSize: 14,
                   marginRight: 8,
                   fontWeight: "600",
-                  color: isMyMessage ? "#1f2937" : "#f3f4f6",
+                  color: isMyMessage ? returnAppThemeText(appTheme) : "#f3f4f6",
                   maxWidth: "85%",
                }}
             >
                {message.text}
             </Text>
             {/* Message Date... */}
-            <Text style={tw(`text-xs -mb-1 ${isMyMessage ? "text-gray-800" : "text-right text-gray-100"}`)}>
+            <Text
+               style={[
+                  tw(`text-xs -mb-1 ${!isMyMessage ? "text-right " : ""}`),
+                  {
+                     color: isMyMessage ? returnAppThemeText(appTheme) : "#f3f4f6",
+                  },
+               ]}
+            >
                {message.timestamp ? moment(message.timestamp.toDate()).format("LT") : "..."}
             </Text>
          </View>

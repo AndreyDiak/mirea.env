@@ -9,15 +9,19 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { ChatHeader, MessageForm, MessagesList, ScreenTemplate } from "../components";
 import { selectUserAppTheme } from "../features/userSlice";
+import { useTheme } from "../hooks";
 import type { ChatScreenNavigatorProp, DBMessage, RootStackParamList } from "../typings";
 import { APP_THEME } from "../typings/enums";
-import { returnAppThemeSecondary, returnAppThemeText } from "../utils";
 
 type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
 export function ChatScreen() {
    const tw = useTailwind();
    const appTheme = useSelector(selectUserAppTheme);
+
+   const { APP_THEME_TEXT, APP_THEME_SECONDARY } = useTheme();
+
+   // TODO @raymix переделать на хук?
    const [isReplyingOnMessage, setIsReplyingOnMessage] = useState<boolean>(false);
    const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState<boolean>(false);
    const [isMessageEdited, setIsMessageEdited] = useState<boolean>(false);
@@ -68,7 +72,7 @@ export function ChatScreen() {
                style={[
                   tw("text-xl font-semibold"),
                   {
-                     color: returnAppThemeText(appTheme),
+                     color: APP_THEME_TEXT,
                   },
                ]}
             >
@@ -76,7 +80,7 @@ export function ChatScreen() {
             </Text>
          </View>
       );
-   }, [appTheme, chatId, groupName, headerClose, isHeaderMenuVisible, selectedMessage, tw]);
+   }, [APP_THEME_TEXT, chatId, groupName, headerClose, isHeaderMenuVisible, selectedMessage, tw]);
 
    const renderClose = useCallback(() => {
       if (isHeaderMenuVisible) {
@@ -86,23 +90,33 @@ export function ChatScreen() {
                   name="close"
                   type="material"
                   size={30}
-                  color={appTheme === APP_THEME.LIGHT ? "#374151" : returnAppThemeText(appTheme)}
+                  color={appTheme === APP_THEME.LIGHT ? "#374151" : APP_THEME_TEXT}
                />
             </TouchableOpacity>
          );
       }
       return null;
-   }, [appTheme, headerClose, isHeaderMenuVisible]);
+   }, [APP_THEME_TEXT, appTheme, headerClose, isHeaderMenuVisible]);
 
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: renderTitle,
          headerRight: renderClose,
          headerStyle: {
-            backgroundColor: returnAppThemeSecondary(appTheme),
+            backgroundColor: APP_THEME_SECONDARY,
          },
       });
-   }, [appTheme, groupName, isHeaderMenuVisible, navigation, renderClose, renderTitle, selectedMessage, tw]);
+   }, [
+      APP_THEME_SECONDARY,
+      appTheme,
+      groupName,
+      isHeaderMenuVisible,
+      navigation,
+      renderClose,
+      renderTitle,
+      selectedMessage,
+      tw,
+   ]);
 
    return (
       <ScreenTemplate>

@@ -16,10 +16,6 @@ export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
 
    const { groupName, disciplinesList, loading, uType, institutes } = useAddUserData();
 
-   // const { disciplines, loading: DLoading } = useDisciplines();
-
-   // const { openModal } = useGlobalModalContext();
-
    const renderLoadingItem = (item: string) => {
       if (loading) {
          return <Text style={tw("text-xl")}>Загрузка...</Text>;

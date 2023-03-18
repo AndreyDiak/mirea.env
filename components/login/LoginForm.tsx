@@ -20,7 +20,13 @@ const stepToTextMap: Record<AuthSteps, string> = {
    bio: "Регистрация",
 };
 
-export function LoginForm({ step, children, handleSubmit, error }: Props) {
+const titleToTextMap: Record<AuthSteps, string> = {
+   auth: "Авторизация",
+   info: "Регистрация",
+   bio: "Регистрация",
+};
+
+export const LoginForm: React.FC<Props> = React.memo(({ step, children, handleSubmit, error }) => {
    const tw = useTailwind();
    const navigation = useNavigation<LoginScreenNavigatorProp>();
 
@@ -50,7 +56,7 @@ export function LoginForm({ step, children, handleSubmit, error }: Props) {
                   },
                ]}
             >
-               {stepTitle}
+               {titleToTextMap[step]}
             </Text>
             {!!error && <Text style={tw("text-red-400 text-center")}>{error}</Text>}
             {/* Login + Pass */}
@@ -74,4 +80,4 @@ export function LoginForm({ step, children, handleSubmit, error }: Props) {
          </View>
       </View>
    );
-}
+});

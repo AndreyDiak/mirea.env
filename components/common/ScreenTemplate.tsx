@@ -4,10 +4,8 @@ import { StyleProp, ViewStyle } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useSelector } from "react-redux";
 
-import { selectUserAppTheme } from "../../features/userSlice";
-import { returnAppTheme, returnAppThemeSecondary } from "../../utils";
+import { useTheme } from "../../hooks";
 
 interface Props {
    children: JSX.Element;
@@ -15,26 +13,25 @@ interface Props {
 }
 
 export const ScreenTemplate: React.FC<Props> = React.memo(({ children, style }) => {
-   const appTheme = useSelector(selectUserAppTheme);
-
    const navigation = useNavigation();
+
+   const { APP_THEME_MAIN, APP_THEME_SECONDARY } = useTheme();
 
    useLayoutEffect(() => {
       navigation.setOptions({
          headerStyle: {
-            backgroundColor: returnAppThemeSecondary(appTheme),
-            // color: returnAppThemeText(appTheme),
+            backgroundColor: APP_THEME_SECONDARY,
          },
       });
    });
 
    return (
       <LinearGradient
-         colors={[returnAppTheme(appTheme), returnAppTheme(appTheme)]}
+         colors={[APP_THEME_MAIN, APP_THEME_MAIN]}
          style={[
             style,
             {
-               backgroundColor: returnAppTheme(appTheme),
+               backgroundColor: APP_THEME_MAIN,
                height: "100%",
             },
          ]}
