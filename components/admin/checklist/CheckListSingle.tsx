@@ -6,6 +6,7 @@ import { CheckBox, Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
 import type { Discipline, Group, Institute } from "../../../typings";
+import { COLORS_400 } from "../../../utils";
 
 // варианты того, что мы можем выбирать
 type Item = Group | Institute | Discipline;
@@ -34,7 +35,7 @@ export const CheckListSingle: React.FC<Props<Item>> = React.memo(
                <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
                   <Icon
                      name={!isListVisible ? "expand-more" : "expand-less"}
-                     color="#60a5fa"
+                     color={COLORS_400.BLUE}
                      containerStyle={tw("bg-gray-50 rounded-full p-1")}
                   />
                </TouchableOpacity>

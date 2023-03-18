@@ -10,10 +10,10 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
-import { useMaterials } from "../hooks";
+import { useMaterials, useTheme } from "../hooks";
 import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
 import { UType } from "../typings/enums";
-import { isEmpty, returnHexCode } from "../utils";
+import { isEmpty } from "../utils";
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
@@ -23,6 +23,8 @@ export function DisciplineScreen() {
    const tw = useTailwind();
    const navigation = useNavigation<DisciplineScreenNavigatorProp>();
    const user = useSelector(selectUser);
+
+   const { THEME_MAIN } = useTheme();
 
    const {
       params: { discipline },
@@ -57,13 +59,13 @@ export function DisciplineScreen() {
                      onPress={() => setIsFormVisible(!isFormVisible)}
                   >
                      <View style={tw("flex flex-row items-center")}>
-                        <Text style={{ color: returnHexCode(user.theme) }}>
+                        <Text style={{ color: THEME_MAIN }}>
                            {isFormVisible ? "Закрыть" : "Добавить материалы"}
                         </Text>
                         <Icon
                            name={!isFormVisible ? "expand-more" : "expand-less"}
                            type="material"
-                           color={returnHexCode(user.theme)}
+                           color={THEME_MAIN}
                            size={25}
                         />
                      </View>

@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
 import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
 import { TabStackParamList } from "../typings";
+import { COLORS_400, COLORS_COMMON } from "../utils";
 import { returnAppThemeSecondary, returnHexCode } from "../utils/returnHexCodes";
 
 const Tab = createBottomTabNavigator<TabStackParamList>();
@@ -16,21 +17,25 @@ const Tab = createBottomTabNavigator<TabStackParamList>();
 function TabNavigator() {
    const user = useSelector(selectUser);
 
+   const activeColor = returnHexCode(user.theme);
+
+   const disabledColor = COLORS_COMMON.DISABLED;
+
    return (
       <Tab.Navigator
          screenOptions={({ route }) => ({
             headerTintColor: "red",
             tabBarInactiveBackgroundColor: returnAppThemeSecondary(user.appTheme),
             tabBarActiveBackgroundColor: returnAppThemeSecondary(user.appTheme),
-            tabBarActiveTintColor: "#60a5fa",
-            tabBarInactiveTintColor: "#9ca3af",
+            tabBarActiveTintColor: COLORS_400.BLUE,
+            tabBarInactiveTintColor: disabledColor,
             // eslint-disable-next-line react/no-unstable-nested-components, consistent-return
             tabBarLabel: ({ focused }) => {
                if (route.name === "Profile") {
                   return (
                      <Text
                         style={{
-                           color: focused ? returnHexCode(user.theme) : "#9ca3af",
+                           color: focused ? activeColor : disabledColor,
                            fontSize: 10,
                         }}
                      >
@@ -42,7 +47,7 @@ function TabNavigator() {
                   return (
                      <Text
                         style={{
-                           color: focused ? returnHexCode(user.theme) : "#9ca3af",
+                           color: focused ? activeColor : disabledColor,
                            fontSize: 10,
                         }}
                      >
@@ -54,7 +59,7 @@ function TabNavigator() {
                   return (
                      <Text
                         style={{
-                           color: focused ? returnHexCode(user.theme) : "#9ca3af",
+                           color: focused ? activeColor : disabledColor,
                            fontSize: 10,
                         }}
                      >
@@ -66,7 +71,7 @@ function TabNavigator() {
                   return (
                      <Text
                         style={{
-                           color: focused ? returnHexCode(user.theme) : "#9ca3af",
+                           color: focused ? activeColor : disabledColor,
                            fontSize: 10,
                         }}
                      >
@@ -82,7 +87,7 @@ function TabNavigator() {
                      <Icon
                         name="home"
                         type="material"
-                        color={focused ? returnHexCode(user.theme) : "#9ca3af"}
+                        color={focused ? activeColor : disabledColor}
                         size={30}
                      />
                   );
@@ -92,7 +97,7 @@ function TabNavigator() {
                      <Icon
                         name="school"
                         type="material"
-                        color={focused ? returnHexCode(user.theme) : "#9ca3af"}
+                        color={focused ? activeColor : disabledColor}
                         size={30}
                      />
                   );
@@ -102,7 +107,7 @@ function TabNavigator() {
                      <Icon
                         name="today"
                         type="material"
-                        color={focused ? returnHexCode(user.theme) : "#9ca3af"}
+                        color={focused ? activeColor : disabledColor}
                         size={30}
                      />
                   );
@@ -112,7 +117,7 @@ function TabNavigator() {
                      <Icon
                         name="save"
                         type="material"
-                        color={focused ? returnHexCode(user.theme) : "#9ca3af"}
+                        color={focused ? activeColor : disabledColor}
                         size={30}
                      />
                   );

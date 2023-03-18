@@ -23,7 +23,6 @@ import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { useTheme } from "../hooks";
 import { UType } from "../typings/enums";
-import { returnDarkenHexCode, returnHexCode } from "../utils";
 
 const userTypeToStringMap: Record<UType, string> = {
    student: "Студент",
@@ -68,7 +67,7 @@ export function ProfileScreen() {
          ]}
       >
          <LinearGradient
-            colors={[returnHexCode(user.theme), returnDarkenHexCode(user.theme)]}
+            colors={[THEME_MAIN, THEME_DARKEN]}
             style={tw("w-full pt-12 px-4 rounded-b-3xl flex items-center mb-12")}
             end={{
                x: 1,

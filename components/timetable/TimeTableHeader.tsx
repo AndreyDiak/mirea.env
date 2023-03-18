@@ -2,12 +2,10 @@ import React from "react";
 
 import { Text, TouchableOpacity, View } from "react-native";
 
-import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserTheme } from "../../features/userSlice";
+import { useTheme } from "../../hooks";
 import { Day, LessonDay } from "../../typings";
-import { returnHexCode } from "../../utils";
 
 const dayToShortMap: Record<Day, string> = {
    Понедельник: "Пн",
@@ -26,7 +24,9 @@ interface Props {
 
 export const TimeTableHeader: React.FC<Props> = React.memo(({ timetable, dayIndex, setDayIndex }) => {
    const tw = useTailwind();
-   const theme = useSelector(selectUserTheme);
+
+   const { THEME_MAIN } = useTheme();
+
    return (
       <View style={tw("bg-white")}>
          <View style={tw("p-2")}>
@@ -41,7 +41,7 @@ export const TimeTableHeader: React.FC<Props> = React.memo(({ timetable, dayInde
                   style={[
                      tw("flex items-center flex-grow py-2"),
                      index === dayIndex && {
-                        borderBottomColor: returnHexCode(theme),
+                        borderBottomColor: THEME_MAIN,
                         borderBottomWidth: 3,
                      },
                   ]}
@@ -49,7 +49,7 @@ export const TimeTableHeader: React.FC<Props> = React.memo(({ timetable, dayInde
                   <Text
                      style={{
                         fontWeight: "600",
-                        color: returnHexCode(theme),
+                        color: THEME_MAIN,
                      }}
                   >
                      {dayToShortMap[day.day]}

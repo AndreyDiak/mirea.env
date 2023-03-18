@@ -2,11 +2,10 @@ import React from "react";
 
 import { Text, TouchableOpacity } from "react-native";
 
-import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserTheme } from "../features/userSlice";
-import { COLORS_COMMON, returnHexCode } from "../utils";
+import { useTheme } from "../hooks";
+import { COLORS_COMMON } from "../utils";
 
 type Props = {
    title: string;
@@ -18,9 +17,9 @@ type Props = {
 export function Button({ title, callback, disabled, disabledText }: Props) {
    const tw = useTailwind();
 
-   const theme = useSelector(selectUserTheme);
+   const { THEME_MAIN } = useTheme();
 
-   const backgroundColor = disabled ? COLORS_COMMON.DISABLED : returnHexCode(theme);
+   const backgroundColor = disabled ? COLORS_COMMON.DISABLED : THEME_MAIN;
 
    return (
       <TouchableOpacity disabled={disabled} style={tw("flex flex-row justify-center")} onPress={callback}>
