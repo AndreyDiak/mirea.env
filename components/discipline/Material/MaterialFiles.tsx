@@ -7,9 +7,8 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserTheme } from "../../../features/userSlice";
-import { useMaterialDocuments } from "../../../hooks";
+import { useMaterialDocuments, useTheme } from "../../../hooks";
 import { isEmpty } from "../../../utils";
-import { returnHexCode } from "../../../utils/returnHexCodes";
 import { Loader } from "../../common";
 
 interface Props {
@@ -20,6 +19,8 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
    const tw = useTailwind();
    const theme = useSelector(selectUserTheme);
    const { sources, loading } = useMaterialDocuments(materialId);
+
+   const { THEME_MAIN } = useTheme();
 
    if (isEmpty(sources) && loading) {
       return <Loader text="Загрузка..." theme={theme} />;
@@ -32,7 +33,7 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
             <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
             {sources.map((document) => (
                <TouchableOpacity key={document.id} onPress={async () => Linking.openURL(document.document)}>
-                  <Text style={[tw("mb-2 font-semibold underline"), { color: returnHexCode(theme) }]}>
+                  <Text style={[tw("mb-2 font-semibold underline"), { color: THEME_MAIN }]}>
                      {document.title}
                   </Text>
                </TouchableOpacity>

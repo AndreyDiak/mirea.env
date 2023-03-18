@@ -7,15 +7,17 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, MaterialCard, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
-import { useFavorites } from "../hooks";
+import { useFavorites, useTheme } from "../hooks";
 import type { Material } from "../typings";
-import { isEmpty, returnHexCode } from "../utils";
+import { isEmpty } from "../utils";
 
 export function FavoritesScreen() {
    const tw = useTailwind();
    const user = useSelector(selectUser);
 
    // const [filter, setFilter] = useState<string>("All");
+
+   const { THEME_MAIN } = useTheme();
 
    const { favorites: favoritesList, loading } = useFavorites();
 
@@ -49,7 +51,7 @@ export function FavoritesScreen() {
                      style={[
                         tw("text-center text-lg px-4 py-2 mt-4 font-extrabold"),
                         {
-                           backgroundColor: returnHexCode(user.theme),
+                           backgroundColor: THEME_MAIN,
                         },
                      ]}
                   >

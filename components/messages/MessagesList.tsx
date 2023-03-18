@@ -7,9 +7,9 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
-import { useMessages } from "../../hooks";
+import { useMessages, useTheme } from "../../hooks";
 import type { DBMessage } from "../../typings";
-import { isEmpty, returnHexCode } from "../../utils";
+import { isEmpty } from "../../utils";
 import { CenteredText } from "../common";
 import { Message } from "./Message";
 import { MessagesScrollToBottom } from "./MessagesScrollToBottom";
@@ -34,9 +34,9 @@ export function MessagesList({
    const tw = useTailwind();
    const user = useSelector(selectUser);
    const flatListRef = useRef(null);
-
-   const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
    const { messages, loading } = useMessages(chatId);
+   const { THEME_MAIN } = useTheme();
+   const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
 
    const scrollToIndex = useCallback(
       (activeMessageIndex: string | null) => {
@@ -75,9 +75,7 @@ export function MessagesList({
       return (
          <CenteredText
             text="Загрузка сообщений"
-            Icon={
-               <Icon name="chat-bubble-outline" type="material" color={returnHexCode(user.theme)} size={30} />
-            }
+            Icon={<Icon name="chat-bubble-outline" type="material" color={THEME_MAIN} size={30} />}
          />
       );
    }
@@ -86,9 +84,7 @@ export function MessagesList({
       return (
          <CenteredText
             text="Напишите первое сообщение!"
-            Icon={
-               <Icon name="chat-bubble-outline" type="material" color={returnHexCode(user.theme)} size={30} />
-            }
+            Icon={<Icon name="chat-bubble-outline" type="material" color={THEME_MAIN} size={30} />}
          />
       );
    }

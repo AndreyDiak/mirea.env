@@ -10,12 +10,7 @@ export const Error: React.FC<{ text: string; theme?: AppTheme }> = React.memo(({
    <CenteredText
       text={text}
       Icon={
-         <Icon
-            name="sentiment-very-dissatisfied"
-            type="material"
-            color={returnHexCode(theme || "blue")}
-            size={30}
-         />
+         <Icon name="sentiment-very-dissatisfied" type="material" color={returnHexCode(theme)} size={30} />
       }
    />
 ));

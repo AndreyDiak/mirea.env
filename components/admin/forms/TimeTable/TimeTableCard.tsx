@@ -5,6 +5,8 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { Card, Icon, Input } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
+import { COLORS_400 } from "../../../../utils";
+
 interface Props {
    dayName: string;
    lessons: string[][];
@@ -30,7 +32,7 @@ export function TimeTableCard({ dayName, lessons, dayIndex, setLessons }: Props)
             <TouchableOpacity onPress={() => setIsCardVisible(!isCardVisible)}>
                <Icon
                   name={!isCardVisible ? "expand-more" : "expand-less"}
-                  color="#60a5fa"
+                  color={COLORS_400.BLUE}
                   containerStyle={tw("bg-gray-50 rounded-full p-1")}
                />
             </TouchableOpacity>
