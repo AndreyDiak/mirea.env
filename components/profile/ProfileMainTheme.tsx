@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserAppTheme, selectUserId } from "../../features/userSlice";
 import { APP_THEME, DB_PATHS } from "../../typings/enums";
-import { DOCS, returnAppTheme, returnDarkenAppTheme, returnLightenAppTheme } from "../../utils";
+import { DOCS, returnAppTheme, returnAppThemeForBorder, returnAppThemeSecondary } from "../../utils";
 import { ColorBlock } from "../common/ColorBlock";
 
 export const ProfileMainTheme: React.FC = React.memo(() => {
@@ -29,14 +29,14 @@ export const ProfileMainTheme: React.FC = React.memo(() => {
             <TouchableOpacity onPress={() => setAppTheme(APP_THEME.LIGHT)}>
                <ColorBlock
                   mainColor={returnAppTheme(APP_THEME.LIGHT)}
-                  secondColor={returnDarkenAppTheme(APP_THEME.LIGHT)}
+                  secondColor={returnAppThemeForBorder(APP_THEME.LIGHT)}
                   isBordered={userAppTheme === APP_THEME.LIGHT}
                />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setAppTheme(APP_THEME.DARK)}>
                <ColorBlock
                   mainColor={returnAppTheme(APP_THEME.DARK)}
-                  secondColor={returnLightenAppTheme(APP_THEME.DARK)}
+                  secondColor={returnAppThemeSecondary(APP_THEME.DARK)}
                   isBordered={userAppTheme === APP_THEME.DARK}
                />
             </TouchableOpacity>

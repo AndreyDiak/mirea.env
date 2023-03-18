@@ -7,14 +7,15 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { DisciplineCard, Loader, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
-import { useDisciplines } from "../hooks";
-import { returnAppThemeText } from "../utils";
+import { useDisciplines, useTheme } from "../hooks";
 
 export function DisciplinesScreen() {
    const tw = useTailwind();
    const user = useSelector(selectUser);
 
    const { disciplines, loading } = useDisciplines();
+
+   const { APP_THEME_TEXT } = useTheme();
 
    if (loading) {
       return <Loader text="Загрузка дисциплин" theme={user.theme} />;
@@ -28,7 +29,7 @@ export function DisciplinesScreen() {
                   style={[
                      tw("text-center font-bold text-xl mb-2"),
                      {
-                        color: returnAppThemeText(user.appTheme),
+                        color: APP_THEME_TEXT,
                      },
                   ]}
                >

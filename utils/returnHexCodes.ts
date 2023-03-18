@@ -1,19 +1,29 @@
 import { AppTheme } from "../typings";
 import { APP_THEME } from "../typings/enums";
+import {
+   COLORS_100,
+   COLORS_400,
+   COLORS_600,
+   COLORS_800,
+   COLORS_THEME_FOR_BORDER,
+   COLORS_THEME_MAIN,
+   COLORS_THEME_MAIN_TEXT,
+   COLORS_THEME_SECONDARY,
+} from "./colors";
 
 // type 100
 export const returnLightenHexCode = (theme: AppTheme) => {
    switch (theme) {
       case "blue":
-         return "#dbeafe";
+         return COLORS_100.BLUE;
       case "emerald":
-         return "#d1fae5";
+         return COLORS_100.EMERALD;
       case "rose":
-         return "#ffe4e6";
+         return COLORS_100.ROSE;
       case "violet":
-         return "#ede9fe";
+         return COLORS_100.VIOLET;
       default:
-         return "#dbeafe";
+         return COLORS_100.BLUE;
    }
 };
 
@@ -21,15 +31,15 @@ export const returnLightenHexCode = (theme: AppTheme) => {
 export const returnHexCode = (theme: AppTheme) => {
    switch (theme) {
       case "blue":
-         return "#60a5fa";
+         return COLORS_400.BLUE;
       case "emerald":
-         return "#34d399";
+         return COLORS_400.EMERALD;
       case "rose":
-         return "#fb7185";
+         return COLORS_400.ROSE;
       case "violet":
-         return "#a78bfa";
+         return COLORS_400.VIOLET;
       default:
-         return "#60a5fa";
+         return COLORS_400.BLUE;
    }
 };
 
@@ -37,15 +47,15 @@ export const returnHexCode = (theme: AppTheme) => {
 export const returnDarkenHexCode = (theme: AppTheme) => {
    switch (theme) {
       case "blue":
-         return "#2563eb";
+         return COLORS_600.BLUE;
       case "emerald":
-         return "#059669";
+         return COLORS_600.EMERALD;
       case "rose":
-         return "#e11d48";
+         return COLORS_600.ROSE;
       case "violet":
-         return "#7c3aed";
+         return COLORS_600.VIOLET;
       default:
-         return "#2563eb";
+         return COLORS_600.BLUE;
    }
 };
 
@@ -53,57 +63,57 @@ export const returnDarkenHexCode = (theme: AppTheme) => {
 export const returnDarkestHexCode = (theme: AppTheme) => {
    switch (theme) {
       case "blue":
-         return "#1e40af";
+         return COLORS_800.BLUE;
       case "emerald":
-         return "#065f46";
+         return COLORS_800.EMERALD;
       case "rose":
-         return "#9f1239";
+         return COLORS_800.ROSE;
       case "violet":
-         return "#5b21b6";
+         return COLORS_800.VIOLET;
       default:
-         return "#1e40af";
+         return COLORS_800.BLUE;
    }
 };
 
 export const returnAppTheme = (theme: APP_THEME) => {
    switch (theme) {
       case APP_THEME.LIGHT:
-         return "#f8fafc";
+         return COLORS_THEME_MAIN.LIGHT;
       case APP_THEME.DARK:
-         return "#1e293b";
+         return COLORS_THEME_MAIN.DARK;
       default:
-         return "#f8fafc";
+         return COLORS_THEME_MAIN.LIGHT;
    }
 };
 export const returnAppThemeText = (theme: APP_THEME) => {
    switch (theme) {
-      case APP_THEME.DARK:
-         return "#f8fafc";
       case APP_THEME.LIGHT:
-         return "#4b5563";
+         return COLORS_THEME_MAIN_TEXT.LIGHT;
+      case APP_THEME.DARK:
+         return COLORS_THEME_MAIN_TEXT.DARK;
       default:
-         return "#f8fafc";
+         return COLORS_THEME_MAIN_TEXT.LIGHT;
    }
 };
 
-export const returnLightenAppTheme = (theme: APP_THEME) => {
+export const returnAppThemeSecondary = (theme: APP_THEME) => {
    switch (theme) {
       case APP_THEME.LIGHT:
-         return "#fff";
+         return COLORS_THEME_SECONDARY.LIGHT;
       case APP_THEME.DARK:
-         return "#475569";
+         return COLORS_THEME_SECONDARY.DARK;
       default:
-         return "#f8fafc";
+         return COLORS_THEME_SECONDARY.LIGHT;
    }
 };
 
-export const returnDarkenAppTheme = (theme: APP_THEME) => {
+export const returnAppThemeForBorder = (theme: APP_THEME) => {
    switch (theme) {
       case APP_THEME.LIGHT:
-         return "#e2e8f0";
+         return COLORS_THEME_FOR_BORDER.LIGHT;
       case APP_THEME.DARK:
-         return "#1c1917";
+         return COLORS_THEME_FOR_BORDER.DARK;
       default:
-         return "#e2e8f0";
+         return COLORS_THEME_FOR_BORDER.LIGHT;
    }
 };

@@ -7,17 +7,19 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserTheme } from "../../features/userSlice";
 import { DBMessage } from "../../typings";
-import { returnDarkestHexCode } from "../../utils";
+import { APP_THEME } from "../../typings/enums";
+import { COLORS_COMMON, COLORS_THEME_SECONDARY, returnAppThemeText, returnDarkestHexCode } from "../../utils";
 
 interface Props {
    reply: DBMessage | null;
    messageEmail: string;
    email: string;
+   appTheme: APP_THEME;
    setBackligthMessage: () => void;
 }
 
 export const MessageReply: React.FC<Props> = React.memo(
-   ({ reply, email, messageEmail, setBackligthMessage }) => {
+   ({ reply, email, messageEmail, setBackligthMessage, appTheme }) => {
       const tw = useTailwind();
       const theme = useSelector(selectUserTheme);
 
@@ -39,14 +41,14 @@ export const MessageReply: React.FC<Props> = React.memo(
                      <Text
                         style={{
                            fontWeight: "800",
-                           color: isMyMessage ? "#52525b" : "#fff",
+                           color: isMyMessage ? returnAppThemeText(appTheme) : COLORS_THEME_SECONDARY.LIGHT,
                         }}
                      >
                         {reply.displayName}
                      </Text>
                      <Text
                         style={{
-                           color: isMyMessage ? "#9ca3af" : "#e5e7eb",
+                           color: isMyMessage ? COLORS_COMMON.DISABLED : "#e5e7eb",
                         }}
                      >
                         {reply.text}

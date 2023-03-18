@@ -8,10 +8,9 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { deleteMaterial } from "../../../api";
 import { selectUserAppTheme } from "../../../features/userSlice";
-import { useFavorite } from "../../../hooks";
+import { useFavorite, useTheme } from "../../../hooks";
 import type { AppTheme, Material } from "../../../typings";
 import { APP_THEME } from "../../../typings/enums";
-import { returnAppThemeText, returnDarkenAppTheme, returnLightenAppTheme } from "../../../utils";
 import { MaterialFiles } from "./MaterialFiles";
 import { MaterialMenu } from "./MaterialMenu";
 
@@ -25,14 +24,15 @@ type Props = {
 export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {
    const tw = useTailwind();
    const userAppTheme = useSelector(selectUserAppTheme);
+   const { APP_THEME_SECONDARY, APP_THEME_BORDER, APP_THEME_TEXT } = useTheme();
    const isFavorite = useFavorite(userId, material.id);
 
    return (
       <Card
          key={material.id}
          containerStyle={{
-            backgroundColor: returnLightenAppTheme(userAppTheme),
-            borderColor: returnDarkenAppTheme(userAppTheme),
+            backgroundColor: APP_THEME_SECONDARY,
+            borderColor: APP_THEME_BORDER,
             borderWidth: userAppTheme === APP_THEME.LIGHT ? 1 : 0,
             borderRadius: 5,
          }}
@@ -41,7 +41,7 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
             style={[
                tw("font-bold text-lg"),
                {
-                  color: returnAppThemeText(userAppTheme),
+                  color: APP_THEME_TEXT,
                },
             ]}
          >
@@ -52,7 +52,7 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
             style={[
                tw("mb-4"),
                {
-                  color: returnAppThemeText(userAppTheme),
+                  color: APP_THEME_TEXT,
                },
             ]}
          >

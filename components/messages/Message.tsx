@@ -7,8 +7,8 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { db } from "../../firebase";
 import { AppTheme, DBMessage } from "../../typings";
-import { DB_PATHS } from "../../typings/enums";
-import { returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
+import { APP_THEME, DB_PATHS } from "../../typings/enums";
+import { returnAppThemeSecondary, returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
 import { UserChatAvatar } from "../common";
 import { MessageData } from "./MessageData";
 import { MessageReply } from "./MessageReply";
@@ -18,6 +18,7 @@ interface Props {
    email: string;
    chatId: string;
    theme: AppTheme;
+   appTheme: APP_THEME;
    nextMessageEmail: string | null;
    isBacklight: boolean;
    isLastMessage: boolean;
@@ -25,7 +26,17 @@ interface Props {
 }
 
 export const Message: React.FC<Props> = React.memo(
-   ({ message, email, nextMessageEmail, isBacklight, chatId, theme, setBackligthMessage, isLastMessage }) => {
+   ({
+      message,
+      email,
+      nextMessageEmail,
+      isBacklight,
+      chatId,
+      theme,
+      setBackligthMessage,
+      isLastMessage,
+      appTheme,
+   }) => {
       const tw = useTailwind();
 
       const [replyingMessage, setReplyingMessage] = useState<DBMessage>(null);
@@ -33,9 +44,6 @@ export const Message: React.FC<Props> = React.memo(
       const isNextMessageOwner = nextMessageEmail === message.email;
       const isMessageOwner = message.email === email;
 
-      if (isLastMessage) {
-         console.log("");
-      }
       /**
        * гайд по отступам в messages
        * paddingTop -> 15 - если это ласт смс пользователя, 5 - в остальных случаях
@@ -67,7 +75,7 @@ export const Message: React.FC<Props> = React.memo(
                paddingHorizontal: 20,
                paddingVertical: 1,
                justifyContent: isMessageOwner ? "flex-end" : "flex-start",
-               backgroundColor: isBacklight ? returnLightenHexCode(theme) : "transparent",
+               backgroundColor: isBacklight ? returnAppThemeSecondary(appTheme) : "transparent",
             }}
          >
             <View
@@ -80,7 +88,7 @@ export const Message: React.FC<Props> = React.memo(
                   marginBottom: isLastMessage ? 25 : isNextMessageOwner ? 5 : 15,
                   paddingLeft: isMessageOwner || isNextMessageOwner ? 10 : 25,
                   paddingRight: !isMessageOwner || isNextMessageOwner ? 10 : 25,
-                  backgroundColor: isMessageOwner ? "white" : returnHexCode(theme),
+                  backgroundColor: isMessageOwner ? returnAppThemeSecondary(appTheme) : returnHexCode(theme),
                }}
             >
                {/* Replying message... */}
@@ -88,10 +96,16 @@ export const Message: React.FC<Props> = React.memo(
                   reply={replyingMessage}
                   messageEmail={message.email}
                   email={email}
+                  appTheme={appTheme}
                   setBackligthMessage={setBackligthMessage}
                />
 
-               <MessageData message={message} email={email} isNextMessageOwner={isNextMessageOwner} />
+               <MessageData
+                  message={message}
+                  email={email}
+                  isNextMessageOwner={isNextMessageOwner}
+                  appTheme={appTheme}
+               />
 
                {/* Message Owner Avatar... */}
                {!isNextMessageOwner && (

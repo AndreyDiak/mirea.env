@@ -9,8 +9,9 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { addMaterial } from "../../../api";
 import { selectUser } from "../../../features/userSlice";
+import { useTheme } from "../../../hooks";
 import { NewDocument } from "../../../typings";
-import { isEmpty, returnHexCode } from "../../../utils";
+import { COLORS_COMMON, isEmpty } from "../../../utils";
 
 type Props = {
    disciplineId: string;
@@ -19,6 +20,8 @@ type Props = {
 
 export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    const tw = useTailwind();
+
+   const { APP_THEME_SECONDARY, APP_THEME_BORDER, APP_THEME_TEXT, THEME_MAIN } = useTheme();
 
    const [isLoading, setIsLoading] = useState(false);
    const [formTitle, setFormTitle] = useState("");
@@ -64,18 +67,33 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
 
    return (
       <View style={tw("mt-24")}>
-         <Card>
+         <Card
+            containerStyle={{
+               backgroundColor: APP_THEME_SECONDARY,
+               borderColor: APP_THEME_BORDER,
+            }}
+         >
             <Input
                label="Тема"
                placeholder="Введите название темы..."
-               inputStyle={tw("text-sm")}
+               inputStyle={[
+                  tw("text-sm"),
+                  {
+                     color: APP_THEME_TEXT,
+                  },
+               ]}
                value={formTitle}
                onChangeText={setFormTitle}
             />
             <Input
                label="Описание"
                placeholder="Введите описание..."
-               inputStyle={tw("text-sm p-0 m-0")}
+               inputStyle={[
+                  tw("text-sm p-0 m-0"),
+                  {
+                     color: APP_THEME_TEXT,
+                  },
+               ]}
                value={formText}
                onChangeText={setFormText}
             />
@@ -84,17 +102,32 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
             {!isEmpty(documents) && (
                <>
                   <Card.Divider />
-                  <Card.Title>Список материалов...</Card.Title>
+                  <Card.Title
+                     style={{
+                        color: APP_THEME_TEXT,
+                     }}
+                  >
+                     Список материалов...
+                  </Card.Title>
 
                   {documents.map((document, index) => (
                      <View key={document.uri} style={tw("flex flex-row justify-between items-center mb-2")}>
-                        <Text style={tw("text-xs mb-2 w-5/6")}>{document.name}</Text>
+                        <Text
+                           style={[
+                              tw("text-xs mb-2 w-5/6"),
+                              {
+                                 color: APP_THEME_TEXT,
+                              },
+                           ]}
+                        >
+                           {document.name}
+                        </Text>
                         <TouchableOpacity
                            onPress={() =>
                               setDocuments(documents.length > 1 ? documents.splice(index, 1) : [])
                            }
                         >
-                           <Icon name="close" type="material" color="#374151" size={20} />
+                           <Icon name="close" type="material" color={APP_THEME_TEXT} size={20} />
                         </TouchableOpacity>
                      </View>
                   ))}
@@ -104,9 +137,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
             <Card.Divider />
             {/* add documents handler */}
             <TouchableOpacity onPress={addDocument}>
-               <Text style={[tw("text-center mb-4"), { color: returnHexCode(user.theme) }]}>
-                  Добавить файлы
-               </Text>
+               <Text style={[tw("text-center mb-4"), { color: THEME_MAIN }]}>Добавить файлы</Text>
             </TouchableOpacity>
 
             <Card.Divider />
@@ -116,7 +147,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
                   style={[
                      tw("text-white font-semibold px-4 py-2 rounded-md"),
                      {
-                        backgroundColor: !isLoading ? returnHexCode(user.theme) : "#9ca3af",
+                        backgroundColor: !isLoading ? THEME_MAIN : COLORS_COMMON.DISABLED,
                      },
                   ]}
                >

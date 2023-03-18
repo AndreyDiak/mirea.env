@@ -5,17 +5,13 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useAddUserData } from "../../hooks";
-import type { AppTheme } from "../../typings";
 import { UType } from "../../typings/enums";
-import { returnHexCode } from "../../utils/returnHexCodes";
 
 interface Props {
-   name: string;
-   female: string;
-   theme: AppTheme;
+   openModal(): void;
 }
 
-export const ProfileBio: React.FC<Props> = React.memo(({ theme }) => {
+export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
    const tw = useTailwind();
 
    const { groupName, disciplinesList, loading, uType, institutes } = useAddUserData();
@@ -32,8 +28,8 @@ export const ProfileBio: React.FC<Props> = React.memo(({ theme }) => {
          return <Text style={tw("text-[18px]")}>Загрузка</Text>;
       }
       return (
-         <TouchableOpacity>
-            <Text style={[tw("text-[18px] font-bold"), { color: returnHexCode(theme) }]}>
+         <TouchableOpacity onPress={openModal}>
+            <Text style={tw("text-[18px] font-bold text-white")}>
                ({disciplinesList.length}) {disciplinesList.length < 5 ? "Предмета" : "Предметов"}
             </Text>
          </TouchableOpacity>
@@ -43,8 +39,8 @@ export const ProfileBio: React.FC<Props> = React.memo(({ theme }) => {
    const renderData = () => {
       if (uType === UType.STUDENT) {
          return (
-            <View style={tw("")}>
-               <View style={tw("flex flex-row  items-center justify-between")}>
+            <View>
+               <View style={tw("flex flex-row items-center justify-between")}>
                   <Text style={tw("text-white font-semibold text-lg")}>Институт</Text>
                   {renderLoadingItem(institutes[0])}
                </View>
@@ -57,8 +53,10 @@ export const ProfileBio: React.FC<Props> = React.memo(({ theme }) => {
       }
       return (
          <View>
-            <Text style={tw("mb-2 text-gray-800")}>Вы вёдете</Text>
-            {renderDisciplinesList()}
+            <View style={tw("flex flex-row items-center justify-between")}>
+               <Text style={tw("mb-2 text-white font-semibold text-lg")}>Вы вёдете</Text>
+               {renderDisciplinesList()}
+            </View>
          </View>
       );
    };

@@ -8,10 +8,9 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
-import { useChat } from "../../hooks";
+import { useChat, useTheme } from "../../hooks";
 import type { Discipline, DisciplineScreenNavigatorProp } from "../../typings";
 import { APP_THEME, UType } from "../../typings/enums";
-import { returnAppThemeText, returnDarkenAppTheme, returnHexCode, returnLightenAppTheme } from "../../utils";
 
 type Props = {
    discipline: Discipline;
@@ -22,13 +21,15 @@ export function DisciplineCard({ discipline }: Props) {
    const navigation = useNavigation<DisciplineScreenNavigatorProp>();
    const user = useSelector(selectUser);
 
+   const { APP_THEME_BORDER, APP_THEME_SECONDARY, APP_THEME_TEXT, THEME_MAIN } = useTheme();
+
    const { chat, loading } = useChat(discipline.id);
 
    return (
       <Card
          containerStyle={{
-            backgroundColor: returnLightenAppTheme(user.appTheme),
-            borderColor: returnDarkenAppTheme(user.appTheme),
+            backgroundColor: APP_THEME_SECONDARY,
+            borderColor: APP_THEME_BORDER,
             borderWidth: user.appTheme === APP_THEME.LIGHT ? 1 : 0,
             borderRadius: 5,
          }}
@@ -37,7 +38,7 @@ export function DisciplineCard({ discipline }: Props) {
             style={[
                tw("font-bold"),
                {
-                  color: returnAppThemeText(user.appTheme),
+                  color: APP_THEME_TEXT,
                },
             ]}
          >
@@ -53,13 +54,13 @@ export function DisciplineCard({ discipline }: Props) {
                   style={[
                      tw("underline font-bold mr-2"),
                      {
-                        color: returnHexCode(user.theme),
+                        color: THEME_MAIN,
                      },
                   ]}
                >
                   Материалы
                </Text>
-               <Icon name="inventory" type="material" color={returnHexCode(user.theme)} />
+               <Icon name="inventory" type="material" color={THEME_MAIN} />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -81,13 +82,13 @@ export function DisciplineCard({ discipline }: Props) {
                      // tw("font-bold text-gray-600 mr-2"),
                      tw("font-bold mr-2"),
                      {
-                        color: returnAppThemeText(user.appTheme),
+                        color: APP_THEME_TEXT,
                      },
                   ]}
                >
                   Перейти в чат
                </Text>
-               <Icon name="textsms" type="material" color={returnAppThemeText(user.appTheme)} />
+               <Icon name="textsms" type="material" color={APP_THEME_TEXT} />
             </TouchableOpacity>
          </View>
       </Card>

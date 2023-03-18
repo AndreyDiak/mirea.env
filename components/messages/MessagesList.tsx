@@ -131,6 +131,7 @@ export function MessagesList({
                      message={message}
                      email={user.email}
                      theme={user.theme}
+                     appTheme={user.appTheme}
                      nextMessageEmail={messages[index + 1]?.email ?? null}
                      isBacklight={message.id === selectedMessageId || message.id === backligthMessage}
                      chatId={chatId}

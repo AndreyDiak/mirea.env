@@ -3,12 +3,11 @@ import React, { useEffect, useRef } from "react";
 import { TextInput, TouchableOpacity, View } from "react-native";
 
 import { Icon } from "@rneui/themed";
-import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserAppTheme, selectUserTheme } from "../../../features/userSlice";
+import { useTheme } from "../../../hooks";
 import { DBMessage } from "../../../typings";
-import { returnAppThemeText, returnHexCode, returnLightenAppTheme } from "../../../utils";
+import { COLORS_COMMON } from "../../../utils";
 import { CustomReplyField } from "./CustomReplyField";
 
 interface Props {
@@ -28,8 +27,8 @@ interface Props {
 export const CustomInputField: React.FC<Props> = React.memo(
    ({ value, loading, isReplying, replyData, placeholder, setValue, onSubmit, onFocus }) => {
       const tw = useTailwind();
-      const theme = useSelector(selectUserTheme);
-      const appTheme = useSelector(selectUserAppTheme);
+
+      const { APP_THEME_SECONDARY, APP_THEME_TEXT, THEME_MAIN } = useTheme();
 
       const ref = useRef(null);
 
@@ -51,7 +50,7 @@ export const CustomInputField: React.FC<Props> = React.memo(
                style={[
                   tw("w-full flex flex-row items-center"),
                   {
-                     backgroundColor: returnLightenAppTheme(appTheme),
+                     backgroundColor: APP_THEME_SECONDARY,
                   },
                ]}
             >
@@ -61,7 +60,7 @@ export const CustomInputField: React.FC<Props> = React.memo(
                   style={[
                      tw("flex-1 mr-4 p-3 h-12 text-[18px]"),
                      {
-                        color: returnAppThemeText(appTheme),
+                        color: APP_THEME_TEXT,
                      },
                   ]}
                   placeholder={placeholder ?? "Введите текст..."}
@@ -72,7 +71,7 @@ export const CustomInputField: React.FC<Props> = React.memo(
                   <Icon
                      name="send"
                      type="material"
-                     color={!loading ? returnHexCode(theme) : "#9ca3af"}
+                     color={!loading ? THEME_MAIN : COLORS_COMMON.DISABLED}
                      size={30}
                   />
                </TouchableOpacity>

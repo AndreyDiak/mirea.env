@@ -18,9 +18,9 @@ export function SimpleModal() {
 
    return (
       <Dialog isVisible onPressOut={closeModal} overlayStyle={tw("")}>
-         <View style={tw("w-full  flex flex-col items-center")}>
+         <View style={tw("w-full flex flex-col items-center")}>
             <Text style={tw("font-bold text-xl mb-2")}>{title}</Text>
-            <Text>{children()}</Text>
+            {children()}
          </View>
       </Dialog>
    );

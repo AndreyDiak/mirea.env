@@ -8,29 +8,29 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { addMessage } from "../api";
-import { Loader } from "../components";
+import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
-import { useChats } from "../hooks";
+import { useChats, useTheme } from "../hooks";
 import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
-import { returnHexCode } from "../utils/returnHexCodes";
 
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
 
 export function ChatsScreen() {
+   const {
+      params: { discipline },
+   } = useRoute<ChatsScreenRouteProp>();
+
    const tw = useTailwind();
 
    const navigation = useNavigation<ChatsScreenNavigatorProp>();
 
    const user = useSelector(selectUser);
 
+   const { APP_THEME_TEXT, APP_THEME_BORDER, APP_THEME_SECONDARY, THEME_MAIN } = useTheme();
+
    const [message, setMessage] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
-
-   const {
-      params: { discipline },
-   } = useRoute<ChatsScreenRouteProp>();
-
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
@@ -63,42 +63,63 @@ export function ChatsScreen() {
    }
 
    return (
-      <View style={tw("relative h-full")}>
-         <View>
-            <Text style={tw("text-center text-lg pt-2")}>Доступные чаты</Text>
-         </View>
-         {/* список всех доступных чатов подключенных к данной дисциплине */}
-         <FlatList
-            data={chats}
-            renderItem={({ item: chat }) => (
-               <Card key={chat.id}>
-                  <View style={tw("flex flex-row justify-between")}>
-                     <Text>
-                        Группа: <Text style={tw("font-bold")}>{chat.groupName}</Text>
-                     </Text>
-                     <TouchableOpacity
-                        onPress={() =>
-                           navigation.navigate("Chat", {
-                              chatId: chat.id,
-                              groupName: chat.groupName,
-                           })
-                        }
-                     >
-                        <Text style={[tw("underline"), { color: returnHexCode(user.theme) }]}>Перейти</Text>
-                     </TouchableOpacity>
-                  </View>
-               </Card>
-            )}
-         />
-         <View style={tw("bg-red-100")}>
-            <CustomInputField
-               placeholder="Написать всем группам..."
-               value={message}
-               loading={loading}
-               setValue={setMessage}
-               onSubmit={sendMessageToAllGroups}
+      <ScreenTemplate>
+         <>
+            <View>
+               <Text
+                  style={[
+                     tw("text-center text-lg pt-2"),
+                     {
+                        color: APP_THEME_TEXT,
+                     },
+                  ]}
+               >
+                  Доступные чаты
+               </Text>
+            </View>
+            {/* список всех доступных чатов подключенных к данной дисциплине */}
+            <FlatList
+               data={chats}
+               renderItem={({ item: chat }) => (
+                  <Card
+                     key={chat.id}
+                     containerStyle={{
+                        backgroundColor: APP_THEME_SECONDARY,
+                        borderColor: APP_THEME_BORDER,
+                     }}
+                  >
+                     <View style={tw("flex flex-row justify-between")}>
+                        <Text
+                           style={{
+                              color: APP_THEME_BORDER,
+                           }}
+                        >
+                           Группа: <Text style={tw("font-bold")}>{chat.groupName}</Text>
+                        </Text>
+                        <TouchableOpacity
+                           onPress={() =>
+                              navigation.navigate("Chat", {
+                                 chatId: chat.id,
+                                 groupName: chat.groupName,
+                              })
+                           }
+                        >
+                           <Text style={[tw("underline"), { color: THEME_MAIN }]}>Перейти</Text>
+                        </TouchableOpacity>
+                     </View>
+                  </Card>
+               )}
             />
-         </View>
-      </View>
+            <View style={tw("bg-red-100")}>
+               <CustomInputField
+                  placeholder="Написать всем группам..."
+                  value={message}
+                  loading={loading}
+                  setValue={setMessage}
+                  onSubmit={sendMessageToAllGroups}
+               />
+            </View>
+         </>
+      </ScreenTemplate>
    );
 }

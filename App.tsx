@@ -29,11 +29,11 @@ export default function App() {
       // @ts-ignore TaiwindProvider Type Defenition...
       <TailwindProvider utilities={utilities}>
          <Provider store={store}>
-            <GlobalModal>
-               <NavigationContainer>
+            <NavigationContainer>
+               <GlobalModal>
                   <RootNavigator />
-               </NavigationContainer>
-            </GlobalModal>
+               </GlobalModal>
+            </NavigationContainer>
          </Provider>
       </TailwindProvider>
    );
