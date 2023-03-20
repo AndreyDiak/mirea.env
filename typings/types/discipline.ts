@@ -1,0 +1,10 @@
+export interface Discipline {
+   id: string;
+   name: string;
+   instituteId: string;
+}
+
+export interface FB_Discipline {
+   name: string;
+   institute_id: string;
+}

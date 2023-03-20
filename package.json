@@ -17,6 +17,7 @@
     "@react-navigation/bottom-tabs": "^6.4.0",
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
+    "@react-navigation/stack": "^6.3.16",
     "@reduxjs/toolkit": "^1.8.6",
     "@rneui/base": "^4.0.0-rc.6",
     "@rneui/themed": "^4.0.0-rc.6",
@@ -26,6 +27,7 @@
     "expo-clipboard": "~3.1.0",
     "expo-document-picker": "~10.3.0",
     "expo-image-picker": "~13.3.1",
+    "expo-linear-gradient": "~11.4.0",
     "expo-status-bar": "~1.4.0",
     "firebase": "^9.6.11",
     "moment": "^2.29.4",
@@ -42,8 +44,7 @@
     "react-native-web": "^0.18.9",
     "react-redux": "^8.0.4",
     "remove": "^0.1.5",
-    "tailwind-rn": "^4.2.0",
-    "expo-linear-gradient": "~11.4.0"
+    "tailwind-rn": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

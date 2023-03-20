@@ -2,7 +2,7 @@ import { addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { storage } from "../../../firebase";
-import { NewDocument } from "../../../typings";
+import { Document } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, createCollection } from "../../../utils/createDBQuery";
 
@@ -11,7 +11,7 @@ export const addMaterial = async (
    text: string,
    ownerId: string,
    disciplineId: string,
-   documents: NewDocument[],
+   documents: Document[],
 ) => {
    await addDoc(createCollection(DB_PATHS.MATERIALS), {
       title,

@@ -1,20 +1,14 @@
-import { Day, Lesson, LessonDay } from "../../typings";
+import { Lesson } from "../../typings";
 
-const days: Day[] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
-
-export function getEmptyLessons(): Lesson[] {
+export function getEmptyLessons(dayIndex: number): Omit<Lesson, "id">[] {
    return Array(6)
       .fill(null)
       .map((_, index) => ({
          name: "",
          cabinet: "",
-         lessonIndex: index + 1,
+         dayIndex,
+         orderIndex: index + 1,
+         groupId: null,
+         teachersIds: null,
       }));
-}
-
-export function getEmptyTimetable(): LessonDay[] {
-   return days.map((day) => ({
-      day,
-      lessons: getEmptyLessons(),
-   }));
 }

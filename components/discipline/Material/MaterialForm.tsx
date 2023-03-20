@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMaterial } from "../../../api";
 import { selectUser } from "../../../features/userSlice";
 import { useTheme } from "../../../hooks";
-import { NewDocument } from "../../../typings";
+import { Document } from "../../../typings";
 import { COLORS_COMMON, isEmpty } from "../../../utils";
 
 type Props = {
@@ -26,7 +26,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    const [isLoading, setIsLoading] = useState(false);
    const [formTitle, setFormTitle] = useState("");
    const [formText, setFormText] = useState("");
-   const [documents, setDocuments] = useState<NewDocument[]>([]);
+   const [documents, setDocuments] = useState<Document[]>([]);
    const [error, setError] = useState("");
 
    const user = useSelector(selectUser);
@@ -37,7 +37,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
          copyToCacheDirectory: false,
       }).then(async (docs) => {
          if (docs.type === "success") {
-            const document: NewDocument = {
+            const document: Document = {
                name: docs.name,
                uri: docs.uri,
                type: docs.mimeType,
