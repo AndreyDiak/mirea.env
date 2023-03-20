@@ -1,57 +1,56 @@
 import React, { useState } from "react";
 
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
-import { Card, Icon, Input } from "@rneui/themed";
+import { Card, Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
+import { Lesson, LessonDay } from "../../../../typings";
 import { COLORS_400 } from "../../../../utils";
+import { MODAL_TYPES, useGlobalModalContext } from "../../../common";
+import { TimeTableModal } from "./modal/TimeTableModal";
 
 interface Props {
    dayName: string;
-   lessons: string[][];
    dayIndex: number;
-   setLessons: (lessons: string[][]) => void;
+   timetable: LessonDay[];
+   handleTimetable: (dayIndex: number, newLessons: Lesson[]) => void;
 }
 
-export function TimeTableCard({ dayName, lessons, dayIndex, setLessons }: Props) {
+export function TimeTableCard({ dayName, dayIndex, timetable, handleTimetable }: Props) {
    const tw = useTailwind();
    const [isCardVisible, setIsCardVisible] = useState(false);
 
-   // Обновляем поле с названием предмета...
-   const changeText = (lessonName: string, lessonIndex: number) => {
-      const newTimeTable = [...lessons];
-      newTimeTable[dayIndex][lessonIndex] = lessonName;
-      setLessons(newTimeTable);
+   const { openModal } = useGlobalModalContext();
+
+   const openTimetableModal = () => {
+      openModal(MODAL_TYPES.SIMPLE_MODAL, {
+         title: dayName,
+         // eslint-disable-next-line react/no-unstable-nested-components
+         children: () => (
+            <TimeTableModal
+               dayIndex={dayIndex}
+               lessons={timetable[dayIndex].lessons}
+               handleTimetable={handleTimetable}
+            />
+         ),
+      });
    };
 
    return (
       <Card>
-         <View style={tw("flex flex-row justify-between items-center")}>
-            <Text>{dayName}</Text>
-            <TouchableOpacity onPress={() => setIsCardVisible(!isCardVisible)}>
-               <Icon
-                  name={!isCardVisible ? "expand-more" : "expand-less"}
-                  color={COLORS_400.BLUE}
-                  containerStyle={tw("bg-gray-50 rounded-full p-1")}
-               />
-            </TouchableOpacity>
-         </View>
-         {isCardVisible && (
-            <FlatList
-               data={lessons[dayIndex]}
-               renderItem={({ item: lesson, index }) => {
-                  return (
-                     <Input
-                        key={index}
-                        value={lesson}
-                        placeholder={`${index + 1} lesson`}
-                        onChangeText={(text) => changeText(text, index)}
-                     />
-                  );
-               }}
-            />
-         )}
+         <TouchableOpacity onPress={openTimetableModal}>
+            <View style={tw("flex flex-row justify-between items-center")}>
+               <Text>{dayName}</Text>
+               <TouchableOpacity>
+                  <Icon
+                     name={!isCardVisible ? "expand-more" : "expand-less"}
+                     color={COLORS_400.BLUE}
+                     containerStyle={tw("bg-gray-50 rounded-full p-1")}
+                  />
+               </TouchableOpacity>
+            </View>
+         </TouchableOpacity>
       </Card>
    );
 }

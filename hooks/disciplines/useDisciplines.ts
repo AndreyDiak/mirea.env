@@ -29,7 +29,7 @@ export const useDisciplines = () => {
                const DBdisciplines = await getAllDataWithFilter<Discipline>(q);
 
                setDisciplines(DBdisciplines);
-            } else {
+            } else if (user.type === UType.TEACHER) {
                const DBdisciplines: Discipline[] = [];
                await Promise.all(
                   user?.disciplines.map(async (d) => {

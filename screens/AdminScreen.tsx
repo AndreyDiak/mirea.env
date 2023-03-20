@@ -43,10 +43,10 @@ export function AdminScreen() {
    };
 
    return (
-      <View style={tw("pt-10 px-4")}>
+      <View style={tw("pt-10 px-4 flex flex-col")}>
          {/* Screen title */}
          <View style={tw("flex flex-row items-center text-lg justify-between")}>
-            <Text style={tw("my-2 text-center text-xl font-semibold")}>Админская панель</Text>
+            <Text style={tw("my-2 text-center text-xl font-semibold")}>Панель администратора</Text>
             <TouchableOpacity onPress={() => signOut(auth)}>
                <Text style={tw("underline text-blue-400 font-bold")}>Выйти</Text>
             </TouchableOpacity>
@@ -110,7 +110,7 @@ export function AdminScreen() {
             </Card>
          </View>
          {/* Forms */}
-         <View>{renderForm()}</View>
+         <View style={tw("max-h-[350px]")}>{renderForm()}</View>
       </View>
    );
 }
