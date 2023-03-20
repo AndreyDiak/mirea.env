@@ -44,20 +44,16 @@ export function GroupForm() {
                title="Выбрать институт"
                list={institutes}
                selectedItem={selectedInstitute}
+               previewText={selectedInstitute?.shortName}
                setSelectedItem={setSelectedInstitute as (item: Institute) => void}
             />
             {!!selectedInstitute && (
-               <>
-                  <Text style={tw("text-center mb-4")}>
-                     Институт: <Text style={tw("font-bold")}>{selectedInstitute.shortName}</Text>
-                  </Text>
-                  <Input
-                     label="Название группы"
-                     value={groupName}
-                     onChangeText={setGroupName}
-                     placeholder="group_name"
-                  />
-               </>
+               <Input
+                  label="Название группы"
+                  value={groupName}
+                  onChangeText={setGroupName}
+                  placeholder="ГРУППА-01-23"
+               />
             )}
 
             <Button title="Добавить" callback={addGroup} disabled={loading} />

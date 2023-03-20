@@ -31,7 +31,7 @@ export function Button({ title, callback, disabled, disabledText }: Props) {
                },
             ]}
          >
-            {disabled ? disabledText ?? "Загрузка..." : title}
+            {disabled ? disabledText || "Загрузка..." : title}
          </Text>
       </TouchableOpacity>
    );

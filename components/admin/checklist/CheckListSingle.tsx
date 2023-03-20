@@ -15,11 +15,12 @@ interface Props<T> {
    title: string;
    list: T[];
    selectedItem: T;
+   previewText?: string;
    setSelectedItem: (item: T) => void;
 }
 
 export const CheckListSingle: React.FC<Props<Item>> = React.memo(
-   ({ title, list, selectedItem, setSelectedItem }) => {
+   ({ title, list, selectedItem, previewText, setSelectedItem }) => {
       const tw = useTailwind();
       const [isListVisible, setIsListVisible] = useState(false);
 
@@ -30,16 +31,20 @@ export const CheckListSingle: React.FC<Props<Item>> = React.memo(
 
       return (
          <View style={tw("mb-4")}>
-            <View style={tw("flex flex-row w-full items-center justify-between")}>
-               <Text style={tw("text-center font-semibold")}>{title}</Text>
-               <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
+            <TouchableOpacity onPress={() => setIsListVisible(!isListVisible)}>
+               <View style={tw("flex flex-row w-full items-center justify-between")}>
+                  <View style={tw("flex flex-row")}>
+                     <Text style={tw("text-center font-semibold mr-2")}>{title}</Text>
+                     {selectedItem ? <Text style={tw("font-bold")}>({previewText})</Text> : null}
+                  </View>
+
                   <Icon
                      name={!isListVisible ? "expand-more" : "expand-less"}
                      color={COLORS_400.BLUE}
                      containerStyle={tw("bg-gray-50 rounded-full p-1")}
                   />
-               </TouchableOpacity>
-            </View>
+               </View>
+            </TouchableOpacity>
 
             {isListVisible && (
                <FlatList

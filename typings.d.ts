@@ -39,12 +39,18 @@ interface Institute {
 
 type Day = "Понедельник" | "Вторник" | "Среда" | "Четверг" | "Пятница" | "Суббота";
 
+interface Lesson {
+   name: string;
+   cabinet: string;
+}
+
 interface LessonDay {
    day: Day;
-   lessons: string[];
+   lessons: Lesson[];
 }
 
 interface TimeTable {
+   id: string;
    groupId: string;
    timetable: LessonDay[];
 }
