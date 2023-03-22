@@ -26,7 +26,7 @@ export const useAddUserData = () => {
          } else if (user.type === UType.TEACHER) {
             setLoading(true);
             const list = await Promise.all(
-               user?.disciplines.map(async (dId) => {
+               user?.disciplinesIds.map(async (dId) => {
                   const discipline = await getDataById<Discipline>(dId, DB_PATHS.DISCIPLINES);
                   return discipline.name;
                }),
@@ -37,7 +37,7 @@ export const useAddUserData = () => {
       };
       getData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [(user as Teacher).disciplines, (user as Student).groupId, user.type]);
+   }, [(user as Teacher).disciplinesIds, (user as Student).groupId, user.type]);
 
    return {
       groupName: gName,

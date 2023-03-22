@@ -15,6 +15,7 @@ export const LoginDialogInstitutes: React.FC = React.memo(() => {
    const { institutes, loading } = useInstitutes();
    const dispatch = useDispatch();
    const myInstitutes = useSelector(selectUserInstitutes);
+
    const toggleInstitute = (institute: Institute) => {
       dispatch(setInstitutes({ institute }));
    };

@@ -32,7 +32,7 @@ export const useDisciplines = () => {
             } else if (user.type === UType.TEACHER) {
                const DBdisciplines: Discipline[] = [];
                await Promise.all(
-                  user?.disciplines.map(async (d) => {
+                  user?.disciplinesIds.map(async (d) => {
                      const discipline = await getDataById<Discipline>(d, DB_PATHS.DISCIPLINES);
                      DBdisciplines.push(discipline);
                   }),

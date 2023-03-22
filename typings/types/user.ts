@@ -1,7 +1,7 @@
 import { APP_THEME, USER_THEME, UType } from "../enums";
 
 export interface User {
-   id: string;
+   id?: string;
    email: string;
    name: string;
    female: string;
@@ -17,7 +17,8 @@ export interface Student extends User {
    type: UType.STUDENT;
 }
 
-export interface FB_Student {
+export interface FBStudent {
+   id?: string;
    email: string;
    name: string;
    female: string;
@@ -36,7 +37,8 @@ export interface Teacher extends User {
    type: UType.TEACHER;
 }
 
-export interface FB_Teacher {
+export interface FBTeacher {
+   id?: string;
    email: string;
    name: string;
    female: string;
@@ -48,3 +50,7 @@ export interface FB_Teacher {
    institutes_ids: string[] | undefined;
    type: UType.TEACHER;
 }
+
+export type AppUser = Student | Teacher;
+
+export type FBAppUser = FBStudent | FBTeacher;

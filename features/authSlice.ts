@@ -3,8 +3,8 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "../store";
-import type { AppTheme, Discipline, Group, Institute } from "../typings";
-import { UType } from "../typings/enums";
+import type { Discipline, Group, Institute } from "../typings";
+import { USER_THEME, UType } from "../typings/enums";
 
 export interface AuthState {
    email: string;
@@ -13,7 +13,7 @@ export interface AuthState {
    name: string;
    female: string;
    img: string;
-   theme: AppTheme;
+   theme: USER_THEME;
    institutes: Institute[]; // array of institutes
    // STUDENT
    group: Group; // group obj
@@ -28,7 +28,7 @@ const initialState: AuthState = {
    name: null,
    female: null,
    img: "",
-   theme: "blue",
+   theme: USER_THEME.BLUE,
    group: null,
    disciplines: [],
    institutes: [],

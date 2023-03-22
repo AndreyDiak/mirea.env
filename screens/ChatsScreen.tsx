@@ -12,7 +12,7 @@ import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useChats, useTheme } from "../hooks";
-import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
+import type { RootStackParamList, RootStackScreenProps } from "../typings";
 
 type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
 
@@ -23,7 +23,7 @@ export function ChatsScreen() {
 
    const tw = useTailwind();
 
-   const navigation = useNavigation<ChatsScreenNavigatorProp>();
+   const navigation = useNavigation();
 
    const user = useSelector(selectUser);
 
@@ -91,13 +91,16 @@ export function ChatsScreen() {
                      <View style={tw("flex flex-row justify-between")}>
                         <Text
                            style={{
-                              color: APP_THEME_BORDER,
+                              color: APP_THEME_TEXT,
                            }}
                         >
                            Группа: <Text style={tw("font-bold")}>{chat.groupName}</Text>
                         </Text>
                         <TouchableOpacity
                            onPress={() =>
+                              // TODO @raymix разобраться как делать типы
+                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                              // @ts-ignore
                               navigation.navigate("Chat", {
                                  chatId: chat.id,
                                  groupName: chat.groupName,

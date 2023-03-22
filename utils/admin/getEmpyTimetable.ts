@@ -1,14 +1,25 @@
-import { Lesson } from "../../typings";
+import { Lesson, Timetable } from "../../typings";
 
-export function getEmptyLessons(dayIndex: number): Omit<Lesson, "id">[] {
+export const getEmptyLesson = (dayIndex: number, orderIndex: number): Omit<Lesson, "id"> => ({
+   name: "",
+   cabinet: "",
+   dayIndex,
+   orderIndex,
+   teachersIds: null,
+});
+
+export const getEmptyLessons = (dayIndex: number): Omit<Lesson, "id">[] => {
    return Array(6)
       .fill(null)
+      .map((_, lessonIndex) => getEmptyLesson(dayIndex, lessonIndex));
+};
+
+export const getEmptyWeekTimetable = (): Timetable => ({
+   groupId: null,
+   days: Array(6)
+      .fill(null)
       .map((_, index) => ({
-         name: "",
-         cabinet: "",
-         dayIndex,
-         orderIndex: index + 1,
-         groupId: null,
-         teachersIds: null,
-      }));
-}
+         dayIndex: String(index),
+         lessons: getEmptyLessons(index),
+      })),
+});

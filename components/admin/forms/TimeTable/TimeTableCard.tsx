@@ -5,7 +5,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { Card, Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Lesson, LessonDay } from "../../../../typings";
+import type { Lesson, Timetable } from "../../../../typings";
 import { COLORS_400 } from "../../../../utils";
 import { MODAL_TYPES, useGlobalModalContext } from "../../../common";
 import { TimeTableModal } from "./modal/TimeTableModal";
@@ -13,7 +13,7 @@ import { TimeTableModal } from "./modal/TimeTableModal";
 interface Props {
    dayName: string;
    dayIndex: number;
-   timetable: LessonDay[];
+   timetable: Timetable;
    handleTimetable: (dayIndex: number, newLessons: Lesson[]) => void;
 }
 
@@ -30,7 +30,7 @@ export function TimeTableCard({ dayName, dayIndex, timetable, handleTimetable }:
          children: () => (
             <TimeTableModal
                dayIndex={dayIndex}
-               lessons={timetable[dayIndex].lessons}
+               lessons={timetable.days[dayIndex].lessons}
                handleTimetable={handleTimetable}
             />
          ),

@@ -9,8 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { deleteMaterial } from "../../../api";
 import { selectUserAppTheme } from "../../../features/userSlice";
 import { useFavorite, useTheme } from "../../../hooks";
-import type { AppTheme, Material } from "../../../typings";
-import { APP_THEME } from "../../../typings/enums";
+import { APP_THEME, Material } from "../../../typings";
 import { MaterialFiles } from "./MaterialFiles";
 import { MaterialMenu } from "./MaterialMenu";
 
@@ -18,7 +17,7 @@ type Props = {
    material: Material;
    userId: string | undefined;
    userType: string | undefined;
-   userTheme: AppTheme;
+   userTheme: APP_THEME;
 };
 
 export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {

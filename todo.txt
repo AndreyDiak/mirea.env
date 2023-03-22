@@ -111,8 +111,22 @@ eas build -p android --profile preview
   [+] доработать все компоненты для отображения в разных темах
   [+] доделать модалку с дисциплинами
   [+] добавить в расписание аудиторию 
+  [+] разобраться с ошибкой при открытии приложения
+  [+] сделать ручную модалку чтобы в рантайме обновлялось то, что мы пишем, или прямо в модалке сделать 
+  useState() с содержимым для урока и класса и уже его сетать потом
+
   [] просмотр профиля другого человека?
   [] дизайн страницы с избранным
-  [] разобраться с ошибкой при открытии приложения
-  [] сделать ручную модалку чтобы в рантайме обновлялось то, что мы пишем, или прямо в модалке сделать 
-  useState() с содержимым для урока и класса и уже его сетать потом
+
+  [4/18] сделать необходимые Patcher-ы и Convertor-ы
+    UserPatcher / UserConverter [+/+]
+    TimetablePatcher / TimetableConverter [+/+]
+    MessagePatcher / MessageConverter [-/-]
+    MaterialPatcher / MaterialConverter [-/-]
+    InstitutePatcher / InstituteConverter [-/-]
+    GroupPatcher / GroupConverter [-/-]
+    DisciplinePatcher / DisciplineConverter [-/-]
+    ChatPatcher / ChatConverter [-/-]
+    CommentPatcher / CommentConverter [-/-]
+
+  

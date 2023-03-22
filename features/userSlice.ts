@@ -3,10 +3,10 @@ import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
 import { RootState } from "../store";
-import { SuperUser } from "../typings";
+import { Student, Teacher } from "../typings";
 
 export interface UserState {
-   user: SuperUser | null;
+   user: Student | Teacher | null;
 }
 
 const initialState: UserState = {
@@ -17,7 +17,7 @@ export const userSlice = createSlice({
    name: "user",
    initialState,
    reducers: {
-      setUser: (state, action: PayloadAction<SuperUser | null>) => {
+      setUser: (state, action: PayloadAction<Student | Teacher | null>) => {
          state.user = action.payload;
       },
    },
@@ -27,9 +27,9 @@ export const selectUser = (state: RootState) => state.user.user;
 
 export const selectUserId = (state: RootState) => state.user.user.id;
 
-export const selectUserTheme = (state: RootState) => state.user.user.theme;
+export const selectUserTheme = (state: RootState) => state?.user?.user?.theme;
 
-export const selectUserAppTheme = (state: RootState) => state.user.user.appTheme;
+export const selectUserAppTheme = (state: RootState) => state?.user?.user?.appTheme;
 
 // Action creators are generated for each case reducer function
 export const { setUser } = userSlice.actions;

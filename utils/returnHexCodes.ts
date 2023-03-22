@@ -1,5 +1,4 @@
-import { AppTheme } from "../typings";
-import { APP_THEME } from "../typings/enums";
+import { APP_THEME, USER_THEME } from "../typings/enums";
 import {
    COLORS_100,
    COLORS_400,
@@ -12,15 +11,15 @@ import {
 } from "./colors";
 
 // type 100
-export const returnLightenHexCode = (theme: AppTheme) => {
+export const returnLightenHexCode = (theme: USER_THEME) => {
    switch (theme) {
-      case "blue":
+      case USER_THEME.BLUE:
          return COLORS_100.BLUE;
-      case "emerald":
+      case USER_THEME.EMERALD:
          return COLORS_100.EMERALD;
-      case "rose":
+      case USER_THEME.ROSE:
          return COLORS_100.ROSE;
-      case "violet":
+      case USER_THEME.VIOLET:
          return COLORS_100.VIOLET;
       default:
          return COLORS_100.BLUE;
@@ -28,15 +27,15 @@ export const returnLightenHexCode = (theme: AppTheme) => {
 };
 
 // type 400
-export const returnHexCode = (theme: AppTheme) => {
+export const returnHexCode = (theme: USER_THEME) => {
    switch (theme) {
-      case "blue":
+      case USER_THEME.BLUE:
          return COLORS_400.BLUE;
-      case "emerald":
+      case USER_THEME.EMERALD:
          return COLORS_400.EMERALD;
-      case "rose":
+      case USER_THEME.ROSE:
          return COLORS_400.ROSE;
-      case "violet":
+      case USER_THEME.VIOLET:
          return COLORS_400.VIOLET;
       default:
          return COLORS_400.BLUE;
@@ -44,15 +43,15 @@ export const returnHexCode = (theme: AppTheme) => {
 };
 
 // type 600
-export const returnDarkenHexCode = (theme: AppTheme) => {
+export const returnDarkenHexCode = (theme: USER_THEME) => {
    switch (theme) {
-      case "blue":
+      case USER_THEME.BLUE:
          return COLORS_600.BLUE;
-      case "emerald":
+      case USER_THEME.EMERALD:
          return COLORS_600.EMERALD;
-      case "rose":
+      case USER_THEME.ROSE:
          return COLORS_600.ROSE;
-      case "violet":
+      case USER_THEME.VIOLET:
          return COLORS_600.VIOLET;
       default:
          return COLORS_600.BLUE;
@@ -60,15 +59,15 @@ export const returnDarkenHexCode = (theme: AppTheme) => {
 };
 
 // type 800
-export const returnDarkestHexCode = (theme: AppTheme) => {
+export const returnDarkestHexCode = (theme: USER_THEME) => {
    switch (theme) {
-      case "blue":
+      case USER_THEME.BLUE:
          return COLORS_800.BLUE;
-      case "emerald":
+      case USER_THEME.EMERALD:
          return COLORS_800.EMERALD;
-      case "rose":
+      case USER_THEME.ROSE:
          return COLORS_800.ROSE;
-      case "violet":
+      case USER_THEME.VIOLET:
          return COLORS_800.VIOLET;
       default:
          return COLORS_800.BLUE;
