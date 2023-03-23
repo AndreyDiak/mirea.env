@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 
 import { FlatList, Keyboard, Text, TouchableOpacity, View } from "react-native";
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Card } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
@@ -12,9 +12,7 @@ import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useChats, useTheme } from "../hooks";
-import type { RootStackParamList, RootStackScreenProps } from "../typings";
-
-type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
+import type { ChatsScreenNavigationProp, ChatsScreenRouteProp } from "../typings";
 
 export function ChatsScreen() {
    const {
@@ -23,7 +21,7 @@ export function ChatsScreen() {
 
    const tw = useTailwind();
 
-   const navigation = useNavigation();
+   const navigation = useNavigation<ChatsScreenNavigationProp>();
 
    const user = useSelector(selectUser);
 

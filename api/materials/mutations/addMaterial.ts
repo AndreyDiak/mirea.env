@@ -2,7 +2,7 @@ import { addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { storage } from "../../../firebase";
-import { Document } from "../../../typings";
+import { Document, FBSource } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, createCollection } from "../../../utils/createDBQuery";
 
@@ -23,9 +23,13 @@ export const addMaterial = async (
    }).then(async (snap) => {
       if (documents.length) {
          documents.map(async (document) => {
-            await addDoc(createCollection(DB_PATHS.SOURCES), {
+            const data: Omit<FBSource, "document"> = {
                title: document.name,
-               materialId: snap.id,
+               material_id: snap.id,
+            };
+
+            await addDoc(createCollection(DB_PATHS.SOURCES), {
+               data,
             }).then(async (newDoc) => {
                const blob = await new Promise((resolve, reject) => {
                   const xhr = new XMLHttpRequest();

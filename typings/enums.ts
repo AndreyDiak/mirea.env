@@ -13,7 +13,13 @@ export const enum DB_PATHS {
    USERS = "users", // все пользователи
 }
 
-export const enum LFilter { // LoginPopupFilters
+export const enum AUTH_STEPS {
+   AUTH = "auth",
+   INFO = "info",
+   BIO = "bio",
+}
+
+export const enum LFilter {
    INSTITUTES = "institutes",
    GROUPS = "groups",
    DISCIPLINES = "disciplines",

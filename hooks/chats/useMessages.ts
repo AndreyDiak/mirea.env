@@ -1,7 +1,7 @@
 import { orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 
-import { DBMessage } from "../../typings";
+import { Message } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { createCollection } from "../../utils";
 
@@ -14,7 +14,7 @@ export const useMessages = (chatId: string) => {
             ({
                ...message.data(),
                id: message.id,
-            } as DBMessage),
+            } as Message),
       ) || [];
    return { messages, loading, error };
 };

@@ -118,7 +118,7 @@ eas build -p android --profile preview
   [] просмотр профиля другого человека?
   [] дизайн страницы с избранным
 
-  [ 14 / 18 ] сделать необходимые Patcher-ы и Convertor-ы
+  [ 18 / 18 ] сделать необходимые Patcher-ы и Convertor-ы
     UserPatcher / UserConverter             [+/+]
     TimetablePatcher / TimetableConverter   [+/+]
     InstitutePatcher / InstituteConverter   [+/+]
@@ -126,8 +126,19 @@ eas build -p android --profile preview
     GroupPatcher / GroupConverter           [+/+]
     MessagePatcher / MessageConverter       [+/+]
     ChatPatcher / ChatConverter             [+/+]
-    
-    MaterialPatcher / MaterialConverter     [-/-]
+    MaterialPatcher / MaterialConverter     [+/+]
     CommentPatcher / CommentConverter       [+/+] 
 
+  [] починить все хуки с обработкой и отправкой данных, добавить оптимизации useMemo() useCallback()
+    /hooks
+      /admin        [+]
+      /chats        []
+      /disciplines  []
+      /favorites    []
+      /login        []
+      /materials    []
+      /timetable    []
+      /user         []
+      
+  [] использовать redux Для хранения данных?
   

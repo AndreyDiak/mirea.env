@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
 import { useChat, useTheme } from "../../hooks";
-import type { Discipline, DisciplineScreenNavigatorProp } from "../../typings";
+import type { Discipline, DisciplineScreenNavigationProp } from "../../typings";
 import { APP_THEME, USER_TYPE } from "../../typings/enums";
 
 type Props = {
@@ -18,7 +18,7 @@ type Props = {
 
 export function DisciplineCard({ discipline }: Props) {
    const tw = useTailwind();
-   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
+   const navigation = useNavigation<DisciplineScreenNavigationProp>();
    const user = useSelector(selectUser);
 
    const { APP_THEME_BORDER, APP_THEME_SECONDARY, APP_THEME_TEXT, THEME_MAIN } = useTheme();

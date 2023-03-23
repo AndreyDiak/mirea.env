@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 
 import { Keyboard, View } from "react-native";
 
@@ -8,36 +8,32 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { addMessage } from "../../api";
 import { selectUser } from "../../features/userSlice";
-import type { DBMessage } from "../../typings";
+import { EditedMessage } from "../../hooks";
+import type { Message } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { DOCS } from "../../utils";
 import { CustomInputField } from "../common/form/CustomInputField";
 
-interface EditedMessage {
-   text: string;
-   id: string;
-}
-
 interface Props {
-   setIsReplyingOnMessage: (isReply: boolean) => void;
-   setIsScrollToBottomVisible: (isVisible: boolean) => void;
-   setIsMessageEdited: (isEdited: boolean) => void;
-   setActiveMessage: (message: null | DBMessage) => void;
-   editedMessageData: EditedMessage;
-   isReplyingOnMessage: boolean;
-   isMessageEdited: boolean;
-   activeMessage: DBMessage | null;
+   onReplyEndMessage(): void;
+   setIsReplying: (isReplying: boolean) => void;
+   setIsEdited: (isEdited: boolean) => void;
+
+   editedMessage: EditedMessage;
+   isReplying: boolean;
+   isEdited: boolean;
+   activeMessage: Message | null;
    chatId: string;
 }
 
 export const MessageForm: React.FC<Props> = React.memo(
    ({
-      setIsReplyingOnMessage,
-      setActiveMessage,
-      setIsMessageEdited,
-      editedMessageData,
-      isReplyingOnMessage,
-      isMessageEdited,
+      onReplyEndMessage,
+      setIsReplying,
+      setIsEdited,
+      editedMessage,
+      isReplying,
+      isEdited,
       activeMessage,
       chatId,
    }) => {
@@ -47,15 +43,15 @@ export const MessageForm: React.FC<Props> = React.memo(
       const user = useSelector(selectUser);
 
       // sendMessage function
-      const sendMessage = async () => {
+      const sendMessage = useCallback(async () => {
          setLoading(true);
-         if (isMessageEdited) {
-            await updateDoc(DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${editedMessageData.id}`), {
+         if (isEdited) {
+            await updateDoc(DOCS.CREATE_DOC(DB_PATHS.CHATS, `${chatId}/messages/${editedMessage.id}`), {
                text: message,
             }).then(() => {
                Keyboard.dismiss();
                setMessage("");
-               setIsMessageEdited(false);
+               setIsEdited(false);
             });
          } else {
             await addMessage(chatId, {
@@ -64,19 +60,31 @@ export const MessageForm: React.FC<Props> = React.memo(
                email: user.email,
                type: user.type,
                photoUrl: user.img,
-               replyingId: isReplyingOnMessage ? activeMessage?.id : "",
+               replyingId: isReplying ? activeMessage?.id : "",
             }).then(() => {
                Keyboard.dismiss();
                setMessage("");
-               if (isReplyingOnMessage) {
-                  setIsReplyingOnMessage(false);
-                  setActiveMessage(null);
+               if (isReplying) {
+                  onReplyEndMessage();
                }
             });
          }
 
          setLoading(false);
-      };
+      }, [
+         activeMessage?.id,
+         chatId,
+         editedMessage.id,
+         isEdited,
+         isReplying,
+         message,
+         onReplyEndMessage,
+         setIsEdited,
+         user.email,
+         user.img,
+         user.name,
+         user.type,
+      ]);
 
       return (
          <View style={tw(`w-full bg-white`)}>
@@ -85,10 +93,10 @@ export const MessageForm: React.FC<Props> = React.memo(
             <CustomInputField
                value={message}
                loading={loading}
-               isReplying={isReplyingOnMessage}
+               isReplying={isReplying}
                replyData={{
                   replyMessage: activeMessage,
-                  replyHandler: () => setIsReplyingOnMessage(false),
+                  replyHandler: () => setIsReplying(false),
                }}
                setValue={setMessage}
                onSubmit={sendMessage}

@@ -1,19 +1,17 @@
-import React, { useCallback, useLayoutEffect, useState } from "react";
+import React, { useCallback, useLayoutEffect } from "react";
 
 import { KeyboardAvoidingView, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { ChatHeader, MessageForm, MessagesList, ScreenTemplate } from "../components";
 import { selectUserAppTheme } from "../features/userSlice";
-import { useTheme } from "../hooks";
-import type { ChatScreenNavigatorProp, DBMessage, RootStackParamList } from "../typings";
+import { useChatData, useTheme } from "../hooks";
+import type { ChatScreenRouteProp, ChatsScreenNavigationProp } from "../typings";
 import { APP_THEME } from "../typings/enums";
-
-type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
 export function ChatScreen() {
    const tw = useTailwind();
@@ -21,48 +19,40 @@ export function ChatScreen() {
 
    const { APP_THEME_TEXT, APP_THEME_SECONDARY } = useTheme();
 
-   // TODO @raymix переделать на хук?
-   const [isReplyingOnMessage, setIsReplyingOnMessage] = useState<boolean>(false);
-   const [isHeaderMenuVisible, setIsHeaderMenuVisible] = useState<boolean>(false);
-   const [isMessageEdited, setIsMessageEdited] = useState<boolean>(false);
-   const [isScrollToBottomVisible, setIsScrollToBottomVisible] = useState<boolean>(true);
-   const [selectedMessage, setSelectedMessage] = useState<DBMessage>(null);
+   const {
+      isReplying,
+      isEdited,
+      isScrollButtonShown,
+      isHeaderMenuShown,
+      activeMessage,
+      editedMessage,
 
-   const [editedMessageData, setEditedMessageData] = useState({
-      text: "",
-      id: "",
-   });
+      onEditMessage,
+      onHeaderClose,
+      onReplyMessage,
+      onLongPressMessage,
+      onReplyEndMessage,
+
+      setIsScrollButtonShown,
+      setIsReplying,
+      setIsEdited,
+   } = useChatData();
 
    const {
       params: { chatId, groupName },
    } = useRoute<ChatScreenRouteProp>();
 
-   const navigation = useNavigation<ChatScreenNavigatorProp>();
-
-   const headerClose = useCallback(() => {
-      setIsHeaderMenuVisible(false);
-      setSelectedMessage(null);
-   }, []);
+   const navigation = useNavigation<ChatsScreenNavigationProp>();
 
    const renderTitle = useCallback(() => {
-      if (isHeaderMenuVisible) {
+      if (isHeaderMenuShown) {
          return (
             <ChatHeader
                chatId={chatId}
-               selectedMessage={selectedMessage}
-               onClose={headerClose}
-               replyOnMessage={() => {
-                  setIsReplyingOnMessage(true);
-                  setIsHeaderMenuVisible(false);
-               }}
-               editMessage={() => {
-                  setIsMessageEdited(true);
-                  setEditedMessageData({
-                     id: selectedMessage.id,
-                     text: selectedMessage.text,
-                  });
-                  headerClose();
-               }}
+               selectedMessage={activeMessage}
+               onClose={onHeaderClose}
+               replyOnMessage={onReplyMessage}
+               editMessage={onEditMessage}
             />
          );
       }
@@ -80,12 +70,22 @@ export function ChatScreen() {
             </Text>
          </View>
       );
-   }, [APP_THEME_TEXT, chatId, groupName, headerClose, isHeaderMenuVisible, selectedMessage, tw]);
+   }, [
+      APP_THEME_TEXT,
+      activeMessage,
+      chatId,
+      groupName,
+      isHeaderMenuShown,
+      onEditMessage,
+      onHeaderClose,
+      onReplyMessage,
+      tw,
+   ]);
 
    const renderClose = useCallback(() => {
-      if (isHeaderMenuVisible) {
+      if (isHeaderMenuShown) {
          return (
-            <TouchableOpacity onPress={headerClose}>
+            <TouchableOpacity onPress={onHeaderClose}>
                <Icon
                   name="close"
                   type="material"
@@ -96,7 +96,7 @@ export function ChatScreen() {
          );
       }
       return null;
-   }, [APP_THEME_TEXT, appTheme, headerClose, isHeaderMenuVisible]);
+   }, [APP_THEME_TEXT, appTheme, isHeaderMenuShown, onHeaderClose]);
 
    useLayoutEffect(() => {
       navigation.setOptions({
@@ -106,17 +106,7 @@ export function ChatScreen() {
             backgroundColor: APP_THEME_SECONDARY,
          },
       });
-   }, [
-      APP_THEME_SECONDARY,
-      appTheme,
-      groupName,
-      isHeaderMenuVisible,
-      navigation,
-      renderClose,
-      renderTitle,
-      selectedMessage,
-      tw,
-   ]);
+   }, [APP_THEME_SECONDARY, navigation, renderClose, renderTitle]);
 
    return (
       <ScreenTemplate>
@@ -125,23 +115,21 @@ export function ChatScreen() {
                {/* Messages */}
                <MessagesList
                   chatId={chatId}
-                  isScrollToBottomVisible={isScrollToBottomVisible}
-                  selectedMessageId={selectedMessage?.id}
-                  setIsScrollToBottomVisible={setIsScrollToBottomVisible}
-                  setSelectedMessage={setSelectedMessage}
-                  setIsHeaderMenuVisible={setIsHeaderMenuVisible}
+                  isScrollButtonShown={isScrollButtonShown}
+                  selectedMessageId={activeMessage?.id}
+                  setIsScrollButtonShown={setIsScrollButtonShown}
+                  onLongPressMessage={onLongPressMessage}
                />
                {/* Message Form */}
                <MessageForm
-                  setIsReplyingOnMessage={setIsReplyingOnMessage}
-                  setIsScrollToBottomVisible={setIsScrollToBottomVisible}
-                  setActiveMessage={setSelectedMessage}
-                  setIsMessageEdited={setIsMessageEdited}
-                  isReplyingOnMessage={isReplyingOnMessage}
-                  activeMessage={selectedMessage}
+                  onReplyEndMessage={onReplyEndMessage}
+                  setIsReplying={setIsReplying}
+                  setIsEdited={setIsEdited}
+                  isReplying={isReplying}
+                  activeMessage={activeMessage}
                   chatId={chatId}
-                  editedMessageData={editedMessageData}
-                  isMessageEdited={isMessageEdited}
+                  editedMessage={editedMessage}
+                  isEdited={isEdited}
                />
             </KeyboardAvoidingView>
          </SafeAreaView>

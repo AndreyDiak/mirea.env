@@ -1,5 +1,6 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { CompositeScreenProps } from "@react-navigation/native";
+import { CompositeScreenProps, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { StackScreenProps } from "@react-navigation/stack";
 
 import { Material } from "./types";
@@ -47,3 +48,24 @@ export type HomeTabScreenProps<T extends keyof TabStackParamList> = CompositeScr
    BottomTabScreenProps<TabStackParamList, T>,
    RootStackScreenProps<keyof RootStackParamList>
 >;
+
+// NativeStackNavigationProp<>   для useNavigation()
+// RouteProp<>    для useRoute()
+
+export type LoginScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Login">;
+export type AuthInfoScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "AuthInfo">;
+export type AuthBioScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "AuthBio">;
+
+export type MainScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Main">;
+
+export type DisciplineScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Discipline">;
+export type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
+
+export type CommentsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Comments">;
+export type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
+
+export type ChatsScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Chats">;
+export type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
+
+export type ChatScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, "Chat">;
+export type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;

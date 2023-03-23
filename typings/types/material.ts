@@ -46,6 +46,11 @@ export interface FBFavorite {
    material_id: string;
 }
 
+export interface PreviewFavorite {
+   disciplineName: string;
+   material: Material;
+}
+
 export interface Document {
    name: string;
    uri: string;

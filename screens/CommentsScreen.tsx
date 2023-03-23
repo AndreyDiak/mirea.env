@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 
 import { FlatList, Keyboard, Text } from "react-native";
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Card } from "@rneui/themed";
 import { addDoc, serverTimestamp } from "firebase/firestore";
 import { useSelector } from "react-redux";
@@ -12,18 +12,16 @@ import { Comment, Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useMaterialComments, useTheme } from "../hooks";
-import type { CommentsScreenNavigatorProp, RootStackParamList } from "../typings";
+import type { CommentsScreenNavigationProp, CommentsScreenRouteProp } from "../typings";
 import { DB_PATHS } from "../typings/enums";
 import { createCollection, isEmpty } from "../utils";
-
-type CommentsScreenRouteProp = RouteProp<RootStackParamList, "Comments">;
 
 export function CommentsScreen() {
    const {
       params: { material },
    } = useRoute<CommentsScreenRouteProp>();
 
-   const navigation = useNavigation<CommentsScreenNavigatorProp>();
+   const navigation = useNavigation<CommentsScreenNavigationProp>();
    const user = useSelector(selectUser);
    const tw = useTailwind();
 

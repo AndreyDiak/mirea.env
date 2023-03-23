@@ -17,12 +17,12 @@ type Props = {
    material: Material;
    userId: string | undefined;
    userType: string | undefined;
-   userTheme: APP_THEME;
 };
 
 export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) => {
    const tw = useTailwind();
    const userAppTheme = useSelector(selectUserAppTheme);
+
    const { APP_THEME_SECONDARY, APP_THEME_BORDER, APP_THEME_TEXT } = useTheme();
    const isFavorite = useFavorite(userId, material.id);
 
