@@ -10,7 +10,8 @@ export interface Material {
    ownerId: string;
 }
 
-export interface FB_Material {
+export interface FBMaterial {
+   id?: string;
    discipline_id: string;
    timestamp: Timestamp;
    title: string;
@@ -20,15 +21,28 @@ export interface FB_Material {
 }
 
 export interface Source {
+   id: string;
    title: string;
    document: string;
    materialId: string;
-   id: string;
 }
 
-export interface FB_Source {
+export interface FBSource {
+   id?: string;
    title: string;
    document: string;
+   material_id: string;
+}
+
+export interface Favorite {
+   id: string;
+   userId: string;
+   materialId: string;
+}
+
+export interface FBFavorite {
+   id?: string;
+   user_id: string;
    material_id: string;
 }
 
@@ -36,15 +50,4 @@ export interface Document {
    name: string;
    uri: string;
    type: string | undefined;
-}
-
-export interface Favorite {
-   userId: string;
-   materialId: string;
-   id: string;
-}
-
-export interface FB_Favorite {
-   user_id: string;
-   material_id: string;
 }

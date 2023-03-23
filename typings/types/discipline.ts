@@ -4,7 +4,8 @@ export interface Discipline {
    instituteId: string;
 }
 
-export interface FB_Discipline {
+export interface FBDiscipline {
+   id?: string;
    name: string;
    institute_id: string;
 }

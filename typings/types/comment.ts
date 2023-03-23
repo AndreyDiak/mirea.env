@@ -8,7 +8,8 @@ export interface Comment {
    materialId: string;
 }
 
-export interface FB_Comment {
+export interface FBComment {
+   id?: string;
    text: string;
    timestamp: Timestamp;
    owner_email: string;

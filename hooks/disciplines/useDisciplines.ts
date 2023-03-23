@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getAllDataWithFilter, getDataById } from "../../api";
 import { selectUser } from "../../features/userSlice";
 import type { Discipline, Group } from "../../typings";
-import { DB_PATHS, UType } from "../../typings/enums";
+import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useDisciplines = () => {
@@ -18,7 +18,7 @@ export const useDisciplines = () => {
       const getData = async () => {
          setLoading(true);
          if (user) {
-            if (user.type === UType.STUDENT) {
+            if (user.type === USER_TYPE.STUDENT) {
                // get our group id...
                const group = await getDataById<Group>(user.groupId, DB_PATHS.GROUPS);
                const q = QUERIES.CREATE_SIMPLE_QUERY<Discipline>(DB_PATHS.DISCIPLINES, {
@@ -29,7 +29,7 @@ export const useDisciplines = () => {
                const DBdisciplines = await getAllDataWithFilter<Discipline>(q);
 
                setDisciplines(DBdisciplines);
-            } else if (user.type === UType.TEACHER) {
+            } else if (user.type === USER_TYPE.TEACHER) {
                const DBdisciplines: Discipline[] = [];
                await Promise.all(
                   user?.disciplinesIds.map(async (d) => {

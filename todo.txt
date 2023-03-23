@@ -118,15 +118,16 @@ eas build -p android --profile preview
   [] просмотр профиля другого человека?
   [] дизайн страницы с избранным
 
-  [4/18] сделать необходимые Patcher-ы и Convertor-ы
-    UserPatcher / UserConverter [+/+]
-    TimetablePatcher / TimetableConverter [+/+]
-    MessagePatcher / MessageConverter [-/-]
-    MaterialPatcher / MaterialConverter [-/-]
-    InstitutePatcher / InstituteConverter [-/-]
-    GroupPatcher / GroupConverter [-/-]
-    DisciplinePatcher / DisciplineConverter [-/-]
-    ChatPatcher / ChatConverter [-/-]
-    CommentPatcher / CommentConverter [-/-]
+  [ 14 / 18 ] сделать необходимые Patcher-ы и Convertor-ы
+    UserPatcher / UserConverter             [+/+]
+    TimetablePatcher / TimetableConverter   [+/+]
+    InstitutePatcher / InstituteConverter   [+/+]
+    DisciplinePatcher / DisciplineConverter [+/+]
+    GroupPatcher / GroupConverter           [+/+]
+    MessagePatcher / MessageConverter       [+/+]
+    ChatPatcher / ChatConverter             [+/+]
+    
+    MaterialPatcher / MaterialConverter     [-/-]
+    CommentPatcher / CommentConverter       [+/+] 
 
   

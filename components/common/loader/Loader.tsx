@@ -2,7 +2,7 @@ import React from "react";
 
 import { Icon } from "@rneui/themed";
 
-import { APP_THEME, USER_THEME } from "../../../typings";
+import { USER_THEME } from "../../../typings";
 import { returnHexCode } from "../../../utils/returnHexCodes";
 import { CenteredText } from "../CenteredText";
 

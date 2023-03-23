@@ -12,7 +12,7 @@ import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../co
 import { selectUser } from "../features/userSlice";
 import { useMaterials, useTheme } from "../hooks";
 import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
-import { UType } from "../typings/enums";
+import { USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";
 
 type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
@@ -39,7 +39,7 @@ export function DisciplineScreen() {
       });
    }, [discipline, navigation, user.appTheme]);
 
-   const isStudent = user.type === UType.STUDENT;
+   const isStudent = user.type === USER_TYPE.STUDENT;
 
    if (loading) {
       return <Loader text="Загрузка материалов" theme={user.theme} />;

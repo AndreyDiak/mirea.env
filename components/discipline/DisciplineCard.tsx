@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { selectUser } from "../../features/userSlice";
 import { useChat, useTheme } from "../../hooks";
 import type { Discipline, DisciplineScreenNavigatorProp } from "../../typings";
-import { APP_THEME, UType } from "../../typings/enums";
+import { APP_THEME, USER_TYPE } from "../../typings/enums";
 
 type Props = {
    discipline: Discipline;
@@ -69,7 +69,7 @@ export function DisciplineCard({ discipline }: Props) {
                   // если пользователь быстро нажал,
                   // (до того как загрузился chatId, то мы должны делать лоадер)
                   // "загрузка чата" или "создание чата"
-                  !loading && user.type === UType.STUDENT
+                  !loading && user.type === USER_TYPE.STUDENT
                      ? navigation.navigate("Chat", {
                           chatId: chat?.id,
                           groupName: chat.groupName,

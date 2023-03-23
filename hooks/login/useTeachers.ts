@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
 import { Institute, Teacher } from "../../typings";
-import { DB_PATHS, UType } from "../../typings/enums";
+import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 
 export const useTeachers = (institute: Institute) => {
@@ -17,7 +17,7 @@ export const useTeachers = (institute: Institute) => {
                QUERIES.CREATE_MULTIPLE_QUERY<Teacher>(DB_PATHS.USERS, [
                   {
                      fieldName: "type",
-                     fieldValue: UType.TEACHER,
+                     fieldValue: USER_TYPE.TEACHER,
                      opStr: "==",
                   },
                   {

@@ -4,7 +4,7 @@ import { addDoc } from "firebase/firestore";
 import { AuthState } from "../../../features/authSlice";
 import { auth } from "../../../firebase";
 import type { AppUser } from "../../../typings";
-import { APP_THEME, DB_PATHS, USER_THEME, UType } from "../../../typings/enums";
+import { APP_THEME, DB_PATHS, USER_THEME, USER_TYPE } from "../../../typings/enums";
 import { createCollection, isEmpty } from "../../../utils";
 import { UserPatcher } from "../../../utils/Patcher/UserPatcher";
 
@@ -24,11 +24,11 @@ export const createUser = async ({ userData, setError }: Props) => {
       setError("Введите фамилию");
       return;
    }
-   if (userData.type === UType.STUDENT && isEmpty(userData.group)) {
+   if (userData.type === USER_TYPE.STUDENT && isEmpty(userData.group)) {
       setError("Выберите группу");
       return;
    }
-   if (userData.type === UType.TEACHER && isEmpty(userData.disciplines)) {
+   if (userData.type === USER_TYPE.TEACHER && isEmpty(userData.disciplines)) {
       setError("Выберите дисциплины");
       return;
    }
@@ -45,38 +45,11 @@ export const createUser = async ({ userData, setError }: Props) => {
       instituteId: userData?.institutes[0].id,
       disciplinesIds: userData?.disciplines,
       institutesIds: userData?.institutes.map((institute) => institute.id),
-      type: userData.type === UType.STUDENT ? UType.STUDENT : UType.TEACHER,
+      type: userData.type === USER_TYPE.STUDENT ? USER_TYPE.STUDENT : USER_TYPE.TEACHER,
    };
 
    const fbUser = UserPatcher.toApiData(user);
 
-   // if (userData.type === UType.STUDENT) {
-   //    user = {
-   //       email: userData.email,
-   //       female: userData.female,
-   //       img: "",
-   //       name: userData.name,
-   //       password: userData.password,
-   //       theme: "blue",
-   //       appTheme: APP_THEME.LIGHT,
-   //       groupId: userData.group.id,
-   //       instituteId: userData.institutes[0].id,
-   //       type: UType.STUDENT,
-   //    };
-   // } else {
-   //    user = {
-   //       email: userData.email,
-   //       female: userData.female,
-   //       img: "",
-   //       name: userData.name,
-   //       password: userData.password,
-   //       theme: "blue",
-   //       appTheme: APP_THEME.LIGHT,
-   //       institutes: userData.institutes.map((institute) => institute.id),
-   //       disciplines: userData.disciplines,
-   //       type: UType.TEACHER,
-   //    };
-   // }
    await createUserWithEmailAndPassword(auth, userData.email, userData.password)
       .then(async () => {
          await addDoc(createCollection(DB_PATHS.USERS), {

@@ -18,7 +18,7 @@ import {
    LoginScreen,
 } from "../screens";
 import { RootStackParamList } from "../typings";
-import { UType } from "../typings/enums";
+import { USER_TYPE } from "../typings/enums";
 import TabNavigator from "./TabNavigator";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -41,7 +41,7 @@ function RootNavigator() {
    useUser(initialUser);
    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
    // @ts-ignore
-   if (user && user.type === UType.ADMIN) {
+   if (user && user.type === USER_TYPE.ADMIN) {
       return <AdminScreen />;
    }
 

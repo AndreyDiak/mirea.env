@@ -5,7 +5,7 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useAddUserData } from "../../hooks";
-import { UType } from "../../typings/enums";
+import { USER_TYPE } from "../../typings/enums";
 
 interface Props {
    openModal(): void;
@@ -14,7 +14,7 @@ interface Props {
 export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
    const tw = useTailwind();
 
-   const { groupName, disciplinesList, loading, uType, institutes } = useAddUserData();
+   const { groupName, disciplinesList, loading, USER_TYPE, institutes } = useAddUserData();
 
    const renderLoadingItem = (item: string) => {
       if (loading) {
@@ -37,7 +37,7 @@ export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
    };
 
    const renderData = () => {
-      if (uType === UType.STUDENT) {
+      if (USER_TYPE === USER_TYPE.STUDENT) {
          return (
             <View>
                <View style={tw("flex flex-row items-center justify-between")}>

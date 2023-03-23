@@ -1,14 +1,14 @@
-import { APP_THEME, AppUser, FBAppUser, Student, Teacher, UType } from "../../typings";
-import { FBStudent } from "../../typings/types/user";
+import { APP_THEME, AppUser, FBAppUser, Student, Teacher, USER_TYPE } from "../../typings";
+import { FBStudent, FBTeacher } from "../../typings/types/user";
 
-type ConvertUserFromApi<T> = Omit<FBAppUser, "app_theme" | "type"> & {
+type ConvertUserFromApi<T> = Omit<FBAppUser, "app_theme"> & {
+   type: T extends FBStudent ? USER_TYPE.STUDENT : USER_TYPE.TEACHER;
    appTheme: APP_THEME;
-   type: T extends FBStudent ? UType.STUDENT : UType.TEACHER;
 };
 
 export class UserConverter {
    public static toData(user: FBAppUser): AppUser {
-      if (user.type === UType.STUDENT) {
+      if (user.type === USER_TYPE.STUDENT) {
          const student: Student = {
             ...UserConverter.convertUserFromApi(user),
             groupId: user.group_id,
@@ -16,7 +16,7 @@ export class UserConverter {
          };
          return student;
       }
-      if (user.type === UType.TEACHER) {
+      if (user.type === USER_TYPE.TEACHER) {
          const teacher: Teacher = {
             ...UserConverter.convertUserFromApi(user),
             disciplinesIds: user.disciplines_ids,
@@ -27,9 +27,13 @@ export class UserConverter {
       return null;
    }
 
-   public static convertUserFromApi<T extends FBAppUser>(user: T): ConvertUserFromApi<T> {
+   static convertUserFromApi(user: FBStudent): ConvertUserFromApi<FBStudent>;
+
+   static convertUserFromApi(user: FBTeacher): ConvertUserFromApi<FBTeacher>;
+
+   public static convertUserFromApi(user: FBAppUser): ConvertUserFromApi<FBAppUser> {
       return {
-         id: user?.id ?? null,
+         id: user.id,
          email: user.email,
          name: user.name,
          female: user.female,
@@ -37,9 +41,6 @@ export class UserConverter {
          img: user.img,
          appTheme: user.app_theme,
          theme: user.theme,
-         // TODO @raymix разобраться
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-         // @ts-ignore
          type: user.type,
       };
    }

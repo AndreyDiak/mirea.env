@@ -11,7 +11,8 @@ export interface Message {
    replyingId?: string;
 }
 
-export interface FB_Message {
+export interface FBMessage {
+   id?: string;
    text: string;
    timestamp: Timestamp;
    display_name: string;

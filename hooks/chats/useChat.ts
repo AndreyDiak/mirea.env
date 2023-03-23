@@ -7,7 +7,7 @@ import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
 import type { Chat, ChatPreview, Group } from "../../typings";
-import { DB_PATHS, UType } from "../../typings/enums";
+import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES, createCollection } from "../../utils";
 
 export const useChat = (disciplineId: string) => {
@@ -17,7 +17,7 @@ export const useChat = (disciplineId: string) => {
 
    useEffect(() => {
       const getData = async () => {
-         if (user.type === UType.STUDENT) {
+         if (user.type === USER_TYPE.STUDENT) {
             setLoading(true);
             // eslint-disable-next-line @typescript-eslint/no-shadow
             let chat: ChatPreview = null;

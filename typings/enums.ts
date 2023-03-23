@@ -19,7 +19,7 @@ export const enum LFilter { // LoginPopupFilters
    DISCIPLINES = "disciplines",
 }
 
-export const enum UType {
+export const enum USER_TYPE {
    STUDENT = "student",
    TEACHER = "teacher",
    ADMIN = "admin",

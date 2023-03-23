@@ -4,7 +4,8 @@ export interface Institute {
    shortName: string;
 }
 
-export interface FB_Institute {
+export interface FBInstitute {
+   id?: string;
    name: string;
    short_name: string;
 }

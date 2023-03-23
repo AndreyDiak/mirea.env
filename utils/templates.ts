@@ -1,5 +1,5 @@
 import { Student, Teacher, User } from "../typings";
-import { UType } from "../typings/enums";
+import { USER_TYPE } from "../typings/enums";
 
 type TemplateUser = Omit<User, "id" | "email" | "password">;
 
@@ -18,12 +18,12 @@ type TemplateTeacher = Pick<Teacher, "disciplines" | "institutes" | "type"> & Te
 //    ...getUserTemplate(),
 //    instituteId: null,
 //    groupId: null,
-//    type: UType.STUDENT,
+//    type: USER_TYPE.STUDENT,
 // });
 
 // export const getTeacherTemplate = (): TemplateTeacher => ({
 //    ...getUserTemplate(),
 //    institutes: null,
 //    disciplines: null,
-//    type: UType.TEACHER,
+//    type: USER_TYPE.TEACHER,
 // });

@@ -1,13 +1,23 @@
-import { APP_THEME, AppUser, FBAppUser, FBStudent, FBTeacher, Student, UType, User } from "../../typings";
+import {
+   APP_THEME,
+   AppUser,
+   FBAppUser,
+   FBStudent,
+   FBTeacher,
+   Student,
+   Teacher,
+   USER_TYPE,
+   User,
+} from "../../typings";
 
-type ConvertUserToApi<A> = Omit<User, "id" | "appTheme"> & {
-   type: A extends Student ? UType.STUDENT : UType.TEACHER;
+type ConvertUserToApi<T> = Omit<User, "id" | "appTheme"> & {
+   type: T extends Student ? USER_TYPE.STUDENT : USER_TYPE.TEACHER;
    app_theme: APP_THEME;
 };
 
 export class UserPatcher {
    public static toApiData(user: AppUser): FBAppUser {
-      if (user.type === UType.STUDENT) {
+      if (user.type === USER_TYPE.STUDENT) {
          const student: FBStudent = {
             ...UserPatcher.convertUserToApi(user),
             group_id: user.groupId,
@@ -15,7 +25,7 @@ export class UserPatcher {
          };
          return student;
       }
-      if (user.type === UType.TEACHER) {
+      if (user.type === USER_TYPE.TEACHER) {
          const teacher: FBTeacher = {
             ...UserPatcher.convertUserToApi(user),
             disciplines_ids: user.disciplinesIds ?? [],
@@ -27,7 +37,11 @@ export class UserPatcher {
       return null;
    }
 
-   public static convertUserToApi<T extends AppUser>(user: T): ConvertUserToApi<T> {
+   static convertUserToApi(user: Student): ConvertUserToApi<Student>;
+
+   static convertUserToApi(user: Teacher): ConvertUserToApi<Teacher>;
+
+   public static convertUserToApi(user: AppUser): ConvertUserToApi<AppUser> {
       return {
          email: user.email,
          name: user.name,
@@ -36,9 +50,6 @@ export class UserPatcher {
          img: user.img,
          theme: user.theme,
          app_theme: user.appTheme,
-         // TODO @raymix разобраться
-         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-         // @ts-ignore
          type: user.type,
       };
    }
