@@ -5,6 +5,7 @@ import { ToastAndroid } from "react-native";
 import { addDoc } from "firebase/firestore";
 
 import { DB_PATHS } from "../../typings/enums";
+import { InstitutePatcher } from "../../utils";
 import { createCollection } from "../../utils/createDBQuery";
 import { isEmpty } from "../../utils/isEmpty";
 
@@ -21,9 +22,14 @@ export const useInstitute = () => {
       }
       setIsLoading(true);
 
-      await addDoc(createCollection(DB_PATHS.INSTITUTES), {
+      const FBInstitute = InstitutePatcher.toApiData({
+         id: "",
          name: fullName,
          shortName,
+      });
+
+      await addDoc(createCollection(DB_PATHS.INSTITUTES), {
+         ...FBInstitute,
       }).then(() => ToastAndroid.show("Институт добавлен!", 1000));
 
       setIsLoading(false);

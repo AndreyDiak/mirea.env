@@ -1,14 +1,17 @@
+import { useMemo } from "react";
+
 import { useCollection } from "react-firebase-hooks/firestore";
 
-import { DBComment } from "../../typings";
+import { FBComment } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
+import { CommentConverter } from "../../utils/Converter/CommentConverter";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useMaterialComments = (materialId: string) => {
-   const q = QUERIES.CREATE_SIMPLE_QUERY_ORDERED<DBComment>(
+   const q = QUERIES.CREATE_SIMPLE_QUERY_ORDERED<FBComment>(
       DB_PATHS.COMMENTS,
       {
-         fieldName: "materialId",
+         fieldName: "material_id",
          fieldValue: materialId,
          opStr: "==",
       },
@@ -18,13 +21,19 @@ export const useMaterialComments = (materialId: string) => {
    );
    const [snap, loading, error] = useCollection(q);
 
-   const comments =
-      snap?.docs.map(
-         (comment) =>
-            ({
-               ...comment.data(),
-               id: comment.id,
-            } as DBComment),
-      ) || [];
+   const FBComments = useMemo(
+      () =>
+         snap?.docs.map(
+            (comment) =>
+               ({
+                  ...comment.data(),
+                  id: comment.id,
+               } as FBComment),
+         ) || [],
+      [snap?.docs],
+   );
+
+   const comments = useMemo(() => CommentConverter.toData(FBComments), [FBComments]);
+
    return { comments, loading, error };
 };

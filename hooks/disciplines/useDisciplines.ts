@@ -4,9 +4,10 @@ import { useSelector } from "react-redux";
 
 import { getAllDataWithFilter, getDataById } from "../../api";
 import { selectUser } from "../../features/userSlice";
-import type { Discipline, Group } from "../../typings";
+import type { Discipline, FBDiscipline, FBGroup, Group } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES } from "../../utils";
+import { DisciplineConverter } from "../../utils/Converter/DisciplineConverter";
 
 export const useDisciplines = () => {
    const user = useSelector(selectUser);
@@ -20,15 +21,15 @@ export const useDisciplines = () => {
          if (user) {
             if (user.type === USER_TYPE.STUDENT) {
                // get our group id...
-               const group = await getDataById<Group>(user.groupId, DB_PATHS.GROUPS);
-               const q = QUERIES.CREATE_SIMPLE_QUERY<Discipline>(DB_PATHS.DISCIPLINES, {
-                  fieldName: "instituteId",
-                  fieldValue: group.instituteId,
+               const FBGroup = await getDataById<FBGroup>(user.groupId, DB_PATHS.GROUPS);
+               const q = QUERIES.CREATE_SIMPLE_QUERY<FBDiscipline>(DB_PATHS.DISCIPLINES, {
+                  fieldName: "institute_id",
+                  fieldValue: FBGroup.institute_id,
                   opStr: "==",
                });
-               const DBdisciplines = await getAllDataWithFilter<Discipline>(q);
+               const FBDisciplines = await getAllDataWithFilter<FBDiscipline>(q);
 
-               setDisciplines(DBdisciplines);
+               setDisciplines(DisciplineConverter.toData(FBDisciplines));
             } else if (user.type === USER_TYPE.TEACHER) {
                const DBdisciplines: Discipline[] = [];
                await Promise.all(

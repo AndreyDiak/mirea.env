@@ -132,13 +132,13 @@ eas build -p android --profile preview
   [] починить все хуки с обработкой и отправкой данных, добавить оптимизации useMemo() useCallback()
     /hooks
       /admin        [+]
-      /chats        []
-      /disciplines  []
-      /favorites    []
-      /login        []
-      /materials    []
-      /timetable    []
-      /user         []
-      
+      /chats        [+]
+      /disciplines  [+]
+      /favorites    [+]
+      /login        [+]
+      /materials    [+]
+      /timetable    [+]
+      /user         [+]
+  [] починить страницу расписания
   [] использовать redux Для хранения данных?
   

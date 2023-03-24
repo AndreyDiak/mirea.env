@@ -9,7 +9,7 @@ import { useInstitutes } from "../../../hooks/login";
 import { useTeachers } from "../../../hooks/login/useTeachers";
 import { Institute, Teacher } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
-import { DOCS, createCollection, isEmpty } from "../../../utils";
+import { DOCS, DisciplinePatcher, createCollection, isEmpty } from "../../../utils";
 import { Button } from "../../Button";
 import { CheckListMulitple } from "../checklist/CheckListMulitple";
 import { CheckListSingle } from "../checklist/CheckListSingle";
@@ -33,15 +33,21 @@ export function DisciplineForm() {
       if (isEmpty(disciplineName) || isEmpty(selectedInstitute)) {
          return;
       }
-      await addDoc(createCollection(DB_PATHS.DISCIPLINES), {
+
+      const FBDiscipline = DisciplinePatcher.toApiData({
+         id: "",
          name: disciplineName,
          instituteId: selectedInstitute.id,
+      });
+
+      await addDoc(createCollection(DB_PATHS.DISCIPLINES), {
+         ...FBDiscipline,
       }).then(async (response) => {
          if (teachers.length !== 0) {
             await Promise.all(
                teachers.map(async (teacher) => {
                   await updateDoc(DOCS.CREATE_DOC(DB_PATHS.USERS, teacher.id), {
-                     disciplines: [...teacher.disciplines, response.id],
+                     disciplines: [...teacher.disciplinesIds, response.id],
                   });
                }),
             );

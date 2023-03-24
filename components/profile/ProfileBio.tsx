@@ -14,7 +14,7 @@ interface Props {
 export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
    const tw = useTailwind();
 
-   const { groupName, disciplinesList, loading, USER_TYPE, institutes } = useAddUserData();
+   const { groupName, disciplines, loading, userType, institutes } = useAddUserData();
 
    const renderLoadingItem = (item: string) => {
       if (loading) {
@@ -30,14 +30,14 @@ export const ProfileBio: React.FC<Props> = React.memo(({ openModal }) => {
       return (
          <TouchableOpacity onPress={openModal}>
             <Text style={tw("text-[18px] font-bold text-white")}>
-               ({disciplinesList.length}) {disciplinesList.length < 5 ? "Предмета" : "Предметов"}
+               ({disciplines.length}) {disciplines.length < 5 ? "Предмета" : "Предметов"}
             </Text>
          </TouchableOpacity>
       );
    };
 
    const renderData = () => {
-      if (USER_TYPE === USER_TYPE.STUDENT) {
+      if (userType === USER_TYPE.STUDENT) {
          return (
             <View>
                <View style={tw("flex flex-row items-center justify-between")}>

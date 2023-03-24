@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
-import { Institute, Teacher } from "../../typings";
+import { FBTeacher, Institute, Teacher } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
-import { QUERIES } from "../../utils";
+import { QUERIES, UserConverter } from "../../utils";
 
 export const useTeachers = (institute: Institute) => {
    const [teachers, setTeachers] = useState<Teacher[]>([]);
@@ -13,21 +13,24 @@ export const useTeachers = (institute: Institute) => {
       const getData = async () => {
          if (institute) {
             setLoading(true);
-            const DBTeachers = await getAllDataWithFilter<Teacher>(
-               QUERIES.CREATE_MULTIPLE_QUERY<Teacher>(DB_PATHS.USERS, [
+            const FBTeachers = await getAllDataWithFilter<FBTeacher>(
+               QUERIES.CREATE_MULTIPLE_QUERY<FBTeacher>(DB_PATHS.USERS, [
                   {
                      fieldName: "type",
                      fieldValue: USER_TYPE.TEACHER,
                      opStr: "==",
                   },
                   {
-                     fieldName: "institutes",
+                     fieldName: "institutes_ids",
                      fieldValue: institute.id,
                      opStr: "array-contains",
                   },
                ]),
             );
-            setTeachers(DBTeachers);
+            const Teachers = FBTeachers.map((teacher) => ({
+               ...UserConverter.toData(teacher),
+            }));
+            setTeachers(Teachers);
             setLoading(false);
          }
       };

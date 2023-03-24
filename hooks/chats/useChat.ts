@@ -6,9 +6,10 @@ import { useSelector } from "react-redux";
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
-import type { Chat, ChatPreview, Group } from "../../typings";
+import type { ChatPreview, FBChat, Group } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
-import { QUERIES, createCollection } from "../../utils";
+import { ChatConverter, QUERIES, createCollection } from "../../utils";
+import { isEmpty } from "../../utils/isEmpty";
 
 export const useChat = (disciplineId: string) => {
    const user = useSelector(selectUser);
@@ -16,54 +17,73 @@ export const useChat = (disciplineId: string) => {
    const [loading, setLoading] = useState<boolean>(false);
 
    useEffect(() => {
+      let active = true;
       const getData = async () => {
          if (user.type === USER_TYPE.STUDENT) {
             setLoading(true);
-            // eslint-disable-next-line @typescript-eslint/no-shadow
-            let chat: ChatPreview = null;
-            const q = QUERIES.CREATE_MULTIPLE_QUERY<Chat>(DB_PATHS.CHATS, [
+
+            const q = QUERIES.CREATE_MULTIPLE_QUERY<FBChat>(DB_PATHS.CHATS, [
                {
-                  fieldName: "disciplineId",
+                  fieldName: "discipline_id",
                   fieldValue: disciplineId,
                   opStr: "==",
                },
                {
-                  fieldName: "groupId",
+                  fieldName: "group_id",
                   fieldValue: user.groupId,
                   opStr: "==",
                },
             ]);
-            const DBchat = await getAllDataWithFilter<Chat>(q);
+            const FBChat = await getAllDataWithFilter<FBChat>(q);
 
-            if (DBchat.length > 0) {
-               chat = {
-                  id: DBchat[0].id,
-                  groupId: DBchat[0].groupId,
-                  groupName: "",
+            if (isEmpty(FBChat)) {
+               // если чат еще не создан, создаем новый чат...
+
+               const newChat: FBChat = {
+                  discipline_id: disciplineId,
+                  group_id: user.groupId,
                };
-            } else {
-               // создаем новый чат...
+
                await addDoc(createCollection(DB_PATHS.CHATS), {
-                  disciplineId,
-                  groupId: user.groupId,
+                  newChat,
                }).then(async (res) => {
                   const chatId = res.id;
-                  const NewDBchat = await getDataById<Chat>(chatId, DB_PATHS.CHATS);
-                  chat = {
-                     id: chatId,
-                     groupId: NewDBchat.groupId,
-                     groupName: "",
-                  };
+                  const NewFbChat = await getDataById<FBChat>(chatId, DB_PATHS.CHATS);
+                  const newPreviewChat = ChatConverter.toData(NewFbChat);
+                  if (active) {
+                     setChat({
+                        id: newPreviewChat.id,
+                        groupId: newPreviewChat.groupId,
+                        groupName: "",
+                     });
+                  }
                });
+            } else {
+               // если чат уже создан
+               const previewChat = ChatConverter.toData(FBChat[0]);
+               if (active) {
+                  setChat({
+                     id: previewChat.id,
+                     groupId: previewChat.groupId,
+                     groupName: "",
+                  });
+               }
             }
 
             const groupName = await getDataById<Group>(chat.groupId, DB_PATHS.GROUPS);
-            chat.groupName = groupName.name;
-            setChat(chat);
+            if (active) {
+               setChat((prev) => ({
+                  ...prev,
+                  groupName: groupName.name,
+               }));
+            }
             setLoading(false);
          }
       };
       getData();
+      return () => {
+         active = false;
+      };
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 

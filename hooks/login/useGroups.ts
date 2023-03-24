@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
-import { Group, Institute } from "../../typings";
+import { FBGroup, Group, Institute } from "../../typings";
 import { DB_PATHS, LFilter } from "../../typings/enums";
 import { QUERIES } from "../../utils";
+import { GroupConverter } from "../../utils/Converter/GroupConverter";
 import { isEmpty } from "../../utils/isEmpty";
 
 export const useGroups = (institutes: Institute[], filter: LFilter) => {
@@ -14,14 +15,14 @@ export const useGroups = (institutes: Institute[], filter: LFilter) => {
       const getData = async () => {
          if (!isEmpty(institutes[0]) && filter === LFilter.GROUPS) {
             setLoading(true);
-            const q = QUERIES.CREATE_SIMPLE_QUERY<Group>(DB_PATHS.GROUPS, {
-               fieldName: "instituteId",
+            const q = QUERIES.CREATE_SIMPLE_QUERY<FBGroup>(DB_PATHS.GROUPS, {
+               fieldName: "institute_id",
                fieldValue: institutes[0]?.id,
                opStr: "==",
             });
-            const DBGroups = await getAllDataWithFilter<Group>(q);
-
-            setGroups(DBGroups);
+            const FBGroups = await getAllDataWithFilter<FBGroup>(q);
+            const Groups = GroupConverter.toData(FBGroups);
+            setGroups(Groups);
             setLoading(false);
          }
       };

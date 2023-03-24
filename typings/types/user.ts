@@ -18,7 +18,7 @@ export interface Student extends User {
 }
 
 export interface FBStudent {
-   id?: string;
+   id: string;
    email: string;
    name: string;
    female: string;

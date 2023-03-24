@@ -1,8 +1,10 @@
+import { useMemo } from "react";
+
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import type { FBSource } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
-import { MaterialConverter } from "../../utils/Converter/MaterialConverter";
+import { MaterialConverter } from "../../utils";
 import { QUERIES } from "../../utils/createDBQuery";
 
 export const useMaterialDocuments = (materialId: string) => {
@@ -13,17 +15,25 @@ export const useMaterialDocuments = (materialId: string) => {
    });
    const [snap, loading, error] = useCollection(q);
 
-   const sources =
-      snap?.docs.map(
-         (comment) =>
-            ({
-               ...comment.data(),
-               id: comment.id,
-            } as FBSource),
-      ) || [];
+   const FBsources = useMemo(
+      () =>
+         snap?.docs.map(
+            (comment) =>
+               ({
+                  ...comment.data(),
+                  id: comment.id,
+               } as FBSource),
+         ) || [],
+      [snap?.docs],
+   );
+
+   const sources = useMemo(
+      () => FBsources.map((source) => MaterialConverter.convertSourceFromApi(source)),
+      [FBsources],
+   );
 
    return {
-      sources: sources.map((source) => MaterialConverter.convertSourceFromApi(source)),
+      sources,
       loading,
       error,
    };

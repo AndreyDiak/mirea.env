@@ -7,7 +7,7 @@ type ConvertUserFromApi<T> = Omit<FBAppUser, "app_theme"> & {
 };
 
 export class UserConverter {
-   public static toData(user: FBAppUser): AppUser {
+   public static toData(user: FBAppUser) {
       if (user.type === USER_TYPE.STUDENT) {
          const student: Student = {
             ...UserConverter.convertUserFromApi(user),

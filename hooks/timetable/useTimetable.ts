@@ -4,26 +4,28 @@ import { useSelector } from "react-redux";
 
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
-import { TimeTable } from "../../typings";
+import { FBLesson, Timetable } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES } from "../../utils";
+import { TimetableConverter } from "../../utils/Converter/TimetableConverter";
 
 export const useTimetable = () => {
    const user = useSelector(selectUser);
-   const [timeTable, setTimeTable] = useState<TimeTable>(null);
+   const [timeTable, setTimeTable] = useState<Timetable>(null);
    const [loading, setLoading] = useState<boolean>(false);
 
    useEffect(() => {
       const getData = async () => {
          if (user.type === USER_TYPE.STUDENT) {
             setLoading(true);
-            const q = QUERIES.CREATE_SIMPLE_QUERY<TimeTable>(DB_PATHS.TIMETABLES, {
-               fieldName: "groupId",
+            const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
+               fieldName: "group_id",
                fieldValue: user.groupId,
                opStr: "==",
             });
-            const data = await getAllDataWithFilter<TimeTable>(q);
-            setTimeTable(data[0]);
+            const data = await getAllDataWithFilter<FBLesson>(q);
+            const timetable = TimetableConverter.toData(data);
+            setTimeTable(timetable);
             setLoading(false);
          }
       };
