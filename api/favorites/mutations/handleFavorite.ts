@@ -3,28 +3,28 @@ import { ToastAndroid } from "react-native";
 import { addDoc, collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
 import { db } from "../../../firebase";
-import type { Favorite } from "../../../typings";
+import type { FBFavorite } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
 import { QUERIES } from "../../../utils/createDBQuery";
 
 export const handleFavorite = async (userId: string, materialId: string, isInFavorite: boolean) => {
    if (!isInFavorite) {
-      const data: Omit<Favorite, "id"> = {
-         userId,
-         materialId,
+      const data: Omit<FBFavorite, "id"> = {
+         user_id: userId,
+         material_id: materialId,
       };
       await addDoc(collection(db, DB_PATHS.FAVORITES), data);
       ToastAndroid.show("Добавлено в избранные", 1000);
    } else {
       const favorites = await getDocs(
-         QUERIES.CREATE_MULTIPLE_QUERY<Favorite>(DB_PATHS.FAVORITES, [
+         QUERIES.CREATE_MULTIPLE_QUERY<FBFavorite>(DB_PATHS.FAVORITES, [
             {
-               fieldName: "userId",
+               fieldName: "user_id",
                fieldValue: userId,
                opStr: "==",
             },
             {
-               fieldName: "materialId",
+               fieldName: "material_id",
                fieldValue: materialId,
                opStr: "==",
             },

@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 
 import { FlatList, Keyboard, Text, TouchableOpacity, View } from "react-native";
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Card } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
@@ -12,9 +12,7 @@ import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useChats, useTheme } from "../hooks";
-import type { ChatsScreenNavigatorProp, RootStackParamList } from "../typings";
-
-type ChatsScreenRouteProp = RouteProp<RootStackParamList, "Chats">;
+import type { ChatsScreenNavigationProp, ChatsScreenRouteProp } from "../typings";
 
 export function ChatsScreen() {
    const {
@@ -23,7 +21,7 @@ export function ChatsScreen() {
 
    const tw = useTailwind();
 
-   const navigation = useNavigation<ChatsScreenNavigatorProp>();
+   const navigation = useNavigation<ChatsScreenNavigationProp>();
 
    const user = useSelector(selectUser);
 
@@ -91,13 +89,16 @@ export function ChatsScreen() {
                      <View style={tw("flex flex-row justify-between")}>
                         <Text
                            style={{
-                              color: APP_THEME_BORDER,
+                              color: APP_THEME_TEXT,
                            }}
                         >
                            Группа: <Text style={tw("font-bold")}>{chat.groupName}</Text>
                         </Text>
                         <TouchableOpacity
                            onPress={() =>
+                              // TODO @raymix разобраться как делать типы
+                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                              // @ts-ignore
                               navigation.navigate("Chat", {
                                  chatId: chat.id,
                                  groupName: chat.groupName,

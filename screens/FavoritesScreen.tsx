@@ -67,7 +67,6 @@ export function FavoritesScreen() {
                            key={favorite.index}
                            material={favorite.item}
                            userId={user.id}
-                           userTheme={user.theme}
                            userType={user.type}
                         />
                      )}

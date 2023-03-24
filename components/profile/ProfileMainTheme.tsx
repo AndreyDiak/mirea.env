@@ -19,7 +19,7 @@ export const ProfileMainTheme: React.FC = React.memo(() => {
 
    const setAppTheme = async (theme: APP_THEME) => {
       await updateDoc(DOCS.CREATE_DOC(DB_PATHS.USERS, userId), {
-         appTheme: theme,
+         app_theme: theme,
       });
    };
 

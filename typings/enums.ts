@@ -8,19 +8,24 @@ export const enum DB_PATHS {
    INSTITUTES = "institutes", // все институты
    MATERIALS = "materials", // все материалы
    TIMETABLES = "timetable", // расписание для групп
-   // NOTIFICATIONS = "notifications",  работать не будет(
    FAVORITES = "favorites", // избранное пользователей
    REVIEWS = "reviews", // отзывы
    USERS = "users", // все пользователи
 }
 
-export const enum LFilter { // LoginPopupFilters
+export const enum AUTH_STEPS {
+   AUTH = "auth",
+   INFO = "info",
+   BIO = "bio",
+}
+
+export const enum LFilter {
    INSTITUTES = "institutes",
    GROUPS = "groups",
    DISCIPLINES = "disciplines",
 }
 
-export const enum UType {
+export const enum USER_TYPE {
    STUDENT = "student",
    TEACHER = "teacher",
    ADMIN = "admin",
@@ -29,6 +34,13 @@ export const enum UType {
 export const enum APP_THEME {
    LIGHT = "light",
    DARK = "dark",
+}
+
+export const enum USER_THEME {
+   BLUE = "blue",
+   VIOLET = "violet",
+   EMERALD = "emerald",
+   ROSE = "rose",
 }
 
 export const enum ADMIN_MODE {

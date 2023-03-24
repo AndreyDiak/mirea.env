@@ -14,7 +14,7 @@ import {
    setName as setNameAction,
    setUserType,
 } from "../features/authSlice";
-import { LFilter, UType } from "../typings/enums";
+import { LFilter, USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";
 
 export function AuthBioScreen() {
@@ -33,7 +33,7 @@ export function AuthBioScreen() {
       setIsDialogVisible(!isDialogVisible);
    };
 
-   const toggleUserType = (userType: UType) => {
+   const toggleUserType = (userType: USER_TYPE) => {
       dispatch(setUserType({ type: userType }));
    };
 
@@ -59,14 +59,14 @@ export function AuthBioScreen() {
                <Input placeholder="Ваша фамилия..." value={female} onChangeText={setFemale} />
                <CheckBox
                   title="Я студент"
-                  checked={userData.type === UType.STUDENT}
-                  onPress={() => toggleUserType(UType.STUDENT)}
+                  checked={userData.type === USER_TYPE.STUDENT}
+                  onPress={() => toggleUserType(USER_TYPE.STUDENT)}
                   containerStyle={{ padding: 0 }}
                />
                <CheckBox
                   title="Я преподаватель"
-                  checked={userData.type === UType.TEACHER}
-                  onPress={() => toggleUserType(UType.TEACHER)}
+                  checked={userData.type === USER_TYPE.TEACHER}
+                  onPress={() => toggleUserType(USER_TYPE.TEACHER)}
                   containerStyle={{ padding: 0 }}
                />
                {/* Select user Institutesvb  */}
@@ -84,7 +84,7 @@ export function AuthBioScreen() {
                )}
                {userData.institutes?.length > 0 && (
                   <View style={tw("text-blue-400 text-lg py-2")}>
-                     {userData.type === UType.STUDENT ? (
+                     {userData.type === USER_TYPE.STUDENT ? (
                         <LoginDialogOpen
                            isSelected={!isEmpty(userData.group)}
                            text="Выбрать группу"

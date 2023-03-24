@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { handleFavorite } from "../../../api";
 import { selectUserAppTheme } from "../../../features/userSlice";
-import type { DisciplineScreenNavigatorProp, Material } from "../../../typings";
+import type { DisciplineScreenNavigationProp, Material } from "../../../typings";
 import { APP_THEME } from "../../../typings/enums";
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
 
 export const MaterialMenu: React.FC<Props> = React.memo(({ userId, material, isFavorite }) => {
    const tw = useTailwind();
-   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
+   const navigation = useNavigation<DisciplineScreenNavigationProp>();
 
    const userAppTheme = useSelector(selectUserAppTheme);
 

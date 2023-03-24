@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { getAllDataWithFilter } from "../../api";
-import type { Discipline, Institute } from "../../typings";
+import type { Discipline, FBDiscipline, Institute } from "../../typings";
 import { DB_PATHS, LFilter } from "../../typings/enums";
-import { QUERIES } from "../../utils";
+import { DisciplineConverter, QUERIES } from "../../utils";
+import { isEmpty } from "../../utils/isEmpty";
 
 export const useDisciplines = (institutes: Institute[], filter: LFilter) => {
    const [disciplines, setDisciplines] = useState<Record<string, Discipline[]>>(null);
@@ -12,18 +13,19 @@ export const useDisciplines = (institutes: Institute[], filter: LFilter) => {
 
    useEffect(() => {
       const getData = async () => {
-         if (!!institutes.length && filter === LFilter.DISCIPLINES) {
+         if (!isEmpty(institutes) && filter === LFilter.DISCIPLINES) {
             setLoading(true);
             const initialDisiciplines: Record<string, Discipline[]> = {};
             await Promise.all(
                institutes.map(async (institute) => {
-                  const q = QUERIES.CREATE_SIMPLE_QUERY<Discipline>(DB_PATHS.DISCIPLINES, {
-                     fieldName: "instituteId",
-                     fieldValue: institute.id,
+                  const q = QUERIES.CREATE_SIMPLE_QUERY<FBDiscipline>(DB_PATHS.DISCIPLINES, {
+                     fieldName: "institute_id",
+                     fieldValue: institute?.id,
                      opStr: "==",
                   });
-                  const DBDisciplines = await getAllDataWithFilter<Discipline>(q);
-                  initialDisiciplines[institute.shortName] = DBDisciplines;
+                  const FBDisciplines = await getAllDataWithFilter<FBDiscipline>(q);
+                  const Disciplines = DisciplineConverter.toData(FBDisciplines);
+                  initialDisiciplines[institute.shortName] = Disciplines;
                }),
             );
 

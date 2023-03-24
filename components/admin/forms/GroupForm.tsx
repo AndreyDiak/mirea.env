@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 import { Card, Input } from "@rneui/themed";
 import { addDoc } from "firebase/firestore";
-import { useTailwind } from "tailwind-rn/dist";
 
 import { useInstitutes } from "../../../hooks/login";
 import type { Institute } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
-import { createCollection } from "../../../utils";
+import { GroupPatcher, createCollection } from "../../../utils";
 import { Button } from "../../Button";
 import { CheckListSingle } from "../checklist/CheckListSingle";
 
@@ -19,16 +18,18 @@ export function GroupForm() {
    const [loading, setLoading] = useState(false);
    const { institutes } = useInstitutes();
 
-   const tw = useTailwind();
-
    const addGroup = async () => {
       if (groupName === "") {
          return;
       }
       setLoading(true);
-      await addDoc(createCollection(DB_PATHS.GROUPS), {
+      const FBGroup = GroupPatcher.toApiData({
+         id: "",
          name: groupName,
          instituteId: selectedInstitute.id,
+      });
+      await addDoc(createCollection(DB_PATHS.GROUPS), {
+         ...FBGroup,
       }).then(() => {
          setGroupName("");
          setSelectedInstitute(null);

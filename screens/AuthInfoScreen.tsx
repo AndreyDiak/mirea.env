@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { LoginForm } from "../components";
 import { setEmail, setPassword } from "../features/authSlice";
-import type { AuthInfoScreenNavigatorProp } from "../typings";
+import { AUTH_STEPS, AuthInfoScreenNavigationProp } from "../typings";
 
 interface UserData {
    email: string;
@@ -19,7 +19,7 @@ interface UserData {
 
 export function AuthInfoScreen() {
    const tw = useTailwind();
-   const navigation = useNavigation<AuthInfoScreenNavigatorProp>();
+   const navigation = useNavigation<AuthInfoScreenNavigationProp>();
    const [userData, setUserData] = useState<UserData>(null);
 
    const dispatch = useDispatch();
@@ -51,7 +51,7 @@ export function AuthInfoScreen() {
 
    return (
       <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
-         <LoginForm handleSubmit={checkEmailAndPassword} step="info" error={error}>
+         <LoginForm handleSubmit={checkEmailAndPassword} step={AUTH_STEPS.INFO} error={error}>
             <View>
                <Input
                   placeholder="Почта..."

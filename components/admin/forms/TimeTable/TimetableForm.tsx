@@ -22,6 +22,8 @@ export function TimetableForm() {
    const {
       timetable,
       institute,
+      teachers,
+      disciplines,
       group,
       loading,
       loadTimetable,
@@ -75,7 +77,9 @@ export function TimetableForm() {
                )}
             />
          )}
-         <Button title="Загрузить расписание" callback={loadTimetable} disabled={loading} />
+         {!isEmpty(group) && !isEmpty(institute) ? (
+            <Button title="Загрузить расписание" callback={loadTimetable} disabled={loading} />
+         ) : null}
       </Card>
    );
 }

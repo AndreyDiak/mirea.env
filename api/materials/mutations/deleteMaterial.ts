@@ -1,9 +1,10 @@
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc } from "firebase/firestore";
 
-import { db } from "../../../firebase";
+import { DB_PATHS } from "../../../typings";
+import { DOCS } from "../../../utils";
 
 // delete material if u an owner
 
 export const deleteMaterial = async (materialId: string) => {
-   await deleteDoc(doc(db, `materials/${materialId}`));
+   await deleteDoc(DOCS.CREATE_DOC(DB_PATHS.MATERIALS, materialId));
 };

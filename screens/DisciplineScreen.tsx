@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Icon } from "@rneui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
@@ -11,17 +11,15 @@ import { useTailwind } from "tailwind-rn/dist";
 import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
 import { selectUser } from "../features/userSlice";
 import { useMaterials, useTheme } from "../hooks";
-import { DisciplineScreenNavigatorProp, RootStackParamList } from "../typings";
-import { UType } from "../typings/enums";
+import type { DisciplineScreenNavigationProp, DisciplineScreenRouteProp } from "../typings";
+import { USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";
-
-type DisciplineScreenRouteProp = RouteProp<RootStackParamList, "Discipline">;
 
 export function DisciplineScreen() {
    const [isFormVisible, setIsFormVisible] = useState(false);
 
    const tw = useTailwind();
-   const navigation = useNavigation<DisciplineScreenNavigatorProp>();
+   const navigation = useNavigation<DisciplineScreenNavigationProp>();
    const user = useSelector(selectUser);
 
    const { THEME_MAIN } = useTheme();
@@ -39,7 +37,7 @@ export function DisciplineScreen() {
       });
    }, [discipline, navigation, user.appTheme]);
 
-   const isStudent = user.type === UType.STUDENT;
+   const isStudent = user.type === USER_TYPE.STUDENT;
 
    if (loading) {
       return <Loader text="Загрузка материалов" theme={user.theme} />;
@@ -89,7 +87,6 @@ export function DisciplineScreen() {
                            material={material}
                            userId={user.id}
                            userType={user.type}
-                           userTheme={user.theme}
                         />
                      );
                   }}

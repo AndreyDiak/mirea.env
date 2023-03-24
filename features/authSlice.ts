@@ -3,17 +3,17 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
 import { RootState } from "../store";
-import type { AppTheme, Discipline, Group, Institute } from "../typings";
-import { UType } from "../typings/enums";
+import type { Discipline, Group, Institute } from "../typings";
+import { USER_THEME, USER_TYPE } from "../typings/enums";
 
 export interface AuthState {
    email: string;
    password: string;
-   type: UType;
+   type: USER_TYPE;
    name: string;
    female: string;
    img: string;
-   theme: AppTheme;
+   theme: USER_THEME;
    institutes: Institute[]; // array of institutes
    // STUDENT
    group: Group; // group obj
@@ -28,7 +28,7 @@ const initialState: AuthState = {
    name: null,
    female: null,
    img: "",
-   theme: "blue",
+   theme: USER_THEME.BLUE,
    group: null,
    disciplines: [],
    institutes: [],
@@ -50,7 +50,7 @@ export const authSlice = createSlice({
       setFemale: (state, action: PayloadAction<{ female: string }>) => {
          state.password = action.payload.female;
       },
-      setUserType: (state, action: PayloadAction<{ type: UType }>) => {
+      setUserType: (state, action: PayloadAction<{ type: USER_TYPE }>) => {
          // при смене типа пользователя зануляем выбранные институты
          if (state.type !== action.payload.type && state.type !== null) {
             state.institutes = [];
@@ -60,7 +60,7 @@ export const authSlice = createSlice({
          state.type = action.payload.type;
       },
       setInstitutes: (state, action: PayloadAction<{ institute: Institute }>) => {
-         if (state.type === UType.STUDENT) {
+         if (state.type === USER_TYPE.STUDENT) {
             state.institutes = [action.payload.institute];
          } else {
             // проверка выбран ли уже этот институт

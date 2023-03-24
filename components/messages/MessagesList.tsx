@@ -8,28 +8,26 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../features/userSlice";
 import { useMessages, useTheme } from "../../hooks";
-import type { DBMessage } from "../../typings";
+import type { Message as MessageType } from "../../typings";
 import { isEmpty } from "../../utils";
 import { CenteredText } from "../common";
 import { Message } from "./Message";
 import { MessagesScrollToBottom } from "./MessagesScrollToBottom";
 
-type Props = {
+interface Props {
    chatId: string;
-   isScrollToBottomVisible: boolean;
+   isScrollButtonShown: boolean;
    selectedMessageId: string | undefined;
-   setIsScrollToBottomVisible: (isVisible: boolean) => void;
-   setSelectedMessage: (selectedMessage: DBMessage) => void;
-   setIsHeaderMenuVisible: (isVisible: boolean) => void;
-};
+   onLongPressMessage(message: MessageType): void;
+   setIsScrollButtonShown: (isVisible: boolean) => void;
+}
 
 export function MessagesList({
    chatId,
-   isScrollToBottomVisible,
+   isScrollButtonShown,
    selectedMessageId,
-   setIsScrollToBottomVisible,
-   setSelectedMessage,
-   setIsHeaderMenuVisible,
+   setIsScrollButtonShown,
+   onLongPressMessage,
 }: Props) {
    const tw = useTailwind();
    const user = useSelector(selectUser);
@@ -53,23 +51,14 @@ export function MessagesList({
    // scrollToBottom function
    const scrollToBottom = useCallback(() => {
       flatListRef.current.scrollToEnd({ animating: true });
-      setIsScrollToBottomVisible(false);
-   }, [setIsScrollToBottomVisible]);
+      setIsScrollButtonShown(false);
+   }, [setIsScrollButtonShown]);
 
    // onMessagePress function...
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-   const onMessagePress = (message: DBMessage) => {
+   const onMessagePress = (message: MessageType) => {
       // fast press on message
    };
-
-   // onMessageLongPress function...
-   const onMessageLongPress = useCallback(
-      (message: DBMessage) => {
-         setIsHeaderMenuVisible(true);
-         setSelectedMessage(message);
-      },
-      [setIsHeaderMenuVisible, setSelectedMessage],
-   );
 
    if (loading && isEmpty(messages)) {
       return (
@@ -91,7 +80,7 @@ export function MessagesList({
 
    return (
       <>
-         <MessagesScrollToBottom isVisible={isScrollToBottomVisible} handleScroll={scrollToBottom} />
+         <MessagesScrollToBottom isVisible={isScrollButtonShown} handleScroll={scrollToBottom} />
 
          <FlatList
             ref={flatListRef}
@@ -100,7 +89,7 @@ export function MessagesList({
             scrollEnabled
             // добавляем кнопку если добавились сообщения
             onContentSizeChange={() => {
-               setIsScrollToBottomVisible(true);
+               setIsScrollButtonShown(true);
             }}
             // когда мы доскролили убираем кнопку
             // onScrollEndDrag={() => {
@@ -110,8 +99,8 @@ export function MessagesList({
             // }}
             onEndReachedThreshold={0.2}
             onEndReached={() => {
-               if (isScrollToBottomVisible) {
-                  setIsScrollToBottomVisible(false);
+               if (isScrollButtonShown) {
+                  setIsScrollButtonShown(false);
                }
             }}
             // TODO у каждого пользователя должна хранится инфа
@@ -120,7 +109,7 @@ export function MessagesList({
             renderItem={({ item: message, index }) => (
                <TouchableOpacity
                   onPress={() => onMessagePress(message)}
-                  onLongPress={() => onMessageLongPress(message)}
+                  onLongPress={() => onLongPressMessage(message)}
                >
                   <Message
                      key={message.id}

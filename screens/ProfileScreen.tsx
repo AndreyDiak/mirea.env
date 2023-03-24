@@ -22,9 +22,9 @@ import {
 import { selectUser } from "../features/userSlice";
 import { auth } from "../firebase";
 import { useTheme } from "../hooks";
-import { UType } from "../typings/enums";
+import { USER_TYPE } from "../typings/enums";
 
-const userTypeToStringMap: Record<UType, string> = {
+const userTypeToStringMap: Record<USER_TYPE, string> = {
    student: "Студент",
    teacher: "Преподаватель",
    admin: "Админ",

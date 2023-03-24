@@ -5,30 +5,30 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { useTailwind } from "tailwind-rn/dist";
 
-import type { AuthSteps, LoginScreenNavigatorProp } from "../../typings";
+import { AUTH_STEPS, LoginScreenNavigationProp } from "../../typings";
 
 type Props = {
-   step: AuthSteps;
+   step: AUTH_STEPS;
    children: JSX.Element;
    handleSubmit: () => void;
    error: string;
 };
 
-const stepToTextMap: Record<AuthSteps, string> = {
-   auth: "Войти",
-   info: "Продолжить",
-   bio: "Регистрация",
+const stepToTextMap: Record<AUTH_STEPS, string> = {
+   [AUTH_STEPS.AUTH]: "Войти",
+   [AUTH_STEPS.INFO]: "Продолжить",
+   [AUTH_STEPS.BIO]: "Регистрация",
 };
 
-const titleToTextMap: Record<AuthSteps, string> = {
-   auth: "Авторизация",
-   info: "Регистрация",
-   bio: "Регистрация",
+const titleToTextMap: Record<AUTH_STEPS, string> = {
+   [AUTH_STEPS.AUTH]: "Авторизация",
+   [AUTH_STEPS.INFO]: "Регистрация",
+   [AUTH_STEPS.BIO]: "Регистрация",
 };
 
 export const LoginForm: React.FC<Props> = React.memo(({ step, children, handleSubmit, error }) => {
    const tw = useTailwind();
-   const navigation = useNavigation<LoginScreenNavigatorProp>();
+   const navigation = useNavigation<LoginScreenNavigationProp>();
 
    const stepTitle = step === "auth" ? "Нет аккаунта?" : "Есть аккаунт?";
 
