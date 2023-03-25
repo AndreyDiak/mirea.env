@@ -7,7 +7,7 @@ import { Material } from "./types";
 import { Discipline } from "./types/discipline";
 
 export interface Timestamp {
-   toDate(): import("moment").MomentInput;
+   toDate(): any;
    seconds: number;
    nanoseconds: number;
 }

@@ -5,10 +5,10 @@ import { Text, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useTheme } from "../../hooks";
-import type { DBComment } from "../../typings";
+import type { Comment as CommentType } from "../../typings";
 
 type Props = {
-   comment: DBComment;
+   comment: CommentType;
    index: number;
    isLast: boolean;
 };
@@ -39,13 +39,13 @@ export const Comment: React.FC<Props> = React.memo(({ comment, index, isLast }) 
             </Text>
             <Text
                style={[
-                  tw("text-right text-xs"),
+                  tw("text-right text-xs font-semibold text-gray-500"),
                   {
                      color: APP_THEME_TEXT,
                   },
                ]}
             >
-               {comment.email}
+               {comment.ownerEmail}
             </Text>
          </View>
          {!isLast && (

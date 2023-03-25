@@ -1,15 +1,14 @@
 import type { FBLesson, Timetable } from "../../typings";
-import { Lesson, PreviewLesson } from "../../typings/types/timetable";
+import { Lesson } from "../../typings/types/timetable";
 import { getEmptyLessons } from "../admin/getEmpyTimetable";
 import { isEmpty } from "../isEmpty";
 
 export class TimetableConverter {
-   public static toData(lessons: FBLesson[]): Timetable {
+   public static toData(lessons: FBLesson[], groupId: string): Timetable {
       if (isEmpty(lessons)) {
          return null;
       }
 
-      const groupId = lessons[0].group_id ?? null;
       const days: Record<string, Lesson[]> = {};
 
       Array(6)
@@ -40,6 +39,7 @@ export class TimetableConverter {
          cabinet: FBLesson.cabinet,
          dayIndex: FBLesson.day_index ?? null,
          orderIndex: FBLesson.order_index ?? null,
+         groupsIds: FBLesson.groups_ids ?? null,
          teachersIds: FBLesson.teachers_ids ?? null,
       };
    }

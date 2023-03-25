@@ -45,29 +45,34 @@ export const useChat = (disciplineId: string) => {
                };
 
                await addDoc(createCollection(DB_PATHS.CHATS), {
-                  newChat,
+                  ...newChat,
                }).then(async (res) => {
                   const chatId = res.id;
                   const NewFbChat = await getDataById<FBChat>(chatId, DB_PATHS.CHATS);
                   const newPreviewChat = ChatConverter.toData(NewFbChat);
                   const group = await getDataById<Group>(newPreviewChat.groupId, DB_PATHS.GROUPS);
                   if (!active) return;
-                  setChat({
+
+                  const chatPreview: ChatPreview = {
                      id: newPreviewChat.id,
                      groupId: newPreviewChat.groupId,
-                     groupName: group.id,
-                  });
+                     groupName: group.name,
+                  };
+
+                  setChat(chatPreview);
                });
             } else {
                // если чат уже создан
                const previewChat = ChatConverter.toData(FBChat[0]);
                const group = await getDataById<Group>(previewChat.groupId, DB_PATHS.GROUPS);
                if (!active) return;
-               setChat({
+
+               const chatPreview: ChatPreview = {
                   id: previewChat.id,
                   groupId: previewChat.groupId,
                   groupName: group.name,
-               });
+               };
+               setChat(chatPreview);
             }
 
             setLoading(false);

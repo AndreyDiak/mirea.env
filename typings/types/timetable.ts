@@ -5,12 +5,14 @@ export interface Lesson {
    dayIndex: number | null;
    orderIndex: number | null;
    teachersIds: string[] | null;
+   groupsIds: string[] | null;
 }
 
 export interface PreviewLesson {
    name: string;
    cabinet: string;
-   teachersNames: string[] | null;
+   teachersNames?: string[] | null;
+   groupNames?: string[] | null;
 }
 
 export interface FBLesson {
@@ -19,7 +21,7 @@ export interface FBLesson {
    cabinet: string;
    day_index: number | undefined;
    order_index: number | undefined;
-   group_id: string | undefined;
+   groups_ids: string[] | undefined;
    teachers_ids: string[] | undefined;
 }
 

@@ -4,21 +4,15 @@ import { useCollection } from "react-firebase-hooks/firestore";
 
 import { FBComment } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
-import { CommentConverter } from "../../utils/Converter/CommentConverter";
-import { QUERIES } from "../../utils/createDBQuery";
+import { CommentConverter, QUERIES } from "../../utils";
 
 export const useMaterialComments = (materialId: string) => {
-   const q = QUERIES.CREATE_SIMPLE_QUERY_ORDERED<FBComment>(
-      DB_PATHS.COMMENTS,
-      {
-         fieldName: "material_id",
-         fieldValue: materialId,
-         opStr: "==",
-      },
-      {
-         fieldValue: "timestamp",
-      },
-   );
+   const q = QUERIES.CREATE_SIMPLE_QUERY<FBComment>(DB_PATHS.COMMENTS, {
+      fieldName: "material_id",
+      fieldValue: materialId,
+      opStr: "==",
+   });
+
    const [snap, loading, error] = useCollection(q);
 
    const FBComments = useMemo(

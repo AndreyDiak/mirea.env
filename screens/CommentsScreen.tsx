@@ -12,9 +12,14 @@ import { Comment, Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useMaterialComments, useTheme } from "../hooks";
-import type { CommentsScreenNavigationProp, CommentsScreenRouteProp } from "../typings";
+import type {
+   Comment as CommentType,
+   CommentsScreenNavigationProp,
+   CommentsScreenRouteProp,
+   Timestamp,
+} from "../typings";
 import { DB_PATHS } from "../typings/enums";
-import { createCollection, isEmpty } from "../utils";
+import { CommentPatcher, createCollection, isEmpty } from "../utils";
 
 export function CommentsScreen() {
    const {
@@ -50,11 +55,21 @@ export function CommentsScreen() {
       }
       setLoading(true);
       Keyboard.dismiss();
-      await addDoc(createCollection(DB_PATHS.COMMENTS), {
-         email: user?.email,
-         text: commentText,
-         timestamp: serverTimestamp(),
+
+      const comment: CommentType = {
+         id: "",
          materialId: material.id,
+         text: commentText,
+         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+         // @ts-ignore
+         timestamp: serverTimestamp() as Timestamp,
+         ownerEmail: user.email,
+      };
+
+      const FBComment = CommentPatcher.toApiData(comment);
+
+      await addDoc(createCollection(DB_PATHS.COMMENTS), {
+         ...FBComment,
       }).then(() => {
          setCommentText("");
          flatListRef.current?.scrollToEnd({ animating: true });

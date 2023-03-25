@@ -27,6 +27,8 @@ export const selectUser = (state: RootState) => state.user.user;
 
 export const selectUserId = (state: RootState) => state.user.user.id;
 
+export const selectUserType = (state: RootState) => state?.user?.user?.type;
+
 export const selectUserTheme = (state: RootState) => state?.user?.user?.theme;
 
 export const selectUserAppTheme = (state: RootState) => state?.user?.user?.appTheme;
