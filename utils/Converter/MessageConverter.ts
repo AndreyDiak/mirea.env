@@ -1,7 +1,13 @@
 import { FBMessage, Message } from "../../typings";
 
 export class MessageConverter {
-   public static toData(message: FBMessage): Message {
+   public static toData(messages: FBMessage[]): Message[] {
+      return messages.map((message) => ({
+         ...MessageConverter.convertFromApi(message),
+      }));
+   }
+
+   public static convertFromApi(message: FBMessage): Message {
       return {
          id: message.id,
          email: message.email,

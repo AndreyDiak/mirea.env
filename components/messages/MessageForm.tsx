@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMessage } from "../../api";
 import { selectUser } from "../../features/userSlice";
 import { EditedMessage } from "../../hooks";
-import type { Message } from "../../typings";
+import type { Message, NewMessage } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { DOCS } from "../../utils";
 import { CustomInputField } from "../common/form/CustomInputField";
@@ -54,14 +54,16 @@ export const MessageForm: React.FC<Props> = React.memo(
                setIsEdited(false);
             });
          } else {
-            await addMessage(chatId, {
-               text: message.trimEnd(),
+            const newMessage: NewMessage = {
+               text: message.trim(),
                displayName: user.name,
                email: user.email,
                type: user.type,
                photoUrl: user.img,
                replyingId: isReplying ? activeMessage?.id : "",
-            }).then(() => {
+            };
+
+            await addMessage(chatId, newMessage).then(() => {
                Keyboard.dismiss();
                setMessage("");
                if (isReplying) {
