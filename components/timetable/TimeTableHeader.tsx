@@ -5,7 +5,9 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useTheme } from "../../hooks";
-import { Day, LessonDay } from "../../typings";
+import { Day, TimetableDay } from "../../typings";
+
+const daysPreview: Day[] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"];
 
 const dayToShortMap: Record<Day, string> = {
    Понедельник: "Пн",
@@ -17,23 +19,35 @@ const dayToShortMap: Record<Day, string> = {
 };
 
 interface Props {
-   timetable: LessonDay[];
    dayIndex: number;
    setDayIndex: (dayIndex: number) => void;
 }
 
-export const TimeTableHeader: React.FC<Props> = React.memo(({ timetable, dayIndex, setDayIndex }) => {
+export const TimeTableHeader: React.FC<Props> = React.memo(({ dayIndex, setDayIndex }) => {
    const tw = useTailwind();
 
-   const { THEME_MAIN } = useTheme();
+   const { THEME_MAIN, APP_THEME_SECONDARY, APP_THEME_TEXT } = useTheme();
 
    return (
-      <View style={tw("bg-white")}>
+      <View
+         style={{
+            backgroundColor: APP_THEME_SECONDARY,
+         }}
+      >
          <View style={tw("p-2")}>
-            <Text style={tw("font-bold")}>{timetable[dayIndex].day}</Text>
+            <Text
+               style={[
+                  tw("font-bold"),
+                  {
+                     color: APP_THEME_TEXT,
+                  },
+               ]}
+            >
+               {daysPreview[dayIndex]}
+            </Text>
          </View>
          <View style={tw("w-full flex flex-row")}>
-            {timetable.map((day, index) => (
+            {daysPreview.map((day, index) => (
                <TouchableOpacity
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
@@ -52,7 +66,7 @@ export const TimeTableHeader: React.FC<Props> = React.memo(({ timetable, dayInde
                         color: THEME_MAIN,
                      }}
                   >
-                     {dayToShortMap[day.day]}
+                     {dayToShortMap[day]}
                   </Text>
                </TouchableOpacity>
             ))}

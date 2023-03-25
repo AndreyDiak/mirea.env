@@ -6,32 +6,44 @@ import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { selectUser } from "../../features/userSlice";
 import { FBLesson, Timetable } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
-import { QUERIES } from "../../utils";
-import { TimetableConverter } from "../../utils/Converter/TimetableConverter";
+import { QUERIES, TimetableConverter } from "../../utils";
 
 export const useTimetable = () => {
    const user = useSelector(selectUser);
-   const [timeTable, setTimeTable] = useState<Timetable>(null);
+   const [timetable, setTimeable] = useState<Timetable>(null);
    const [loading, setLoading] = useState<boolean>(false);
 
    useEffect(() => {
       const getData = async () => {
+         setLoading(true);
          if (user.type === USER_TYPE.STUDENT) {
-            setLoading(true);
+            // подгрузка расписания для студента
             const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
-               fieldName: "group_id",
+               fieldName: "groups_ids",
                fieldValue: user.groupId,
-               opStr: "==",
+               opStr: "array-contains",
             });
             const data = await getAllDataWithFilter<FBLesson>(q);
-            const timetable = TimetableConverter.toData(data);
-            setTimeTable(timetable);
-            setLoading(false);
+            const newTimetable = TimetableConverter.toData(data, user.groupId);
+            setTimeable(newTimetable);
+         } else {
+            // подгрузка расписания для препода
+            const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
+               fieldName: "teachers_ids",
+               fieldValue: user.id,
+               opStr: "array-contains",
+            });
+            const data = await getAllDataWithFilter<FBLesson>(q);
+            const newTimetable = TimetableConverter.toData(data, "");
+            setTimeable(newTimetable);
          }
+
+         setLoading(false);
       };
       getData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
 
-   return { timeTable, loading };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [user.id, user.type]);
+
+   return { timetable, loading };
 };

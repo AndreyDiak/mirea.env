@@ -129,7 +129,7 @@ eas build -p android --profile preview
     MaterialPatcher / MaterialConverter     [+/+]
     CommentPatcher / CommentConverter       [+/+] 
 
-  [] починить все хуки с обработкой и отправкой данных, добавить оптимизации useMemo() useCallback()
+  [+] починить все хуки с обработкой и отправкой данных, добавить оптимизации useMemo() useCallback()
     /hooks
       /admin        [+]
       /chats        [+]
@@ -139,6 +139,9 @@ eas build -p android --profile preview
       /materials    [+]
       /timetable    [+]
       /user         [+]
+
   [] починить страницу расписания
+    / для ученика [+]
+    / для препода []
   [] использовать redux Для хранения данных?
   

@@ -14,7 +14,7 @@ import {
    setName as setNameAction,
    setUserType,
 } from "../features/authSlice";
-import { LFilter, USER_TYPE } from "../typings/enums";
+import { AUTH_STEPS, LFilter, USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";
 
 export function AuthBioScreen() {
@@ -52,7 +52,7 @@ export function AuthBioScreen() {
 
    return (
       <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
-         <LoginForm handleSubmit={registerHandler} step="bio" error={error}>
+         <LoginForm handleSubmit={registerHandler} step={AUTH_STEPS.BIO} error={error}>
             <View style={tw("")}>
                <LoginDialog isVisible={isDialogVisible} filter={filter} toggleVisible={setIsDialogVisible} />
                <Input placeholder="Ваше имя..." value={name} onChangeText={setName} />

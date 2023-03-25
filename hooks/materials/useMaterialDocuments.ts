@@ -4,8 +4,7 @@ import { useCollection } from "react-firebase-hooks/firestore";
 
 import type { FBSource } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
-import { MaterialConverter } from "../../utils";
-import { QUERIES } from "../../utils/createDBQuery";
+import { MaterialConverter, QUERIES } from "../../utils";
 
 export const useMaterialDocuments = (materialId: string) => {
    const q = QUERIES.CREATE_SIMPLE_QUERY<FBSource>(DB_PATHS.SOURCES, {

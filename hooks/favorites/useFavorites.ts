@@ -65,8 +65,8 @@ export function useFavorites(): UseFavorites {
    return useMemo(() => {
       return {
          favorites,
-         loading: loading || (!isEmpty(snapshot.docs) && isEmpty(favorites)),
+         loading: loading || (!isEmpty(snapshot?.docs) && isEmpty(favorites)),
          error,
       };
-   }, [error, favorites, loading, snapshot.docs]);
+   }, [error, favorites, loading, snapshot?.docs]);
 }

@@ -7,12 +7,12 @@ import { useSelector } from "react-redux";
 
 import { selectUserId, selectUserTheme } from "../../features/userSlice";
 import { db } from "../../firebase";
-import type { AppTheme } from "../../typings";
+import { USER_THEME } from "../../typings";
 import { returnDarkenHexCode, returnHexCode } from "../../utils";
 import { ColorBlock } from "./ColorBlock";
 
 type Props = {
-   theme: AppTheme;
+   theme: USER_THEME;
    isBordered: boolean;
 };
 

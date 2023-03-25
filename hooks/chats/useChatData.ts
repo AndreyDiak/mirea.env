@@ -61,7 +61,7 @@ export function useChatData(): UseChatData {
          text: activeMessage.text,
       });
       onHeaderClose();
-   }, [activeMessage.id, activeMessage.text, onHeaderClose]);
+   }, [activeMessage?.id, activeMessage?.text, onHeaderClose]);
 
    const onLongPressMessage = useCallback((message: Message) => {
       setIsHeaderMenuShown(true);

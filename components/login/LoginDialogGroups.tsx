@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { selectUserGroup, selectUserInstitutes, setGroup } from "../../features/authSlice";
 import { useGroups } from "../../hooks/login";
 import { Group } from "../../typings";
-import { LFilter } from "../../typings/enums";
+import { LFilter, USER_THEME } from "../../typings/enums";
 import { Error, Loader } from "../common";
 
 interface Props {
@@ -29,10 +29,10 @@ export const LoginDialogGroups: React.FC<Props> = React.memo(({ filter }) => {
 
    const renderData = () => {
       if (ILoading) {
-         return <Loader text="Загрузка доступных групп" theme="blue" />;
+         return <Loader text="Загрузка доступных групп" theme={USER_THEME.BLUE} />;
       }
       if (!groups.length) {
-         return <Error text="Группы не найдены" theme="blue" />;
+         return <Error text="Группы не найдены" theme={USER_THEME.BLUE} />;
       }
 
       return (

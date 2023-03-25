@@ -12,7 +12,7 @@ import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { selectUser } from "../features/userSlice";
 import { useChats, useTheme } from "../hooks";
-import type { ChatsScreenNavigationProp, ChatsScreenRouteProp } from "../typings";
+import { ChatsScreenNavigationProp, ChatsScreenRouteProp, USER_TYPE } from "../typings";
 
 export function ChatsScreen() {
    const {
@@ -111,15 +111,17 @@ export function ChatsScreen() {
                   </Card>
                )}
             />
-            <View style={tw("bg-red-100")}>
-               <CustomInputField
-                  placeholder="Написать всем группам..."
-                  value={message}
-                  loading={loading}
-                  setValue={setMessage}
-                  onSubmit={sendMessageToAllGroups}
-               />
-            </View>
+            {user.type === USER_TYPE.TEACHER ? (
+               <View style={tw("bg-red-100")}>
+                  <CustomInputField
+                     placeholder="Написать всем группам..."
+                     value={message}
+                     loading={loading}
+                     setValue={setMessage}
+                     onSubmit={sendMessageToAllGroups}
+                  />
+               </View>
+            ) : null}
          </>
       </ScreenTemplate>
    );

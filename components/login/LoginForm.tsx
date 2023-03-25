@@ -35,16 +35,7 @@ export const LoginForm: React.FC<Props> = React.memo(({ step, children, handleSu
    return (
       <View style={tw("bg-white w-4/5 rounded-lg p-2")}>
          {/* Logo */}
-         <Text
-            style={[
-               tw("text-blue-500 text-[44px] uppercase text-center"),
-               {
-                  fontFamily: "Roboto_500Medium",
-               },
-            ]}
-         >
-            mirea.env
-         </Text>
+         <Text style={tw("text-blue-500 text-[44px] uppercase text-center")}>mirea.env</Text>
          {/* Form */}
          <View style={tw("py-2")}>
             {/* Title */}

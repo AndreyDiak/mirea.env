@@ -9,7 +9,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { selectUserDisciplines, setDisciplines } from "../../features/authSlice";
 import { useDisciplines, useInstitutes } from "../../hooks/login";
 import type { Discipline } from "../../typings";
-import { LFilter } from "../../typings/enums";
+import { LFilter, USER_THEME } from "../../typings/enums";
 import { returnHexCode } from "../../utils/returnHexCodes";
 import { Error, Loader } from "../common";
 
@@ -36,11 +36,11 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
 
    const renderData = () => {
       if (ILoading || DLoading) {
-         return <Loader text="Загрузка доступных дисциплин" theme="blue" />;
+         return <Loader text="Загрузка доступных дисциплин" theme={USER_THEME.BLUE} />;
       }
 
       if (totalDisciplinesCount === 0) {
-         return <Error text="Дисциплины не найдены" theme="blue" />;
+         return <Error text="Дисциплины не найдены" theme={USER_THEME.BLUE} />;
       }
 
       return (
@@ -52,7 +52,7 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
                if (disciplines[IName].length > 0) {
                   return (
                      <View key={index} style={tw("mb-1")}>
-                        <View style={{ backgroundColor: returnHexCode("blue") }}>
+                        <View style={{ backgroundColor: returnHexCode(USER_THEME.BLUE) }}>
                            <Text style={tw("text-center py-2 text-white font-bold")}>{IName}</Text>
                         </View>
 

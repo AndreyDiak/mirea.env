@@ -94,8 +94,6 @@ export const authSlice = createSlice({
    },
 });
 
-export const selectUserType = (state: RootState) => state.auth.type;
-
 export const selectUserInstitutes = (state: RootState) => state.auth.institutes;
 
 export const selectUserDisciplines = (state: RootState) => state.auth.disciplines;

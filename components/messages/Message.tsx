@@ -6,18 +6,19 @@ import { doc, getDoc } from "firebase/firestore";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { db } from "../../firebase";
-import { AppTheme, DBMessage } from "../../typings";
-import { APP_THEME, DB_PATHS } from "../../typings/enums";
-import { returnAppThemeSecondary, returnHexCode, returnLightenHexCode } from "../../utils/returnHexCodes";
+import { FBMessage, Message as MessageType } from "../../typings";
+import { APP_THEME, DB_PATHS, USER_THEME } from "../../typings/enums";
+import { MessageConverter } from "../../utils";
+import { returnAppThemeSecondary, returnHexCode } from "../../utils/returnHexCodes";
 import { UserChatAvatar } from "../common";
 import { MessageData } from "./MessageData";
 import { MessageReply } from "./MessageReply";
 
 interface Props {
-   message: DBMessage;
+   message: MessageType;
    email: string;
    chatId: string;
-   theme: AppTheme;
+   theme: USER_THEME;
    appTheme: APP_THEME;
    nextMessageEmail: string | null;
    isBacklight: boolean;
@@ -39,7 +40,7 @@ export const Message: React.FC<Props> = React.memo(
    }) => {
       const tw = useTailwind();
 
-      const [replyingMessage, setReplyingMessage] = useState<DBMessage>(null);
+      const [replyingMessage, setReplyingMessage] = useState<MessageType>(null);
 
       const isNextMessageOwner = nextMessageEmail === message.email;
       const isMessageOwner = message.email === email;
@@ -58,10 +59,12 @@ export const Message: React.FC<Props> = React.memo(
                const replyingMessageSnap = await getDoc(
                   doc(db, `${DB_PATHS.CHATS}/${chatId}/messages/${message.replyingId}`),
                );
-               setReplyingMessage({
+               const FBReplyingMessage = {
                   ...replyingMessageSnap.data(),
                   id: replyingMessageSnap.id,
-               } as DBMessage);
+               } as FBMessage;
+               const ReplyingMessage = MessageConverter.toData(FBReplyingMessage);
+               setReplyingMessage(ReplyingMessage);
             }
          };
          getReplyingMessage();

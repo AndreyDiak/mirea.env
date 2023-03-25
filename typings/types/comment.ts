@@ -1,3 +1,5 @@
+import { FieldValue } from "firebase/firestore";
+
 import { Timestamp } from "../common";
 
 export interface Comment {
@@ -11,7 +13,7 @@ export interface Comment {
 export interface FBComment {
    id?: string;
    text: string;
-   timestamp: Timestamp;
+   timestamp: FieldValue;
    owner_email: string;
    material_id: string;
 }

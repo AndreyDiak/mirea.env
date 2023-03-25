@@ -38,7 +38,9 @@ function RootNavigator() {
          dispatch(setUser(null));
       }
    });
+
    useUser(initialUser);
+
    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
    // @ts-ignore
    if (user && user.type === USER_TYPE.ADMIN) {

@@ -5,12 +5,14 @@ export interface Lesson {
    dayIndex: number | null;
    orderIndex: number | null;
    teachersIds: string[] | null;
+   groupsIds: string[] | null;
 }
 
 export interface PreviewLesson {
    name: string;
    cabinet: string;
-   teachersNames: string[] | null;
+   teachersNames?: string[] | null;
+   groupNames?: string[] | null;
 }
 
 export interface FBLesson {
@@ -19,7 +21,7 @@ export interface FBLesson {
    cabinet: string;
    day_index: number | undefined;
    order_index: number | undefined;
-   group_id: string | undefined;
+   groups_ids: string[] | undefined;
    teachers_ids: string[] | undefined;
 }
 
@@ -27,12 +29,14 @@ export interface FBLesson {
  * в патчере из Timetable мы возвращам массив Lesson-ов
  * и пушим уже его в БД
  */
+
+export interface TimetableDay {
+   dayIndex: string;
+   lessons: Lesson[];
+}
 export interface Timetable {
    groupId: string | null;
-   days: {
-      dayIndex: string;
-      lessons: Lesson[];
-   }[];
+   days: TimetableDay[];
 }
 
 export type Day = "Понедельник" | "Вторник" | "Среда" | "Четверг" | "Пятница" | "Суббота";
