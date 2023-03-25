@@ -50,33 +50,26 @@ export const useChat = (disciplineId: string) => {
                   const chatId = res.id;
                   const NewFbChat = await getDataById<FBChat>(chatId, DB_PATHS.CHATS);
                   const newPreviewChat = ChatConverter.toData(NewFbChat);
-                  if (active) {
-                     setChat({
-                        id: newPreviewChat.id,
-                        groupId: newPreviewChat.groupId,
-                        groupName: "",
-                     });
-                  }
+                  const group = await getDataById<Group>(newPreviewChat.groupId, DB_PATHS.GROUPS);
+                  if (!active) return;
+                  setChat({
+                     id: newPreviewChat.id,
+                     groupId: newPreviewChat.groupId,
+                     groupName: group.id,
+                  });
                });
             } else {
                // если чат уже создан
                const previewChat = ChatConverter.toData(FBChat[0]);
-               if (active) {
-                  setChat({
-                     id: previewChat.id,
-                     groupId: previewChat.groupId,
-                     groupName: "",
-                  });
-               }
+               const group = await getDataById<Group>(previewChat.groupId, DB_PATHS.GROUPS);
+               if (!active) return;
+               setChat({
+                  id: previewChat.id,
+                  groupId: previewChat.groupId,
+                  groupName: group.name,
+               });
             }
 
-            const groupName = await getDataById<Group>(chat.groupId, DB_PATHS.GROUPS);
-            if (active) {
-               setChat((prev) => ({
-                  ...prev,
-                  groupName: groupName.name,
-               }));
-            }
             setLoading(false);
          }
       };

@@ -29,7 +29,7 @@ export const useMaterials = (disciplineId: string) => {
                   id: m.id,
                   ...m.data(),
                } as FBMaterial),
-         ),
+         ) ?? [],
       [snapshot?.docs],
    );
 

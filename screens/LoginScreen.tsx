@@ -8,6 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { LoginForm } from "../components";
 import { auth } from "../firebase";
+import { AUTH_STEPS } from "../typings";
 
 export function LoginScreen() {
    const tw = useTailwind();
@@ -24,7 +25,7 @@ export function LoginScreen() {
 
    return (
       <View style={tw("w-full h-full bg-slate-100 flex flex-row items-center justify-center")}>
-         <LoginForm step="auth" handleSubmit={signIn} error={error}>
+         <LoginForm step={AUTH_STEPS.AUTH} handleSubmit={signIn} error={error}>
             <View style={tw("")}>
                <Input placeholder="Почта..." value={login} onChangeText={setLogin} containerStyle={tw(``)} />
                <Input

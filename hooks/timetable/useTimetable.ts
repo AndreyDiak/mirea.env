@@ -11,7 +11,7 @@ import { TimetableConverter } from "../../utils/Converter/TimetableConverter";
 
 export const useTimetable = () => {
    const user = useSelector(selectUser);
-   const [timeTable, setTimeTable] = useState<Timetable>(null);
+   const [timetable, setTimeable] = useState<Timetable>(null);
    const [loading, setLoading] = useState<boolean>(false);
 
    useEffect(() => {
@@ -24,8 +24,8 @@ export const useTimetable = () => {
                opStr: "==",
             });
             const data = await getAllDataWithFilter<FBLesson>(q);
-            const timetable = TimetableConverter.toData(data);
-            setTimeTable(timetable);
+            const newTimetable = TimetableConverter.toData(data);
+            setTimeable(newTimetable);
             setLoading(false);
          }
       };
@@ -33,5 +33,5 @@ export const useTimetable = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
-   return { timeTable, loading };
+   return { timetable, loading };
 };

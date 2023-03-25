@@ -4,7 +4,10 @@ import { Text, View } from "react-native";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { LessonDay } from "../../typings";
+import { usePreviewLessons, useTheme } from "../../hooks";
+import { Lesson } from "../../typings";
+import { isEmpty } from "../../utils";
+import { Loader } from "../common";
 
 const lessonIndexToTimeMap: Record<number, string> = {
    0: "09:00 10:30",
@@ -16,22 +19,56 @@ const lessonIndexToTimeMap: Record<number, string> = {
 };
 
 interface Props {
-   timetable: LessonDay[];
+   lessons: Lesson[]; // @raymix TODO Lesson[] => PreviewLesson[]
    dayIndex: number;
 }
 
-export const TimeTableLessons: React.FC<Props> = React.memo(({ timetable, dayIndex }) => {
+export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons }) => {
    const tw = useTailwind();
+
+   const { APP_THEME_TEXT } = useTheme();
+
+   const { previewLessons, loading } = usePreviewLessons(lessons);
+
+   // сделать хук которые будет возвращать PreviewLesson уже с именами учителей
+
+   if (loading) {
+      return <Loader text="Загрузка доп. данных" />;
+   }
+
+   if (isEmpty(previewLessons)) {
+      return null;
+   }
+
    return (
       <View style={tw("flex flex-col px-4")}>
-         {timetable[dayIndex].lessons.map((lesson, index) => (
+         {previewLessons.map((lesson, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <View key={index} style={tw("flex flex-row py-4 mb-4")}>
+            <View key={index} style={tw("flex flex-row py-4 mb-4 overflow-hidden")}>
                <View style={tw("mr-4 max-w-[70px]")}>
                   <Text style={tw("font-bold text-gray-500")}>{lessonIndexToTimeMap[index]}</Text>
                </View>
-               <View>
-                  <Text style={tw("text-xl font-semibold")}>{lesson}</Text>
+               <View style={tw("flex-1")}>
+                  <Text
+                     style={[
+                        tw("text-lg font-semibold mb-1"),
+                        {
+                           color: APP_THEME_TEXT,
+                        },
+                     ]}
+                  >
+                     {lesson.name}
+                  </Text>
+                  <View style={tw("flex-row justify-between")}>
+                     <Text style={tw("text-gray-500 font-bold")}>{lesson.cabinet}</Text>
+                     <View>
+                        {lesson.teachersNames.map((teacherName) => (
+                           <Text style={{ color: APP_THEME_TEXT }} key={teacherName}>
+                              {teacherName}
+                           </Text>
+                        ))}
+                     </View>
+                  </View>
                </View>
             </View>
          ))}

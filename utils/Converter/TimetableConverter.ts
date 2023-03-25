@@ -1,5 +1,5 @@
 import type { FBLesson, Timetable } from "../../typings";
-import { Lesson } from "../../typings/types/timetable";
+import { Lesson, PreviewLesson } from "../../typings/types/timetable";
 import { getEmptyLessons } from "../admin/getEmpyTimetable";
 import { isEmpty } from "../isEmpty";
 
@@ -34,7 +34,7 @@ export class TimetableConverter {
    }
 
    public static convertFromApi(FBLesson: FBLesson): Lesson {
-      const lesson: Lesson = {
+      return {
          id: FBLesson.id,
          name: FBLesson.name,
          cabinet: FBLesson.cabinet,
@@ -42,6 +42,5 @@ export class TimetableConverter {
          orderIndex: FBLesson.order_index ?? null,
          teachersIds: FBLesson.teachers_ids ?? null,
       };
-      return lesson;
    }
 }

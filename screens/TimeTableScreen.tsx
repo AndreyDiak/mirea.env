@@ -5,7 +5,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, ScreenTemplate, TimeTableHeader, TimeTableLessons } from "../components";
 import { selectUserTheme } from "../features/userSlice";
-import { useTimetable } from "../hooks/timetable/useTimetable";
+import { useTimetable } from "../hooks";
 import { isEmpty } from "../utils";
 
 export function TimeTableScreen() {
@@ -15,21 +15,21 @@ export function TimeTableScreen() {
 
    const theme = useSelector(selectUserTheme);
 
-   const { timeTable, loading } = useTimetable();
+   const { timetable, loading } = useTimetable();
 
-   if (isEmpty(timeTable) && loading) {
+   if (isEmpty(timetable) && loading) {
       return <Loader text="Загрузка расписания" theme={theme} />;
    }
 
-   if (isEmpty(timeTable)) {
+   if (isEmpty(timetable)) {
       return <Error text="Расписание не найдено" theme={theme} />;
    }
 
    return (
       <ScreenTemplate style={tw("py-8")}>
          <>
-            <TimeTableHeader timetable={timeTable?.timetable} dayIndex={dayIndex} setDayIndex={setDayIndex} />
-            <TimeTableLessons timetable={timeTable?.timetable} dayIndex={dayIndex} />
+            <TimeTableHeader dayIndex={dayIndex} setDayIndex={setDayIndex} />
+            <TimeTableLessons lessons={timetable.days[dayIndex].lessons} dayIndex={dayIndex} />
          </>
       </ScreenTemplate>
    );

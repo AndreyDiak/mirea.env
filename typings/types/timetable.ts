@@ -27,12 +27,14 @@ export interface FBLesson {
  * в патчере из Timetable мы возвращам массив Lesson-ов
  * и пушим уже его в БД
  */
+
+export interface TimetableDay {
+   dayIndex: string;
+   lessons: Lesson[];
+}
 export interface Timetable {
    groupId: string | null;
-   days: {
-      dayIndex: string;
-      lessons: Lesson[];
-   }[];
+   days: TimetableDay[];
 }
 
 export type Day = "Понедельник" | "Вторник" | "Среда" | "Четверг" | "Пятница" | "Суббота";

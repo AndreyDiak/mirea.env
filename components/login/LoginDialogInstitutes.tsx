@@ -8,11 +8,12 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserInstitutes, setInstitutes } from "../../features/authSlice";
 import { useInstitutes } from "../../hooks/login";
-import type { Institute } from "../../typings";
+import { Institute, USER_THEME } from "../../typings";
 import { Loader } from "../common";
 
 export const LoginDialogInstitutes: React.FC = React.memo(() => {
    const { institutes, loading } = useInstitutes();
+
    const dispatch = useDispatch();
    const myInstitutes = useSelector(selectUserInstitutes);
 
@@ -24,7 +25,7 @@ export const LoginDialogInstitutes: React.FC = React.memo(() => {
 
    const renderData = () => {
       if (loading) {
-         return <Loader text="Загрузка доступных институтов" theme="blue" />;
+         return <Loader text="Загрузка доступных институтов" theme={USER_THEME.BLUE} />;
       }
       return (
          <FlatList
