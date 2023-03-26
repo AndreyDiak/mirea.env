@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { Card, Icon, Input } from "@rneui/themed";
 import * as DocumentPicker from "expo-document-picker";
@@ -66,7 +66,7 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    };
 
    return (
-      <View style={tw("mt-24")}>
+      <View style={tw("")}>
          <Card
             containerStyle={{
                backgroundColor: APP_THEME_SECONDARY,
@@ -110,27 +110,36 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
                      Список материалов...
                   </Card.Title>
 
-                  {documents.map((document, index) => (
-                     <View key={document.uri} style={tw("flex flex-row justify-between items-center mb-2")}>
-                        <Text
-                           style={[
-                              tw("text-xs mb-2 w-5/6"),
-                              {
-                                 color: APP_THEME_TEXT,
-                              },
-                           ]}
+                  <ScrollView
+                     style={{
+                        maxHeight: 150,
+                     }}
+                  >
+                     {documents.map((document, index) => (
+                        <View
+                           key={document.uri}
+                           style={tw("flex flex-row justify-between items-center mb-2")}
                         >
-                           {document.name}
-                        </Text>
-                        <TouchableOpacity
-                           onPress={() =>
-                              setDocuments(documents.length > 1 ? documents.splice(index, 1) : [])
-                           }
-                        >
-                           <Icon name="close" type="material" color={APP_THEME_TEXT} size={20} />
-                        </TouchableOpacity>
-                     </View>
-                  ))}
+                           <Text
+                              style={[
+                                 tw("text-xs mb-2 w-5/6"),
+                                 {
+                                    color: APP_THEME_TEXT,
+                                 },
+                              ]}
+                           >
+                              {document.name}
+                           </Text>
+                           <TouchableOpacity
+                              onPress={() =>
+                                 setDocuments(documents.length > 1 ? documents.splice(index, 1) : [])
+                              }
+                           >
+                              <Icon name="close" type="material" color={APP_THEME_TEXT} size={20} />
+                           </TouchableOpacity>
+                        </View>
+                     ))}
+                  </ScrollView>
                </>
             )}
 

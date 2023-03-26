@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Linking, Text, TouchableOpacity, View } from "react-native";
+import { Linking, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { Card } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
@@ -29,13 +29,22 @@ export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
          <View style={tw("mb-2")}>
             <Card.Divider />
             <Text style={tw("mb-4 text-center")}>Прикрепленные файлы</Text>
-            {sources.map((document) => (
-               <TouchableOpacity key={document.id} onPress={async () => Linking.openURL(document.document)}>
-                  <Text style={[tw("mb-2 font-semibold underline"), { color: THEME_MAIN }]}>
-                     {document.title}
-                  </Text>
-               </TouchableOpacity>
-            ))}
+            <ScrollView
+               style={{
+                  maxHeight: 120,
+               }}
+            >
+               {sources.map((document) => (
+                  <TouchableOpacity
+                     key={document.id}
+                     onPress={async () => Linking.openURL(document.document)}
+                  >
+                     <Text style={[tw("mb-2 font-semibold underline"), { color: THEME_MAIN }]}>
+                        {document.title}
+                     </Text>
+                  </TouchableOpacity>
+               ))}
+            </ScrollView>
          </View>
       );
    return null;

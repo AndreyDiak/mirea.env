@@ -1,11 +1,10 @@
 import { FBFavorite, FBMaterial, FBSource, Favorite, Material, Source } from "../../typings";
 
 export class MaterialPatcher {
-   public static toAPiData(material: Material): FBMaterial {
+   public static toApiData(material: Partial<Material>): FBMaterial {
       return {
-         id: material.id,
-         title: material.title,
-         text: material.text,
+         title: material.title.trim(),
+         text: material.text.trim(),
          likes: material.likes,
          timestamp: material.timestamp,
          owner_id: material.ownerId,

@@ -2,8 +2,9 @@ import { addDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { storage } from "../../../firebase";
-import { Document, FBSource } from "../../../typings";
+import { Document, FBSource, Material, Timestamp } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
+import { MaterialPatcher } from "../../../utils/Patcher/MaterialPatcher";
 import { DOCS, createCollection } from "../../../utils/createDBQuery";
 
 export const addMaterial = async (
@@ -13,13 +14,17 @@ export const addMaterial = async (
    disciplineId: string,
    documents: Document[],
 ) => {
-   await addDoc(createCollection(DB_PATHS.MATERIALS), {
+   const material: Partial<Material> = {
       title,
       text,
       ownerId,
       likes: 0,
       disciplineId,
-      timestamp: serverTimestamp(),
+      timestamp: serverTimestamp() as unknown as Timestamp,
+   };
+   const FBMaterial = MaterialPatcher.toApiData(material);
+   await addDoc(createCollection(DB_PATHS.MATERIALS), {
+      ...FBMaterial,
    }).then(async (snap) => {
       if (documents.length) {
          documents.map(async (document) => {
@@ -29,7 +34,7 @@ export const addMaterial = async (
             };
 
             await addDoc(createCollection(DB_PATHS.SOURCES), {
-               data,
+               ...data,
             }).then(async (newDoc) => {
                const blob = await new Promise((resolve, reject) => {
                   const xhr = new XMLHttpRequest();
