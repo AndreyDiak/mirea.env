@@ -34,6 +34,7 @@ export const MaterialCard: React.FC<Props> = React.memo(({ material, userId }) =
             borderColor: APP_THEME_BORDER,
             borderWidth: userAppTheme === APP_THEME.LIGHT ? 1 : 0,
             borderRadius: 5,
+            maxHeight: 250,
          }}
       >
          <Card.Title

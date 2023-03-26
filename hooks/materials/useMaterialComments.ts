@@ -1,17 +1,15 @@
 import { useMemo } from "react";
 
+import { orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 
 import { FBComment } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
-import { CommentConverter, QUERIES } from "../../utils";
+import { CommentConverter } from "../../utils";
+import { createCollection } from "../../utils/createDBQuery";
 
 export const useMaterialComments = (materialId: string) => {
-   const q = QUERIES.CREATE_SIMPLE_QUERY<FBComment>(DB_PATHS.COMMENTS, {
-      fieldName: "material_id",
-      fieldValue: materialId,
-      opStr: "==",
-   });
+   const q = query(createCollection(`${DB_PATHS.MATERIALS}/${materialId}/comments`), orderBy("timestamp"));
 
    const [snap, loading, error] = useCollection(q);
 
