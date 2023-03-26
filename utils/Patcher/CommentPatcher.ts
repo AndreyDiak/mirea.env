@@ -10,7 +10,6 @@ export class CommentPatcher {
          // @ts-ignore
          timestamp: chat.timestamp as FieldValue,
          owner_email: chat.ownerEmail,
-         material_id: chat.materialId,
       };
    }
 }

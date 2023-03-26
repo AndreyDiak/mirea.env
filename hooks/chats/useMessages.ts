@@ -26,24 +26,6 @@ export const useMessages = (chatId: string) => {
 
       const newMessages: Message[] = MessageConverter.toData(FBMessages);
       setMessages(newMessages);
-      // if (newMessages.length > 0) {
-      //    setIsFirstLoading(false);
-      // }
-      // } else {
-      // snap?.docChanges().forEach((doc) => {
-      //    if (doc.type === "added") {
-      //       const NewFBMessage = {
-      //          ...doc.doc.data(),
-      //          id: doc.doc.id,
-      //       } as FBMessage;
-      //       const NewMessage = MessageConverter.convertFromApi(NewFBMessage);
-      //       setMessages((prev) => [...prev, NewMessage]);
-      //    }
-      // });
-      // }
-      // return () => {
-      //    setIsFirstLoading(true);
-      // };
    }, [snap]);
 
    return { messages, loading, error };

@@ -58,8 +58,7 @@ export function CommentsScreen() {
 
       const comment: CommentType = {
          id: "",
-         materialId: material.id,
-         text: commentText,
+         text: commentText.trim(),
          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
          // @ts-ignore
          timestamp: serverTimestamp() as Timestamp,
@@ -68,7 +67,7 @@ export function CommentsScreen() {
 
       const FBComment = CommentPatcher.toApiData(comment);
 
-      await addDoc(createCollection(DB_PATHS.COMMENTS), {
+      await addDoc(createCollection(`${DB_PATHS.MATERIALS}/${material.id}/comments`), {
          ...FBComment,
       }).then(() => {
          setCommentText("");

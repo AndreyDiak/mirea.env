@@ -15,7 +15,7 @@ export class CommentConverter {
          // @ts-ignore
          timestamp: comment.timestamp,
          ownerEmail: comment.owner_email,
-         materialId: comment.material_id,
+         // materialId: comment.material_id,
       };
    }
 }
