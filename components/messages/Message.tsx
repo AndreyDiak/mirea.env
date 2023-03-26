@@ -57,13 +57,14 @@ export const Message: React.FC<Props> = React.memo(
          const getReplyingMessage = async () => {
             if (message.replyingId) {
                const replyingMessageSnap = await getDoc(
+                  // TODO @raymix менять путь!
                   doc(db, `${DB_PATHS.CHATS}/${chatId}/messages/${message.replyingId}`),
                );
                const FBReplyingMessage = {
                   ...replyingMessageSnap.data(),
                   id: replyingMessageSnap.id,
                } as FBMessage;
-               const ReplyingMessage = MessageConverter.toData(FBReplyingMessage);
+               const ReplyingMessage = MessageConverter.convertFromApi(FBReplyingMessage);
                setReplyingMessage(ReplyingMessage);
             }
          };

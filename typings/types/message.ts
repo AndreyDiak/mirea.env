@@ -21,3 +21,5 @@ export interface FBMessage {
    photo_url: string;
    replying_id: string | null;
 }
+
+export type NewMessage = Omit<Message, "timestamp" | "id">;

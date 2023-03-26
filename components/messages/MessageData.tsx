@@ -5,12 +5,12 @@ import { Text, View } from "react-native";
 import moment from "moment";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { DBMessage } from "../../typings";
+import { Message as MessageType } from "../../typings";
 import { APP_THEME } from "../../typings/enums";
 import { returnAppThemeText } from "../../utils";
 
 interface Props {
-   message: DBMessage;
+   message: MessageType;
    email: string;
    appTheme: APP_THEME;
    isNextMessageOwner: boolean;

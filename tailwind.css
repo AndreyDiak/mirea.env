@@ -262,24 +262,8 @@
   max-width: 100%
 }
 
-.max-w-\[300px\] {
-  max-width: 300px
-}
-
 .max-w-\[70px\] {
   max-width: 70px
-}
-
-.max-w-\[200px\] {
-  max-width: 200px
-}
-
-.max-w-\[100px\] {
-  max-width: 100px
-}
-
-.max-w-\[250px\] {
-  max-width: 250px
 }
 
 .flex-1 {
@@ -589,6 +573,11 @@
   color: rgb(156 163 175 / var(--tw-text-opacity))
 }
 
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity))
+}
+
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity))
@@ -607,11 +596,6 @@
 .text-gray-200 {
   --tw-text-opacity: 1;
   color: rgb(229 231 235 / var(--tw-text-opacity))
-}
-
-.text-gray-500 {
-  --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity))
 }
 
 .underline {

@@ -80,8 +80,6 @@
 // дисциплины //
 ================
 
-eas build -p android --profile preview
-
 1. Технологическая (проектно-технологическая) практика                              / qX0tvXFR98w4ec2rJney
 2. Цифровая обработка сигналов                                                      / 9xqHwP0pH7KmpQ1I1W4p
 3. Сжатие и помехоустойчивое кодирование цифровых сигналов связи и телевидения      / rL2UMFTZy9DJ4bCrqzUs
@@ -118,6 +116,7 @@ eas build -p android --profile preview
   [] просмотр профиля другого человека?
   [] дизайн страницы с избранным
 
+22.03.23  
   [ 18 / 18 ] сделать необходимые Patcher-ы и Convertor-ы
     UserPatcher / UserConverter             [+/+]
     TimetablePatcher / TimetableConverter   [+/+]
@@ -129,6 +128,7 @@ eas build -p android --profile preview
     MaterialPatcher / MaterialConverter     [+/+]
     CommentPatcher / CommentConverter       [+/+] 
 
+24.03.23
   [+] починить все хуки с обработкой и отправкой данных, добавить оптимизации useMemo() useCallback()
     /hooks
       /admin        [+]
@@ -140,8 +140,13 @@ eas build -p android --profile preview
       /timetable    [+]
       /user         [+]
 
-  [] починить страницу расписания
+25.03.23
+  [+] починить страницу расписания
     / для ученика [+]
-    / для препода []
+    / для препода [+]
+
   [] использовать redux Для хранения данных?
   
+  [] отображать коменты с учетом timestamp
+
+  eas build -p android --profile preview
