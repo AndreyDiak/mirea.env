@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMessage } from "../api";
 import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { useChats, useTheme } from "../hooks";
 import { ChatsScreenNavigationProp, ChatsScreenRouteProp, USER_TYPE } from "../typings";
 

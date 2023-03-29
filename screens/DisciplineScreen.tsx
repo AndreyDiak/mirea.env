@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { useMaterials, useTheme } from "../hooks";
 import type { DisciplineScreenNavigationProp, DisciplineScreenRouteProp } from "../typings";
 import { USER_TYPE } from "../typings/enums";
@@ -30,6 +30,8 @@ export function DisciplineScreen() {
 
    const { materials, loading } = useMaterials(discipline.id);
 
+   // console.log({ materials });
+
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
@@ -39,7 +41,7 @@ export function DisciplineScreen() {
 
    const isStudent = user.type === USER_TYPE.STUDENT;
 
-   if (loading) {
+   if (isEmpty(materials) && loading) {
       return <Loader text="Загрузка материалов" theme={user.theme} />;
    }
 

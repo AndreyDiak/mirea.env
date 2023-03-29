@@ -5,7 +5,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserTheme } from "../../../features/userSlice";
+import { selectUserTheme } from "../../../features/slices/userSlice";
 import { returnDarkenHexCode } from "../../../utils";
 
 type Props = {
@@ -36,7 +36,7 @@ export const UserProfileAvatar: React.FC<Props> = React.memo(({ title, source })
          <View style={styles.image}>
             <Text
                style={[
-                  tw("font-bold text-2xl"),
+                  tw("font-bold text-2xl text-black"),
                   {
                      color: returnDarkenHexCode(theme),
                   },
@@ -49,26 +49,4 @@ export const UserProfileAvatar: React.FC<Props> = React.memo(({ title, source })
    }
 
    return <Image style={styles.image} source={{ uri: source }} />;
-
-   // return source ? (
-   //    <Avatar
-   //       size={size || "medium"}
-   //       source={{ uri: source }}
-   //       rounded
-   //       avatarStyle={tw("")}
-   //       overlayContainerStyle={tw("bg-blue-400")}
-   //       titleStyle={tw("text-white")}
-   //       containerStyle={tw("mr-4 mb-1")}
-   //    />
-   // ) : (
-   //    <Avatar
-   //       title={title}
-   //       size={size || "medium"}
-   //       rounded
-   //       avatarStyle={tw("")}
-   //       overlayContainerStyle={tw("bg-blue-400")}
-   //       titleStyle={tw("text-white")}
-   //       containerStyle={tw("mr-4 mb-1")}
-   //    />
-   // );
 });

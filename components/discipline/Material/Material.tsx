@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { deleteMaterial } from "../../../api";
-import { selectUserAppTheme } from "../../../features/userSlice";
+import { selectUserAppTheme } from "../../../features/slices/userSlice";
 import { useFavorite, useTheme } from "../../../hooks";
 import { APP_THEME, Material } from "../../../typings";
 import { MaterialFiles } from "./MaterialFiles";

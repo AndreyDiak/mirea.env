@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserType } from "../../../features/userSlice";
+import { selectUserType } from "../../../features/slices/userSlice";
 import { USER_TYPE } from "../../../typings";
 import { Label } from "../../common/Label";
 

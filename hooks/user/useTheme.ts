@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 
-import { selectUserAppTheme, selectUserTheme } from "../../features/userSlice";
+import { selectUserAppTheme, selectUserTheme } from "../../features/slices/userSlice";
 import { returnAppThemeText } from "../../utils";
 import {
    returnAppTheme,

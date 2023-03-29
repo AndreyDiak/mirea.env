@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
-import { selectUser } from "../../features/userSlice";
+import { selectUser } from "../../features/slices/userSlice";
 import { FBLesson, Timetable } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES, TimetableConverter } from "../../utils";

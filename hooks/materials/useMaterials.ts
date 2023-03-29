@@ -1,35 +1,67 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
+import { FirebaseError } from "firebase/app";
 import { useCollection } from "react-firebase-hooks/firestore";
+import { useDispatch, useSelector } from "react-redux";
 
-import type { FBMaterial } from "../../typings";
+import { selectMaterialsByDisciplineId, setMaterials } from "../../features/slices/materialsSlice";
+import { RootState } from "../../store";
+import type { FBMaterial, Material } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { MaterialConverter, QUERIES } from "../../utils";
+import { deepCompare } from "../../utils/deepCompare";
 
-export const useMaterials = (disciplineId: string) => {
+interface UseMaterials {
+   materials: Material[];
+   loading: boolean;
+   error: FirebaseError;
+}
+
+export function useMaterials(disciplineId: string): UseMaterials {
+   const dispatch = useDispatch();
+
+   const rawMaterialsSelector = useCallback(
+      (s: RootState) => selectMaterialsByDisciplineId(s, disciplineId),
+      [disciplineId],
+   );
+   const rawMaterials = useSelector(rawMaterialsSelector);
+
    const q = QUERIES.CREATE_SIMPLE_QUERY<FBMaterial>(DB_PATHS.MATERIALS, {
       fieldName: "discipline_id",
       fieldValue: disciplineId,
       opStr: "==",
    });
+
    const [snapshot, loading, error] = useCollection(q);
 
-   const FBmaterials = useMemo(
-      () =>
+   const loadMaterials = useCallback(() => {
+      const materials =
          snapshot?.docs.map(
             (m) =>
                ({
-                  id: m.id,
                   ...m.data(),
+                  id: m.id,
                } as FBMaterial),
-         ) ?? [],
-      [snapshot?.docs],
-   );
+         ) ?? [];
+      // делаем глубокое сравнение двух объектов
+      if (!deepCompare(materials, rawMaterials)) {
+         dispatch(setMaterials({ materials, disciplineId }));
+      }
+   }, [disciplineId, dispatch, rawMaterials, snapshot?.docs]);
 
-   const materials = useMemo(
-      () => FBmaterials.map((material) => MaterialConverter.toData(material)),
-      [FBmaterials],
-   );
+   useEffect(() => {
+      // если у нас пусто или идет загрузка
+      if (snapshot?.docs.length === 0 || loading) return;
+      loadMaterials();
+   }, [disciplineId, dispatch, loadMaterials, loading, snapshot]);
 
-   return { materials, loading, error };
-};
+   return useMemo(() => {
+      const newMaterials = rawMaterials ? MaterialConverter.toData(rawMaterials) : [];
+
+      return {
+         materials: newMaterials,
+         loading,
+         error,
+      };
+   }, [error, loading, rawMaterials]);
+}

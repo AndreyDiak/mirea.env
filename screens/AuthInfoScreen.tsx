@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { LoginForm } from "../components";
-import { setEmail, setPassword } from "../features/authSlice";
+import { setEmail, setPassword } from "../features/slices/authSlice";
 import { AUTH_STEPS, AuthInfoScreenNavigationProp } from "../typings";
 
 interface UserData {

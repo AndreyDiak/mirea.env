@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, ScreenTemplate, TimeTableHeader, TimeTableLessons } from "../components";
-import { selectUserTheme } from "../features/userSlice";
+import { selectUserTheme } from "../features/slices/userSlice";
 import { useTimetable } from "../hooks";
 import { isEmpty } from "../utils";
 

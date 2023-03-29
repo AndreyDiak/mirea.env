@@ -2,7 +2,11 @@ import { useMemo } from "react";
 
 import { useSelector } from "react-redux";
 
-import { selectUserDisciplines, selectUserGroup, selectUserInstitutes } from "../../features/authSlice";
+import {
+   selectUserDisciplines,
+   selectUserGroup,
+   selectUserInstitutes,
+} from "../../features/slices/authSlice";
 import { LFilter } from "../../typings/enums";
 import { isEmpty } from "../../utils";
 import { useDisciplines } from "./useDisciplines";

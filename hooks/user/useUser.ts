@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch } from "react-redux";
 
-import { setUser } from "../../features/userSlice";
+import { setUser } from "../../features/slices/userSlice";
 import { DB_PATHS } from "../../typings/enums";
 import { FBAppUser } from "../../typings/types/user";
 import { QUERIES, UserConverter } from "../../utils";

@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
 import { TabStackParamList } from "../typings";
 import { COLORS_400, COLORS_COMMON } from "../utils";

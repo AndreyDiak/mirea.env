@@ -7,7 +7,7 @@ export const getDataById = async <T>(id: string, collectionName: DB_PATHS): Prom
    const q = DOCS.CREATE_DOC(collectionName, id);
    const snap = await getDoc(q);
 
-   if (snap.exists) {
+   if (snap.exists()) {
       const data = {
          id: snap.id,
          ...snap.data(),

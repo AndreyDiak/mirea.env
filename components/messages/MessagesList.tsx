@@ -6,7 +6,7 @@ import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUser } from "../../features/userSlice";
+import { selectUser } from "../../features/slices/userSlice";
 import { useMessages, useTheme } from "../../hooks";
 import type { Message as MessageType } from "../../typings";
 import { isEmpty } from "../../utils";

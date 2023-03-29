@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { addDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
-import { selectUser } from "../../features/userSlice";
+import { selectUser } from "../../features/slices/userSlice";
 import type { ChatPreview, FBChat, Group } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { ChatConverter, QUERIES, createCollection } from "../../utils";
@@ -63,6 +63,7 @@ export const useChat = (disciplineId: string) => {
                });
             } else {
                // если чат уже создан
+
                const previewChat = ChatConverter.toData(FBChat[0]);
                const group = await getDataById<Group>(previewChat.groupId, DB_PATHS.GROUPS);
                if (!active) return;

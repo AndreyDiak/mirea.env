@@ -6,7 +6,7 @@ import { CheckBox } from "@rneui/themed";
 import { useDispatch, useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserDisciplines, setDisciplines } from "../../features/authSlice";
+import { selectUserDisciplines, setDisciplines } from "../../features/slices/authSlice";
 import { useDisciplines, useInstitutes } from "../../hooks/login";
 import type { Discipline } from "../../typings";
 import { LFilter, USER_THEME } from "../../typings/enums";

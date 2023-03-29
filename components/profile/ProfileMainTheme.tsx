@@ -6,7 +6,7 @@ import { updateDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserAppTheme, selectUserId } from "../../features/userSlice";
+import { selectUserAppTheme, selectUserId } from "../../features/slices/userSlice";
 import { APP_THEME, DB_PATHS } from "../../typings/enums";
 import { DOCS, returnAppTheme, returnAppThemeForBorder, returnAppThemeSecondary } from "../../utils";
 import { ColorBlock } from "../common/ColorBlock";

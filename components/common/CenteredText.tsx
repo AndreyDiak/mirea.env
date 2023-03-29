@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserAppTheme } from "../../features/userSlice";
+import { selectUserAppTheme } from "../../features/slices/userSlice";
 import { APP_THEME } from "../../typings/enums";
 import { ScreenTemplate } from "./ScreenTemplate";
 

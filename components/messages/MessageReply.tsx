@@ -5,13 +5,13 @@ import { Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserTheme } from "../../features/userSlice";
-import { DBMessage } from "../../typings";
+import { selectUserTheme } from "../../features/slices/userSlice";
+import { Message } from "../../typings";
 import { APP_THEME } from "../../typings/enums";
 import { COLORS_COMMON, COLORS_THEME_SECONDARY, returnAppThemeText, returnDarkestHexCode } from "../../utils";
 
 interface Props {
-   reply: DBMessage | null;
+   reply: Message | null;
    messageEmail: string;
    email: string;
    appTheme: APP_THEME;

@@ -10,7 +10,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { Comment, Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { useMaterialComments, useTheme } from "../hooks";
 import type {
    Comment as CommentType,

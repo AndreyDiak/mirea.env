@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { handleFavorite } from "../../../api";
-import { selectUserAppTheme } from "../../../features/userSlice";
+import { selectUserAppTheme } from "../../../features/slices/userSlice";
 import type { DisciplineScreenNavigationProp, Material } from "../../../typings";
 import { APP_THEME } from "../../../typings/enums";
 

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { addMessage } from "../../api";
-import { selectUser } from "../../features/userSlice";
+import { selectUser } from "../../features/slices/userSlice";
 import { EditedMessage } from "../../hooks";
 import type { Message, NewMessage } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
