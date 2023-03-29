@@ -2,8 +2,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { RootState } from "../store";
-import { Student, Teacher } from "../typings";
+import { RootState } from "../../store";
+import { Student, Teacher } from "../../typings";
 
 export interface UserState {
    user: Student | Teacher | null;

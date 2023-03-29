@@ -2,9 +2,9 @@
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
-import { RootState } from "../store";
-import type { Discipline, Group, Institute } from "../typings";
-import { USER_THEME, USER_TYPE } from "../typings/enums";
+import { RootState } from "../../store";
+import type { Discipline, Group, Institute } from "../../typings";
+import { USER_THEME, USER_TYPE } from "../../typings/enums";
 
 export interface AuthState {
    email: string;

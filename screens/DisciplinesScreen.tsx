@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { DisciplineCard, Loader, ScreenTemplate } from "../components";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { useDisciplines, useTheme } from "../hooks";
 
 export function DisciplinesScreen() {
@@ -37,7 +37,7 @@ export function DisciplinesScreen() {
                </Text>
             </View>
             <ScrollView>
-               {disciplines.map((discipline) => (
+               {disciplines?.map((discipline) => (
                   <DisciplineCard key={discipline.id} discipline={discipline} />
                ))}
             </ScrollView>

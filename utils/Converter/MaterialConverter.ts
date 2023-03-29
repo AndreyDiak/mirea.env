@@ -1,7 +1,13 @@
 import { FBFavorite, FBMaterial, FBSource, Favorite, Material, Source } from "../../typings";
 
 export class MaterialConverter {
-   public static toData(material: FBMaterial): Material {
+   public static toData(materials: FBMaterial[]): Material[] {
+      return materials.map((material) => ({
+         ...MaterialConverter.convertMaterialFromApi(material),
+      }));
+   }
+
+   public static convertMaterialFromApi(material: FBMaterial): Material {
       return {
          id: material.id,
          title: material.title,

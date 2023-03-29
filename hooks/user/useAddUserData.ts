@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
-import { selectUser } from "../../features/userSlice";
+import { selectUser } from "../../features/slices/userSlice";
 import { FBDiscipline, FBGroup, FBInstitute, Student, Teacher } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 

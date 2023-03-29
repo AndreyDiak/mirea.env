@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, MaterialCard, ScreenTemplate } from "../components";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { useFavorites, useTheme } from "../hooks";
 import type { Material } from "../typings";
 import { isEmpty } from "../utils";

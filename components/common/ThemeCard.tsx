@@ -5,7 +5,7 @@ import { ToastAndroid, TouchableOpacity } from "react-native";
 import { doc, updateDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 
-import { selectUserId, selectUserTheme } from "../../features/userSlice";
+import { selectUserId, selectUserTheme } from "../../features/slices/userSlice";
 import { db } from "../../firebase";
 import { USER_THEME } from "../../typings";
 import { returnDarkenHexCode, returnHexCode } from "../../utils";

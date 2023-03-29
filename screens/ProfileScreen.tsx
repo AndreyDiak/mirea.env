@@ -19,7 +19,7 @@ import {
    ProfileTheme,
    useGlobalModalContext,
 } from "../components";
-import { selectUser } from "../features/userSlice";
+import { selectUser } from "../features/slices/userSlice";
 import { auth } from "../firebase";
 import { useTheme } from "../hooks";
 import { USER_TYPE } from "../typings/enums";

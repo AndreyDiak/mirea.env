@@ -5,7 +5,7 @@ import { addDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUserId } from "../../../features/userSlice";
+import { selectUserId } from "../../../features/slices/userSlice";
 import { DB_PATHS } from "../../../typings/enums";
 import { createCollection } from "../../../utils";
 import { Button } from "../../Button";

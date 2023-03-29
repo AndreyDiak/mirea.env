@@ -8,14 +8,14 @@ import { deleteDoc } from "firebase/firestore";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { selectUser } from "../../features/userSlice";
-import type { DBMessage } from "../../typings";
+import { selectUser } from "../../features/slices/userSlice";
+import type { Message } from "../../typings";
 import { APP_THEME, DB_PATHS } from "../../typings/enums";
 import { DOCS, returnAppThemeText } from "../../utils";
 
 interface Props {
    chatId: string;
-   selectedMessage: DBMessage;
+   selectedMessage: Message;
    onClose: () => void;
    replyOnMessage: () => void;
    editMessage: () => void;

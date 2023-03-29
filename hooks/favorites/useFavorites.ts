@@ -1,15 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { FirebaseError } from "firebase/app";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
-import { selectUser } from "../../features/userSlice";
+import { selectFavorites, setFavorites } from "../../features/slices/favoritesSlice";
+import { selectUser } from "../../features/slices/userSlice";
+import { RootState } from "../../store";
 import type { Discipline, FBFavorite, FBMaterial, PreviewFavorite } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { MaterialConverter } from "../../utils/Converter/MaterialConverter";
 import { QUERIES } from "../../utils/createDBQuery";
+import { deepCompare } from "../../utils/deepCompare";
 import { isEmpty } from "../../utils/isEmpty";
 
 interface UseFavorites {
@@ -19,9 +22,14 @@ interface UseFavorites {
 }
 
 export function useFavorites(): UseFavorites {
-   const user = useSelector(selectUser);
+   const dispatch = useDispatch();
 
-   const [favorites, setFavorites] = useState<PreviewFavorite[]>([]);
+   const rawFavoritesSelector = useCallback((s: RootState) => selectFavorites(s), []);
+   const rawFavorites = useSelector(rawFavoritesSelector);
+
+   const [previewFavorites, setPreviewFavorites] = useState<PreviewFavorite[]>([]);
+
+   const user = useSelector(selectUser);
 
    const q = QUERIES.CREATE_SIMPLE_QUERY<FBFavorite>(DB_PATHS.FAVORITES, {
       fieldName: "user_id",
@@ -31,42 +39,51 @@ export function useFavorites(): UseFavorites {
 
    const [snapshot, loading, error] = useCollection(q);
 
+   const loadFavorites = useCallback(async () => {
+      const favorites: FBMaterial[] = await Promise.all(
+         snapshot?.docs.map(async (doc) => {
+            const materialId = doc.data().material_id;
+            const material = await getDataById<FBMaterial>(materialId, DB_PATHS.MATERIALS);
+            return material;
+         }),
+      );
+
+      if (!deepCompare(favorites, rawFavorites)) {
+         dispatch(setFavorites({ favorites }));
+      }
+   }, [dispatch, rawFavorites, snapshot?.docs]);
+
+   const loadPreviewFavorites = useCallback(async () => {
+      const rawPreviewFavorites: PreviewFavorite[] = await Promise.all(
+         rawFavorites.filter(Boolean).map(async (favorite) => {
+            const discipline = await getDataById<Discipline>(favorite.discipline_id, DB_PATHS.DISCIPLINES);
+            return {
+               disciplineName: discipline.name,
+               material: MaterialConverter.convertMaterialFromApi(favorite),
+            };
+         }),
+      );
+
+      setPreviewFavorites(rawPreviewFavorites);
+   }, [rawFavorites]);
+
    useEffect(() => {
-      const getData = async () => {
-         await Promise.all(
-            snapshot?.docs.map(async (doc) => {
-               // const material = await getMaterialById(doc.data().materialId);
-               const material = await getDataById<FBMaterial>(doc.data().material_id, DB_PATHS.MATERIALS);
-               if (material) {
-                  const discipline = await getDataById<Discipline>(
-                     material.discipline_id,
-                     DB_PATHS.DISCIPLINES,
-                  );
-                  return {
-                     disciplineName: discipline?.name,
-                     material,
-                  };
-               }
-               return null;
-            }) || [],
-         ).then((data) => {
-            // проверка на то, что если материал, который был добавлен в favorites был удален
-            setFavorites(
-               data.filter(Boolean).map((item) => ({
-                  disciplineName: item.disciplineName,
-                  material: MaterialConverter.toData(item.material),
-               })) || [],
-            );
-         });
-      };
-      getData();
-   }, [snapshot]);
+      if (snapshot?.docs.length === 0 || loading) return;
+      // загруажем сырые FBMaterial
+      loadFavorites();
+   }, [loadFavorites, loading, snapshot?.docs]);
+
+   useEffect(() => {
+      if (!isEmpty(rawFavorites)) {
+         loadPreviewFavorites();
+      }
+   }, [loadPreviewFavorites, rawFavorites]);
 
    return useMemo(() => {
       return {
-         favorites,
-         loading: loading || (!isEmpty(snapshot?.docs) && isEmpty(favorites)),
+         favorites: previewFavorites,
+         loading,
          error,
       };
-   }, [error, favorites, loading, snapshot?.docs]);
+   }, [error, loading, previewFavorites]);
 }

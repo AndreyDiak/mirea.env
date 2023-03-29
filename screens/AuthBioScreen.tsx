@@ -13,7 +13,7 @@ import {
    setFemale as setFemaleAction,
    setName as setNameAction,
    setUserType,
-} from "../features/authSlice";
+} from "../features/slices/authSlice";
 import { AUTH_STEPS, LFilter, USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";
 

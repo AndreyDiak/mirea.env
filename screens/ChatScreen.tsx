@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { ChatHeader, MessageForm, MessagesList, ScreenTemplate } from "../components";
-import { selectUserAppTheme } from "../features/userSlice";
+import { selectUserAppTheme } from "../features/slices/userSlice";
 import { useChatData, useTheme } from "../hooks";
 import type { ChatScreenRouteProp, ChatsScreenNavigationProp } from "../typings";
 import { APP_THEME } from "../typings/enums";

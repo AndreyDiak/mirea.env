@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { addDoc } from "firebase/firestore";
 
-import { AuthState } from "../../../features/authSlice";
+import { AuthState } from "../../../features/slices/authSlice";
 import { auth } from "../../../firebase";
 import type { AppUser } from "../../../typings";
 import { APP_THEME, DB_PATHS, USER_THEME, USER_TYPE } from "../../../typings/enums";
