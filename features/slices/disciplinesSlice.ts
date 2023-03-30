@@ -5,11 +5,11 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { FBDiscipline } from "../../typings";
 
-export interface UserState {
+interface InitialState {
    disciplines: FBDiscipline[];
 }
 
-const initialState: UserState = {
+const initialState: InitialState = {
    disciplines: null,
 };
 

@@ -4,12 +4,12 @@ import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { ChatPreview } from "../../typings";
 
-export interface UserState {
+interface InitialState {
    // по id дисциплины храним материалы
    chats: Record<string, ChatPreview[]>;
 }
 
-const initialState: UserState = {
+const initialState: InitialState = {
    chats: {},
 };
 
@@ -18,8 +18,12 @@ export const chatsSlice = createSlice({
    initialState,
    reducers: {
       setChats: (state, action: PayloadAction<{ chats: ChatPreview[]; disciplineId: string }>) => {
-         const { disciplineId } = action.payload;
-         state.chats[disciplineId] = action.payload.chats;
+         const { chats, disciplineId } = action.payload;
+         state.chats[disciplineId] = chats;
+      },
+      setChat: (state, action: PayloadAction<{ chat: ChatPreview; disciplineId: string }>) => {
+         const { chat, disciplineId } = action.payload;
+         state.chats[disciplineId] = [chat];
       },
    },
 });
@@ -27,12 +31,18 @@ export const chatsSlice = createSlice({
 const selectChats = (state: RootState) => state.chats.chats;
 
 export const selectChatsWithDisciplineId = createSelector(
-   (s: RootState, disciplineId: string) => disciplineId,
+   (_: RootState, disciplineId: string) => disciplineId,
    selectChats,
    (disciplineId, chats) => chats[disciplineId] ?? [],
 );
 
+export const selectChatWithDisciplineId = createSelector(
+   (s: RootState, disciplineId: string) => disciplineId,
+   selectChats,
+   (disciplineId, chats) => chats[disciplineId][0],
+);
+
 // Action creators are generated for each case reducer function
-export const { setChats } = chatsSlice.actions;
+export const { setChats, setChat } = chatsSlice.actions;
 
 export default chatsSlice.reducer;

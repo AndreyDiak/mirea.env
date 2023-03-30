@@ -4,6 +4,7 @@ import authSlice from "./features/slices/authSlice";
 import chatsSlice from "./features/slices/chatsSlice";
 import commentsSlice from "./features/slices/commentsSlice";
 import disciplinesSlice from "./features/slices/disciplinesSlice";
+import documentsSlice from "./features/slices/documentsSlice";
 import favoritesSlice from "./features/slices/favoritesSlice";
 import materialsSlice from "./features/slices/materialsSlice";
 import messagesSlice from "./features/slices/messagesSlice";
@@ -13,10 +14,14 @@ export const store = configureStore({
    reducer: {
       user: userSlice,
       auth: authSlice,
+
       disciplines: disciplinesSlice,
+
       materials: materialsSlice,
       comments: commentsSlice,
+      documents: documentsSlice,
       favorites: favoritesSlice,
+
       chats: chatsSlice,
       messages: messagesSlice,
    },

@@ -4,12 +4,12 @@ import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { FBComment } from "../../typings";
 
-export interface UserState {
+interface InitialState {
    // по id дисциплины храним материалы
    comments: Record<string, FBComment[]>;
 }
 
-const initialState: UserState = {
+const initialState: InitialState = {
    comments: {},
 };
 
@@ -26,7 +26,7 @@ export const commentsSlice = createSlice({
 
 export const selectComments = (state: RootState) => state.comments.comments;
 
-export const selectCommentsByDisciplineId = createSelector(
+export const selectCommentsByMaterialId = createSelector(
    (s: RootState, materialId: string) => materialId,
    selectComments,
    (materialId, comments) => comments[materialId] ?? [],

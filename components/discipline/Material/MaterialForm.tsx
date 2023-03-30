@@ -1,16 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { Card, Icon, Input } from "@rneui/themed";
-import * as DocumentPicker from "expo-document-picker";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { addMaterial } from "../../../api";
 import { selectUser } from "../../../features/slices/userSlice";
 import { useTheme } from "../../../hooks";
-import { Document } from "../../../typings";
+import { useMaterialForm } from "../../../hooks/materials/useMaterialForm";
 import { COLORS_COMMON, isEmpty } from "../../../utils";
 
 type Props = {
@@ -18,51 +16,32 @@ type Props = {
    setIsFormVisible: (isVisible: boolean) => void;
 };
 
+// TODO @raymix useMaterialData / useMaterialForm
+// вынести в отдельный хук
+
 export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    const tw = useTailwind();
 
    const { APP_THEME_SECONDARY, APP_THEME_BORDER, APP_THEME_TEXT, THEME_MAIN } = useTheme();
 
-   const [isLoading, setIsLoading] = useState(false);
-   const [formTitle, setFormTitle] = useState("");
-   const [formText, setFormText] = useState("");
-   const [documents, setDocuments] = useState<Document[]>([]);
-   const [error, setError] = useState("");
-
    const user = useSelector(selectUser);
 
-   const addDocument = async () => {
-      await DocumentPicker.getDocumentAsync({
-         multiple: true,
-         copyToCacheDirectory: false,
-      }).then(async (docs) => {
-         if (docs.type === "success") {
-            const document: Document = {
-               name: docs.name,
-               uri: docs.uri,
-               type: docs.mimeType,
-            };
-            const documentsCopy = [...documents];
-            documentsCopy.push(document);
-            setDocuments(documentsCopy);
-         }
-      });
-   };
+   const {
+      text,
+      title,
+      error,
+      setText,
+      isLoading,
+      documents,
+      setTitle,
+      addDocument,
+      submitForm,
+      setDocuments,
+   } = useMaterialForm(user.id, disciplineId);
 
-   const submitForm = async () => {
-      if (!formText || !formTitle) {
-         setError("Заполните все поля!");
-         return;
-      }
-
-      setIsLoading(true);
-      await addMaterial(formTitle, formText, user.id, disciplineId, documents);
-
-      setIsLoading(false);
-      setDocuments([]);
+   const submitHandler = () => {
+      submitForm();
       setIsFormVisible(false);
-      setFormText("");
-      setFormTitle("");
    };
 
    return (
@@ -82,8 +61,8 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
                      color: APP_THEME_TEXT,
                   },
                ]}
-               value={formTitle}
-               onChangeText={setFormTitle}
+               value={title}
+               onChangeText={setTitle}
             />
             <Input
                label="Описание"
@@ -94,8 +73,8 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
                      color: APP_THEME_TEXT,
                   },
                ]}
-               value={formText}
-               onChangeText={setFormText}
+               value={text}
+               onChangeText={setText}
             />
             {error && <Text style={tw("text-red-400 text-center mb-4")}>{error}</Text>}
             {/* documents list */}
@@ -151,7 +130,8 @@ export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
 
             <Card.Divider />
             {/* submit form handler */}
-            <TouchableOpacity style={tw("flex flex-row justify-center")} onPress={submitForm}>
+            {/* TODO возможно стоит заменить на Button */}
+            <TouchableOpacity style={tw("flex flex-row justify-center")} onPress={submitHandler}>
                <Text
                   style={[
                      tw("text-white font-semibold px-4 py-2 rounded-md"),

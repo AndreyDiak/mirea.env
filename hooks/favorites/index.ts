@@ -1,2 +1,1 @@
-export * from "./useFavorite";
-export * from "./useFavorites";
+export { useFavorite } from "./useFavorite";

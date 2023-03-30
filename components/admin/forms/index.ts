@@ -1,4 +1,4 @@
-export * from "./DisciplineForm";
-export * from "./GroupForm";
-export * from "./TimeTable/TimetableForm";
-export * from "./InstituteForm";
+export { DisciplineForm } from "./DisciplineForm";
+export { GroupForm } from "./GroupForm";
+export { TimetableForm } from "./TimeTable/TimetableForm";
+export { InstituteForm } from "./InstituteForm";

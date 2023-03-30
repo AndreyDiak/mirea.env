@@ -29,7 +29,7 @@ export const useTeachers = (institute: Institute) => {
             );
             const Teachers = FBTeachers.map((teacher) => ({
                ...UserConverter.toData(teacher),
-            }));
+            })) as Teacher[];
             setTeachers(Teachers);
             setLoading(false);
          }

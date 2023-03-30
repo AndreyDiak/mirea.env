@@ -1,7 +1,7 @@
 import { FBMessage, Message } from "../../typings";
 
 export class MessagePatcher {
-   public static toApiData(message: Message): FBMessage {
+   public static toApiData(message: Partial<Message>): FBMessage {
       return {
          email: message.email,
          text: message.text,

@@ -5,7 +5,8 @@ import { Linking, ScrollView, Text, TouchableOpacity, View } from "react-native"
 import { Card } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { useMaterialDocuments, useTheme } from "../../../hooks";
+import { useDocuments } from "../../../features/hooks";
+import { useTheme } from "../../../hooks";
 import { isEmpty } from "../../../utils";
 
 interface Props {
@@ -15,7 +16,7 @@ interface Props {
 export const MaterialFiles: React.FC<Props> = React.memo(({ materialId }) => {
    const tw = useTailwind();
 
-   const { sources, loading } = useMaterialDocuments(materialId);
+   const { sources, loading } = useDocuments(materialId);
 
    const { THEME_MAIN } = useTheme();
 

@@ -90,14 +90,14 @@ export function useTimetable(): UseTimetable {
       const findGroupTimetable = async () => {
          if (!isEmpty(selectedGroup)) {
             const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
-               fieldName: "group_id",
+               fieldName: "groups_ids",
                fieldValue: selectedGroup.id,
-               opStr: "==",
+               opStr: "array-contains",
             });
             const data = await getAllDataWithFilter<FBLesson>(q);
             if (!active) return;
             if (!isEmpty(data)) {
-               setTimetable(TimetableConverter.toData(data));
+               setTimetable(TimetableConverter.toData(data, selectedGroup.id));
             }
          }
       };

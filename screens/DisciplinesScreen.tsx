@@ -6,8 +6,9 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { DisciplineCard, Loader, ScreenTemplate } from "../components";
+import { useDisciplines } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
-import { useDisciplines, useTheme } from "../hooks";
+import { useTheme } from "../hooks";
 
 export function DisciplinesScreen() {
    const tw = useTailwind();

@@ -22,10 +22,6 @@ export function TimeTableModal({ handleTimetable, lessons, dayIndex }: Props) {
       ...lessons, // сетаем то, что уже записали
    ]);
 
-   /* TODO @raymix делаем здесь useState()
-    * на кнопку "сохранить" мы делаем handleTimetable
-    * если пользователь просто закрывает то мы ничего не сохраняем
-    */
    const { closeModal } = useGlobalModalContext();
 
    const changeName = (name: string, lessonIndex: number) => {
@@ -51,7 +47,6 @@ export function TimeTableModal({ handleTimetable, lessons, dayIndex }: Props) {
             data={lessons}
             style={tw("mb-2")}
             renderItem={({ item: lesson, index }) => {
-               // TODO @raymix разобраться как сделать лучше
                return (
                   <View style={tw("flex flex-row my-1 min-w-full items-center")}>
                      <Text

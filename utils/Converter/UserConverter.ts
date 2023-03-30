@@ -8,6 +8,9 @@ type ConvertUserFromApi<T> = Omit<FBAppUser, "app_theme"> & {
 
 export class UserConverter {
    public static toData(user: FBAppUser) {
+      /* если мы разлогинились -> то у нас нет почты и соответсвенно сюда прилетит undefined
+       * проверки не пройдут и верентся null
+       */
       if (user.type === USER_TYPE.STUDENT) {
          const student: Student = {
             ...UserConverter.convertUserFromApi(user),
