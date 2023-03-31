@@ -43,6 +43,7 @@ export function usePreviewLessons(lessons: Lesson[]): UsePreviewLesson {
                            })
                            .filter(Boolean),
                      );
+
                      previewLesson.teachersNames = teachersNames
                         .filter(Boolean)
                         .sort((prev, next) => prev.localeCompare(next));
@@ -55,6 +56,7 @@ export function usePreviewLessons(lessons: Lesson[]): UsePreviewLesson {
                            return group.name;
                         }),
                      );
+
                      previewLesson.groupNames = groupsName
                         .filter(Boolean)
                         .sort((prev, next) => prev.localeCompare(next));

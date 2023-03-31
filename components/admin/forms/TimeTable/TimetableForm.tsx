@@ -5,7 +5,7 @@ import { FlatList } from "react-native";
 import { Card } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { useTimetable } from "../../../../hooks/admin/useTimetable";
+import { useTimetable } from "../../../../hooks/admin";
 import { useGroups, useInstitutes } from "../../../../hooks/login";
 import { Day, Group, Institute } from "../../../../typings";
 import { LFilter } from "../../../../typings/enums";
@@ -37,8 +37,6 @@ export function TimetableForm() {
    const { institutes } = useInstitutes();
    const { groups } = useGroups([institute], LFilter.GROUPS);
 
-   // TODO разобраться с логикой, происходит постоянный ререндер
-
    return (
       <Card>
          <Card.Title>Добавить расписание</Card.Title>
@@ -61,7 +59,7 @@ export function TimetableForm() {
                setSelectedItem={handleGroup as (item: Group) => void}
             />
          )}
-         {/* TODO разобраться с логикой и сделать более грамотно  */}
+
          {!isEmpty(institute) && !isEmpty(group) && (
             <FlatList
                data={days}

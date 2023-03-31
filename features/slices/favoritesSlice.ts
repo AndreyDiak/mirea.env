@@ -4,12 +4,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { FBMaterial } from "../../typings";
 
-export interface UserState {
+interface InitialState {
    // по id дисциплины храним материалы
    favorites: FBMaterial[];
 }
 
-const initialState: UserState = {
+const initialState: InitialState = {
    favorites: [],
 };
 

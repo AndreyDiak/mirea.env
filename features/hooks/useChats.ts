@@ -4,12 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries";
-import { selectChatsWithDisciplineId, setChats } from "../../features/slices/chatsSlice";
 import { RootState } from "../../store";
 import type { ChatPreview, FBChat, Group } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 import { isEmpty } from "../../utils/isEmpty";
+import { selectChatsWithDisciplineId, setChats } from "../slices/chatsSlice";
 
 interface UseChats {
    chats: ChatPreview[];

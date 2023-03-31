@@ -57,7 +57,6 @@ export const Message: React.FC<Props> = React.memo(
          const getReplyingMessage = async () => {
             if (message.replyingId) {
                const replyingMessageSnap = await getDoc(
-                  // TODO @raymix менять путь!
                   doc(db, `${DB_PATHS.CHATS}/${chatId}/messages/${message.replyingId}`),
                );
                const FBReplyingMessage = {

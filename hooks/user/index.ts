@@ -1,3 +1,2 @@
-export * from "./useAddUserData";
-export * from "./useUser";
-export * from "./useTheme";
+export { useAddUserData } from "./useAddUserData";
+export { useTheme } from "./useTheme";

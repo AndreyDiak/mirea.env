@@ -5,24 +5,24 @@ import { orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectCommentsByDisciplineId, setComments } from "../../features/slices/commentsSlice";
 import { RootState } from "../../store";
 import { Comment, FBComment } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { CommentConverter } from "../../utils";
 import { createCollection } from "../../utils/createDBQuery";
 import { deepCompare } from "../../utils/deepCompare";
+import { selectCommentsByMaterialId, setComments } from "../slices/commentsSlice";
 
-interface UseMaterialComments {
+interface UseComments {
    comments: Comment[];
    loading: boolean;
    error: FirebaseError;
 }
 
-export function useMaterialComments(materialId: string): UseMaterialComments {
+export function useComments(materialId: string): UseComments {
    const dispatch = useDispatch();
    const rawCommentsSelector = useCallback(
-      (s: RootState) => selectCommentsByDisciplineId(s, materialId),
+      (s: RootState) => selectCommentsByMaterialId(s, materialId),
       [materialId],
    );
    const rawComments = useSelector(rawCommentsSelector);
@@ -54,10 +54,10 @@ export function useMaterialComments(materialId: string): UseMaterialComments {
    }, [dispatch, loadMaterials, loading, snap]);
 
    return useMemo(() => {
-      const newComments = rawComments ? CommentConverter.toData(rawComments) : [];
+      const comments = rawComments ? CommentConverter.toData(rawComments) : [];
 
       return {
-         comments: newComments,
+         comments,
          loading,
          error,
       };

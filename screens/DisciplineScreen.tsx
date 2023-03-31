@@ -9,8 +9,9 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
+import { useMaterials } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
-import { useMaterials, useTheme } from "../hooks";
+import { useTheme } from "../hooks";
 import type { DisciplineScreenNavigationProp, DisciplineScreenRouteProp } from "../typings";
 import { USER_TYPE } from "../typings/enums";
 import { isEmpty } from "../utils";

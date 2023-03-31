@@ -11,14 +11,12 @@ import { Loader } from "../common";
 import { TimetableLessonRow } from "./TimetableLessonRow/TimetableLessonRow";
 
 interface Props {
-   lessons: Lesson[]; // @raymix TODO Lesson[] => PreviewLesson[]
+   lessons: Lesson[];
    dayIndex: number;
 }
 
 export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons }) => {
    const tw = useTailwind();
-
-   console.log({ lessons });
 
    const { previewLessons, loading } = usePreviewLessons(lessons);
 

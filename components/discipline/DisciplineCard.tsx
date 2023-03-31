@@ -7,8 +7,9 @@ import { Card, Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
+import { useChat } from "../../features/hooks";
 import { selectUser } from "../../features/slices/userSlice";
-import { useChat, useTheme } from "../../hooks";
+import { useTheme } from "../../hooks";
 import type { Discipline, DisciplineScreenNavigationProp } from "../../typings";
 import { APP_THEME, USER_TYPE } from "../../typings/enums";
 

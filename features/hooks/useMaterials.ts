@@ -4,12 +4,12 @@ import { FirebaseError } from "firebase/app";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectMaterialsByDisciplineId, setMaterials } from "../../features/slices/materialsSlice";
 import { RootState } from "../../store";
 import type { FBMaterial, Material } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { MaterialConverter, QUERIES } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
+import { selectMaterialsByDisciplineId, setMaterials } from "../slices/materialsSlice";
 
 interface UseMaterials {
    materials: Material[];

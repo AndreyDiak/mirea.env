@@ -5,8 +5,6 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
-import { selectFavorites, setFavorites } from "../../features/slices/favoritesSlice";
-import { selectUser } from "../../features/slices/userSlice";
 import { RootState } from "../../store";
 import type { Discipline, FBFavorite, FBMaterial, PreviewFavorite } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
@@ -14,6 +12,8 @@ import { MaterialConverter } from "../../utils/Converter/MaterialConverter";
 import { QUERIES } from "../../utils/createDBQuery";
 import { deepCompare } from "../../utils/deepCompare";
 import { isEmpty } from "../../utils/isEmpty";
+import { selectFavorites, setFavorites } from "../slices/favoritesSlice";
+import { selectUser } from "../slices/userSlice";
 
 interface UseFavorites {
    favorites: PreviewFavorite[];

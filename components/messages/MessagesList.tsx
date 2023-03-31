@@ -6,8 +6,9 @@ import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
+import { useMessages } from "../../features/hooks";
 import { selectUser } from "../../features/slices/userSlice";
-import { useMessages, useTheme } from "../../hooks";
+import { useTheme } from "../../hooks";
 import type { Message as MessageType } from "../../typings";
 import { isEmpty } from "../../utils";
 import { CenteredText } from "../common";
@@ -103,7 +104,7 @@ export function MessagesList({
                   setIsScrollButtonShown(false);
                }
             }}
-            // TODO у каждого пользователя должна хранится инфа
+            // TODO @raymix у каждого пользователя должна хранится инфа
             // на каком смс он закончил читать группу
             // initialScrollIndex
             renderItem={({ item: message, index }) => (

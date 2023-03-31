@@ -4,12 +4,12 @@ import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 import { FBMessage } from "../../typings";
 
-export interface UserState {
+interface InitialState {
    // по id чата храним сообщения
    messages: Record<string, FBMessage[]>;
 }
 
-const initialState: UserState = {
+const initialState: InitialState = {
    messages: {},
 };
 

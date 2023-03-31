@@ -10,8 +10,9 @@ import { useTailwind } from "tailwind-rn/dist";
 import { addMessage } from "../api";
 import { Loader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
+import { useChats } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
-import { useChats, useTheme } from "../hooks";
+import { useTheme } from "../hooks";
 import { ChatsScreenNavigationProp, ChatsScreenRouteProp, USER_TYPE } from "../typings";
 
 export function ChatsScreen() {
@@ -96,9 +97,6 @@ export function ChatsScreen() {
                         </Text>
                         <TouchableOpacity
                            onPress={() =>
-                              // TODO @raymix разобраться как делать типы
-                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                              // @ts-ignore
                               navigation.navigate("Chat", {
                                  chatId: chat.id,
                                  groupName: chat.groupName,

@@ -1,2 +1,2 @@
-export * from "./usePreviewLessons";
-export * from "./useTimetable";
+export { usePreviewLessons } from "./usePreviewLessons";
+export { useTimetable } from "./useTimetable";

@@ -5,14 +5,12 @@ import { Text, View } from "react-native";
 import { Card, Input } from "@rneui/themed";
 import { addDoc, updateDoc } from "firebase/firestore";
 
-import { useInstitutes } from "../../../hooks/login";
-import { useTeachers } from "../../../hooks/login/useTeachers";
+import { useInstitutes, useTeachers } from "../../../hooks/login";
 import { Institute, Teacher } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, DisciplinePatcher, createCollection, isEmpty } from "../../../utils";
 import { Button } from "../../Button";
-import { CheckListMulitple } from "../checklist/CheckListMulitple";
-import { CheckListSingle } from "../checklist/CheckListSingle";
+import { CheckListMulitple, CheckListSingle } from "../checklist";
 
 /* мы подгружаем все институты, после чего, выбираем один
  * подгружаем всех преподов, которые подключены к этому институту

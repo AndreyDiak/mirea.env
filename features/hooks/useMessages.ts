@@ -1,14 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 import { orderBy, query } from "firebase/firestore";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
-import { selectMessagesWithChatId, setMessages } from "../../features/slices/messagesSlice";
 import { RootState } from "../../store";
 import { DB_PATHS, FBMessage, Message } from "../../typings";
 import { MessageConverter, createCollection } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
+import { selectMessagesWithChatId, setMessages } from "../slices/messagesSlice";
 
 interface UseMessages {
    messages: Message[];

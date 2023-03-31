@@ -3,13 +3,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getAllDataWithFilter, getDataById } from "../../api";
-import { selectDisciplines, setDisciplines } from "../../features/slices/disciplinesSlice";
-import { selectUser } from "../../features/slices/userSlice";
 import { RootState } from "../../store";
 import type { Discipline, FBDiscipline, FBGroup } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { DisciplineConverter, QUERIES } from "../../utils";
 import { isEmpty } from "../../utils/isEmpty";
+import { selectDisciplines, setDisciplines } from "../slices/disciplinesSlice";
+import { selectUser } from "../slices/userSlice";
 
 interface UseDisciplines {
    disciplines: Discipline[];
