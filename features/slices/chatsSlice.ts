@@ -39,7 +39,7 @@ export const selectChatsWithDisciplineId = createSelector(
 export const selectChatWithDisciplineId = createSelector(
    (s: RootState, disciplineId: string) => disciplineId,
    selectChats,
-   (disciplineId, chats) => chats[disciplineId][0],
+   (disciplineId, chats) => (chats[disciplineId] ? chats[disciplineId][0] : {}),
 );
 
 // Action creators are generated for each case reducer function

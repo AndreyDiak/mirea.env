@@ -4,9 +4,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 
+import { useUser } from "../features/hooks";
 import { selectUser, setUser } from "../features/slices/userSlice";
 import { auth } from "../firebase";
-import { useUser } from "../hooks";
 import {
    AdminScreen,
    AuthBioScreen,
