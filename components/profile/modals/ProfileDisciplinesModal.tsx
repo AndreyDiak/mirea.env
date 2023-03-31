@@ -4,7 +4,7 @@ import { Text, View } from "react-native";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { useDisciplines } from "../../../hooks";
+import { useDisciplines } from "../../../features/hooks";
 import { COLORS_THEME_MAIN_TEXT } from "../../../utils";
 
 export function ProfileDisciplinesModal() {

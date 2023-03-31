@@ -31,8 +31,6 @@ export function DisciplineScreen() {
 
    const { materials, loading } = useMaterials(discipline.id);
 
-   // console.log({ materials });
-
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,

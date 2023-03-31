@@ -36,7 +36,7 @@ export const UserProfileAvatar: React.FC<Props> = React.memo(({ title, source })
          <View style={styles.image}>
             <Text
                style={[
-                  tw("font-bold text-2xl text-black"),
+                  tw("font-bold text-2xl"),
                   {
                      color: returnDarkenHexCode(theme),
                   },

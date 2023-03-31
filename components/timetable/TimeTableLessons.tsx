@@ -20,8 +20,6 @@ export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons }) => {
 
    const { previewLessons, loading } = usePreviewLessons(lessons);
 
-   // console.log({ previewLessons });
-
    if (loading) {
       return <Loader text="Загрузка доп. данных" />;
    }
