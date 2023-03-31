@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import { Card, Icon } from "@rneui/themed";
@@ -25,6 +25,21 @@ export function DisciplineCard({ discipline }: Props) {
    const { APP_THEME_BORDER, APP_THEME_SECONDARY, APP_THEME_TEXT, THEME_MAIN } = useTheme();
 
    const { chat, loading } = useChat(discipline.id);
+
+   const onChatOpenHandler = () => {
+      if (loading) {
+         ToastAndroid.show("Загрузка данных", 500);
+         return;
+      }
+      if (user.type === USER_TYPE.STUDENT) {
+         navigation.navigate("Chat", {
+            chatId: chat?.id,
+            groupName: chat.groupName,
+         });
+      } else {
+         navigation.navigate("Chats", { discipline });
+      }
+   };
 
    return (
       <Card
@@ -64,20 +79,7 @@ export function DisciplineCard({ discipline }: Props) {
                <Icon name="inventory" type="material" color={THEME_MAIN} />
             </TouchableOpacity>
 
-            <TouchableOpacity
-               style={tw("flex flex-row items-center")}
-               onPress={() =>
-                  // если пользователь быстро нажал,
-                  // (до того как загрузился chatId, то мы должны делать лоадер)
-                  // "загрузка чата" или "создание чата"
-                  !loading && user.type === USER_TYPE.STUDENT
-                     ? navigation.navigate("Chat", {
-                          chatId: chat?.id,
-                          groupName: chat.groupName,
-                       })
-                     : navigation.navigate("Chats", { discipline })
-               }
-            >
+            <TouchableOpacity style={tw("flex flex-row items-center")} onPress={onChatOpenHandler}>
                <Text
                   style={[
                      // tw("font-bold text-gray-600 mr-2"),

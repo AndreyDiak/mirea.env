@@ -66,6 +66,7 @@ export const useChat = (disciplineId: string) => {
             groupId: previewChat.groupId,
             groupName: group.name,
          };
+
          dispatch(setChat({ chat: chatPreview, disciplineId }));
       },
       [disciplineId, dispatch],
@@ -92,7 +93,10 @@ export const useChat = (disciplineId: string) => {
             ]);
             const chat = await getAllDataWithFilter<FBChat>(q);
 
-            if (rawChat !== undefined) return;
+            if (!isEmpty(rawChat)) {
+               setLoading(false);
+               return;
+            }
 
             if (isEmpty(chat)) {
                // если чат еще не создан, создаем новый чат...
