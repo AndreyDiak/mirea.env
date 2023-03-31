@@ -7,17 +7,13 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUser } from "../../../features/slices/userSlice";
-import { useTheme } from "../../../hooks";
-import { useMaterialForm } from "../../../hooks/materials/useMaterialForm";
+import { useMaterialForm, useTheme } from "../../../hooks";
 import { COLORS_COMMON, isEmpty } from "../../../utils";
 
 type Props = {
    disciplineId: string;
    setIsFormVisible: (isVisible: boolean) => void;
 };
-
-// TODO @raymix useMaterialData / useMaterialForm
-// вынести в отдельный хук
 
 export function MaterialForm({ disciplineId, setIsFormVisible }: Props) {
    const tw = useTailwind();
