@@ -6,12 +6,12 @@ import { Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useTheme } from "../../../hooks";
-import { DBMessage } from "../../../typings";
+import { Message } from "../../../typings";
 import { COLORS_COMMON } from "../../../utils";
 
 interface Props {
    isReplying: boolean;
-   replyMessage: DBMessage | null;
+   replyMessage: Message | null;
    replyHandler: () => void;
 }
 

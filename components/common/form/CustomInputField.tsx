@@ -6,7 +6,7 @@ import { Icon } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useTheme } from "../../../hooks";
-import { DBMessage } from "../../../typings";
+import { Message } from "../../../typings";
 import { COLORS_COMMON } from "../../../utils";
 import { CustomReplyField } from "./CustomReplyField";
 
@@ -16,7 +16,7 @@ interface Props {
    placeholder?: string;
    isReplying?: boolean;
    replyData?: {
-      replyMessage: DBMessage | null;
+      replyMessage: Message | null;
       replyHandler: () => void;
    };
    setValue: (value: string) => void;

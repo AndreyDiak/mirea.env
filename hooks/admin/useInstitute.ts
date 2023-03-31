@@ -46,6 +46,14 @@ export const useInstitute = () => {
    }, [fullName, isError, shortName]);
 
    return useMemo(() => {
-      return { fullName, setFullName, shortName, setShortName, isLoading, isError, addInstitute };
+      return {
+         fullName,
+         setFullName,
+         shortName,
+         setShortName,
+         isLoading,
+         isError,
+         addInstitute,
+      };
    }, [addInstitute, fullName, isError, isLoading, shortName]);
 };
