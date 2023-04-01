@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 
+import { AppLoader } from "../components";
 import { useUser } from "../features/hooks";
 import { selectUser, setUser } from "../features/slices/userSlice";
 import { auth } from "../firebase";
@@ -26,11 +27,12 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function RootNavigator() {
    // user которого мы получаем от сервиса авторизации...
    const [initialUser, setInitialUser] = useState(null);
+   const [loading, setLoading] = useState(true);
    const dispatch = useDispatch();
    const user = useSelector(selectUser);
 
    // авторизация с сервиса...
-   onAuthStateChanged(auth, async (resolve) => {
+   onAuthStateChanged(auth, (resolve) => {
       if (resolve) {
          setInitialUser(resolve);
       } else {
@@ -39,7 +41,11 @@ function RootNavigator() {
       }
    });
 
-   useUser(initialUser);
+   useUser(initialUser, setLoading);
+
+   if (loading) {
+      return <AppLoader />;
+   }
 
    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
    // @ts-ignore

@@ -5,10 +5,11 @@ import { ScrollView, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { DisciplineCard, Loader, ScreenTemplate } from "../components";
+import { DisciplineCard, Error, Loader, ScreenTemplate } from "../components";
 import { useDisciplines } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
 import { useTheme } from "../hooks";
+import { isEmpty } from "../utils";
 
 export function DisciplinesScreen() {
    const tw = useTailwind();
@@ -20,6 +21,10 @@ export function DisciplinesScreen() {
 
    if (loading) {
       return <Loader text="Загрузка дисциплин" theme={user.theme} />;
+   }
+
+   if (isEmpty(disciplines)) {
+      return <Error text="К вашему институту нет привязанных дисциплин" theme={user.theme} />;
    }
 
    return (

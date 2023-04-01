@@ -73,7 +73,7 @@ export function AuthBioScreen() {
                {userData.type !== null && (
                   <View style={tw("text-blue-400 text-lg py-2")}>
                      <LoginDialogOpen
-                        isSelected={!userData.institutes.length}
+                        isSelected={isEmpty(userData.institutes)}
                         text="Выбрать институт"
                         subText={`Институт(ы): ${userData.institutes.map(
                            (institute) => `${institute.shortName} `,
@@ -86,7 +86,7 @@ export function AuthBioScreen() {
                   <View style={tw("text-blue-400 text-lg py-2")}>
                      {userData.type === USER_TYPE.STUDENT ? (
                         <LoginDialogOpen
-                           isSelected={!isEmpty(userData.group)}
+                           isSelected={isEmpty(userData.group)}
                            text="Выбрать группу"
                            subText={`Группа: ${userData.group?.name}`}
                            openDialog={() => toggleDialog(LFilter.GROUPS)}
