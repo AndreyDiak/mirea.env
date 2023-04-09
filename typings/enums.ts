@@ -1,7 +1,6 @@
 // пути до коллекций БД
 export const enum DB_PATHS {
    CHATS = "chats", // чаты групп
-   // COMMENTS = "comments", // комменты к материалам
    SOURCES = "sources", // прикрепленные файлы к материалам
    DISCIPLINES = "disciplines", // все доступные дисциплины
    GROUPS = "groups", // все группы

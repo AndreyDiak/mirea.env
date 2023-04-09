@@ -36,12 +36,11 @@ export function usePreviewLessons(lessons: Lesson[]): UsePreviewLesson {
                if (userType === USER_TYPE.STUDENT) {
                   if (!isEmpty(lesson.teachersIds)) {
                      const teachersNames = await Promise.all(
-                        lesson?.teachersIds
-                           .map(async (teacherId) => {
-                              const teacher = await getDataById<FBTeacher>(teacherId, DB_PATHS.USERS);
-                              return `${teacher.female} ${teacher.name[0]}.`;
-                           })
-                           .filter(Boolean),
+                        lesson?.teachersIds.map(async (teacherId) => {
+                           const teacher = await getDataById<FBTeacher>(teacherId, DB_PATHS.USERS);
+
+                           return !isEmpty(teacher) ? `${teacher.female} ${teacher.name[0]}.` : null;
+                        }),
                      );
 
                      previewLesson.teachersNames = teachersNames

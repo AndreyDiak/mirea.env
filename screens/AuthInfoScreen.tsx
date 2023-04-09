@@ -54,14 +54,16 @@ export function AuthInfoScreen() {
          <LoginForm handleSubmit={checkEmailAndPassword} step={AUTH_STEPS.INFO} error={error}>
             <View>
                <Input
-                  placeholder="Почта..."
+                  placeholder="example@edu.mirea.ru"
+                  label="Почта"
                   value={userData?.email}
                   onChangeText={(value) => {
                      setUserData({ ...userData, email: value });
                   }}
                />
                <Input
-                  placeholder="Пароль..."
+                  placeholder="password..."
+                  label="Пароль"
                   secureTextEntry
                   value={userData?.password}
                   onChangeText={(value) => {
@@ -69,7 +71,8 @@ export function AuthInfoScreen() {
                   }}
                />
                <Input
-                  placeholder="Повторите пароль..."
+                  placeholder="repeat_password..."
+                  label="Повтор пароля"
                   secureTextEntry
                   value={userData?.repeatedPassword}
                   onChangeText={(value) => {

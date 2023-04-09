@@ -10,7 +10,7 @@ import { deepCompare } from "../../utils/deepCompare";
 import { selectUser, setUser } from "../slices/userSlice";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const useUser = (initialUser: any) => {
+export const useUser = (initialUser: any, setLoading: (isLoading: boolean) => void) => {
    const dispatch = useDispatch();
    const rawUser = useSelector(selectUser);
 
@@ -33,8 +33,9 @@ export const useUser = (initialUser: any) => {
 
       if (!deepCompare(user, rawUser)) {
          dispatch(setUser(user));
+         setLoading(false);
       }
-   }, [dispatch, rawUser, snapshot?.docs]);
+   }, [dispatch, rawUser, setLoading, snapshot?.docs]);
 
    useEffect(() => {
       if (snapshot?.empty) {

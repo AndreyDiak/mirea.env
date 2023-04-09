@@ -24,7 +24,6 @@ export function useDisciplines(): UseDisciplines {
    const rawDisciplinesSelector = useCallback((s: RootState) => selectDisciplines(s), []);
    const rawDisciplines = useSelector(rawDisciplinesSelector);
 
-   // const [disciplines, setDisciplines] = useState<Discipline[]>([]);
    const [loading, setLoading] = useState<boolean>(false);
 
    const loadUserDisciplines = useCallback(
@@ -36,6 +35,7 @@ export function useDisciplines(): UseDisciplines {
             opStr: "==",
          });
          const disciplines = await getAllDataWithFilter<FBDiscipline>(q);
+
          dispatch(setDisciplines({ disciplines }));
       },
       [dispatch],
@@ -43,6 +43,7 @@ export function useDisciplines(): UseDisciplines {
 
    const loadTeacherDisciplines = useCallback(
       async (disciplinesIds: string[]) => {
+         setLoading(true);
          const disciplines = await Promise.all(
             disciplinesIds.map(async (disciplineId) => {
                const discipline = await getDataById<FBDiscipline>(disciplineId, DB_PATHS.DISCIPLINES);
@@ -55,18 +56,20 @@ export function useDisciplines(): UseDisciplines {
    );
 
    useEffect(() => {
-      if (isEmpty(user)) return;
-
-      // первичная загрузка
-      if (isEmpty(rawDisciplines)) {
+      const loadDisciplines = async () => {
+         if (isEmpty(user)) return;
          setLoading(true);
-         if (user.type === USER_TYPE.STUDENT) {
-            loadUserDisciplines(user.groupId);
-         } else if (user.type === USER_TYPE.TEACHER) {
-            loadTeacherDisciplines(user.disciplinesIds);
+         // первичная загрузка
+         if (isEmpty(rawDisciplines)) {
+            if (user.type === USER_TYPE.STUDENT) {
+               await loadUserDisciplines(user.groupId);
+            } else if (user.type === USER_TYPE.TEACHER) {
+               await loadTeacherDisciplines(user.disciplinesIds);
+            }
          }
          setLoading(false);
-      }
+      };
+      loadDisciplines();
    }, [loadTeacherDisciplines, loadUserDisciplines, rawDisciplines, user]);
 
    return useMemo(() => {

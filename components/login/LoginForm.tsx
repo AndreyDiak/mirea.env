@@ -14,12 +14,14 @@ type Props = {
    error: string;
 };
 
+// текст в кнопке
 const stepToTextMap: Record<AUTH_STEPS, string> = {
    [AUTH_STEPS.AUTH]: "Войти",
    [AUTH_STEPS.INFO]: "Продолжить",
    [AUTH_STEPS.BIO]: "Регистрация",
 };
 
+// текст в заголовке
 const titleToTextMap: Record<AUTH_STEPS, string> = {
    [AUTH_STEPS.AUTH]: "Авторизация",
    [AUTH_STEPS.INFO]: "Регистрация",
@@ -30,7 +32,9 @@ export const LoginForm: React.FC<Props> = React.memo(({ step, children, handleSu
    const tw = useTailwind();
    const navigation = useNavigation<LoginScreenNavigationProp>();
 
-   const stepTitle = step === "auth" ? "Нет аккаунта?" : "Есть аккаунт?";
+   const stepTitle = step === AUTH_STEPS.AUTH ? "Нет аккаунта?" : "Есть аккаунт?";
+
+   const stepText = step === AUTH_STEPS.AUTH ? "Регистрация" : "Авторизация";
 
    return (
       <View style={tw("bg-white w-4/5 rounded-lg p-2")}>
@@ -65,7 +69,7 @@ export const LoginForm: React.FC<Props> = React.memo(({ step, children, handleSu
                      step === "auth" ? navigation.navigate("AuthInfo") : navigation.navigate("Login")
                   }
                >
-                  <Text style={tw("text-blue-400 underline")}>{stepTitle}</Text>
+                  <Text style={tw("text-blue-400 underline")}>{stepText}</Text>
                </TouchableOpacity>
             </View>
          </View>
