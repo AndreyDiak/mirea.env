@@ -39,8 +39,9 @@ export const useUser = (initialUser: any, setLoading: (isLoading: boolean) => vo
 
    useEffect(() => {
       if (snapshot?.empty) {
+         setLoading(false);
          return;
       }
       loadUser();
-   }, [dispatch, loadUser, rawUser, snapshot?.empty]);
+   }, [dispatch, loadUser, rawUser, setLoading, snapshot?.empty]);
 };

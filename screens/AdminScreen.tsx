@@ -8,7 +8,7 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { DisciplineForm, GroupForm, InstituteForm, TimetableForm } from "../components";
 import { auth } from "../firebase";
-import { useAdminMode } from "../hooks";
+import { useAdminMode } from "../hooks/admin";
 import { ADMIN_MODE } from "../typings/enums";
 
 const modeToComponentMap: Record<ADMIN_MODE, JSX.Element> = {

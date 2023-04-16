@@ -5,7 +5,7 @@ import { View } from "react-native";
 import { Input } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { useInstitute } from "../../../hooks";
+import { useInstitute } from "../../../hooks/admin";
 import { isEmpty } from "../../../utils";
 import { Button } from "../../Button";
 
