@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getDataById } from "../../api";
 import { selectUserType } from "../../features/slices/userSlice";
 import { DB_PATHS, FBGroup, FBTeacher, Lesson, PreviewLesson, USER_TYPE } from "../../typings";
-import { isEmpty } from "../../utils";
+import { isEmpty, localeSort } from "../../utils";
 
 interface UsePreviewLesson {
    previewLessons: PreviewLesson[];
@@ -35,30 +35,22 @@ export function usePreviewLessons(lessons: Lesson[]): UsePreviewLesson {
 
                if (userType === USER_TYPE.STUDENT) {
                   if (!isEmpty(lesson.teachersIds)) {
-                     const teachersNames = await Promise.all(
+                     previewLesson.teachersNames = await Promise.all(
                         lesson?.teachersIds.map(async (teacherId) => {
                            const teacher = await getDataById<FBTeacher>(teacherId, DB_PATHS.USERS);
 
                            return !isEmpty(teacher) ? `${teacher.female} ${teacher.name[0]}.` : null;
                         }),
-                     );
-
-                     previewLesson.teachersNames = teachersNames
-                        .filter(Boolean)
-                        .sort((prev, next) => prev.localeCompare(next));
+                     ).then((res) => res.filter(Boolean).sort(localeSort));
                   }
                } else if (userType === USER_TYPE.TEACHER) {
                   if (!isEmpty(lesson.groupsIds)) {
-                     const groupsName = await Promise.all(
+                     previewLesson.groupNames = await Promise.all(
                         lesson?.groupsIds.map(async (groupId) => {
                            const group = await getDataById<FBGroup>(groupId, DB_PATHS.GROUPS);
                            return group.name;
                         }),
-                     );
-
-                     previewLesson.groupNames = groupsName
-                        .filter(Boolean)
-                        .sort((prev, next) => prev.localeCompare(next));
+                     ).then((res) => res.filter(Boolean).sort(localeSort));
                   }
                }
 

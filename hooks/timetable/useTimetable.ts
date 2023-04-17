@@ -1,49 +1,100 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
+import {
+   selectLessonsForStudent,
+   selectLessonsForTeacher,
+   setLessons,
+} from "../../features/slices/timetableSlice";
 import { selectUser } from "../../features/slices/userSlice";
-import { FBLesson, Timetable } from "../../typings";
+import { RootState } from "../../store";
+import { FBLesson, Student, Timetable } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES, TimetableConverter } from "../../utils";
+import { deepCompare } from "../../utils/deepCompare";
 
-export const useTimetable = () => {
+interface UseTimetable {
+   timetable: Timetable;
+   loading: boolean;
+}
+
+export function useTimetable(): UseTimetable {
+   const dispatch = useDispatch();
    const user = useSelector(selectUser);
-   const [timetable, setTimeable] = useState<Timetable>(null);
+
    const [loading, setLoading] = useState<boolean>(false);
 
-   useEffect(() => {
-      const getData = async () => {
+   const rawStudentLessonsSelector = useCallback(
+      (s: RootState) => selectLessonsForStudent(s, (user as Student).groupId ?? ""),
+      [user],
+   );
+
+   const rawTeacherLessonsSelector = useCallback(
+      (s: RootState) => selectLessonsForTeacher(s, user.id),
+      [user.id],
+   );
+
+   const rawStudentLessons = useSelector(rawStudentLessonsSelector);
+   const rawTeacherLessons = useSelector(rawTeacherLessonsSelector);
+
+   const loadStudentTimetable = useCallback(
+      async (groupId: string) => {
+         const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
+            fieldName: "groups_ids",
+            fieldValue: groupId,
+            opStr: "array-contains",
+         });
          setLoading(true);
+         const lessons = await getAllDataWithFilter<FBLesson>(q);
+         if (!deepCompare(lessons, rawStudentLessons)) {
+            dispatch(setLessons({ lessons }));
+         }
+         setLoading(false);
+      },
+      [dispatch, rawStudentLessons],
+   );
+
+   const loadTeacherTimetable = useCallback(
+      async (teacherId: string) => {
+         const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
+            fieldName: "teachers_ids",
+            fieldValue: teacherId,
+            opStr: "array-contains",
+         });
+         setLoading(true);
+         const lessons = await getAllDataWithFilter<FBLesson>(q);
+         if (!deepCompare(lessons, rawTeacherLessons)) {
+            dispatch(setLessons({ lessons }));
+         }
+         setLoading(false);
+      },
+      [dispatch, rawTeacherLessons],
+   );
+
+   useEffect(() => {
+      const loadTimetable = async () => {
          if (user.type === USER_TYPE.STUDENT) {
             // подгрузка расписания для студента
-            const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
-               fieldName: "groups_ids",
-               fieldValue: user.groupId,
-               opStr: "array-contains",
-            });
-            const data = await getAllDataWithFilter<FBLesson>(q);
-            const newTimetable = TimetableConverter.toData(data, user.groupId);
-            setTimeable(newTimetable);
+            loadStudentTimetable(user.groupId);
          } else {
             // подгрузка расписания для препода
-            const q = QUERIES.CREATE_SIMPLE_QUERY<FBLesson>(DB_PATHS.TIMETABLES, {
-               fieldName: "teachers_ids",
-               fieldValue: user.id,
-               opStr: "array-contains",
-            });
-            const data = await getAllDataWithFilter<FBLesson>(q);
-            const newTimetable = TimetableConverter.toData(data, "");
-            setTimeable(newTimetable);
+            loadTeacherTimetable(user.id);
          }
-
-         setLoading(false);
       };
-      getData();
+      loadTimetable();
+   }, [loadStudentTimetable, loadTeacherTimetable, user]);
 
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, [user.id, user.type]);
+   return useMemo(() => {
+      const timetable =
+         user.type === USER_TYPE.STUDENT
+            ? TimetableConverter.toData(rawStudentLessons, user.groupId)
+            : TimetableConverter.toData(rawTeacherLessons);
 
-   return { timetable, loading };
-};
+      return {
+         timetable,
+         loading,
+      };
+   }, [loading, rawStudentLessons, rawTeacherLessons, user]);
+}
