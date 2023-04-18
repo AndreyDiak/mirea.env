@@ -19,9 +19,8 @@ export const useUser = (initialUser: any, setLoading: (isLoading: boolean) => vo
       fieldValue: initialUser?.email || "",
       opStr: "==",
    });
-   // useCollection нужен для того, чтобы подгружать изменения в runtime
-   // например аватар и тд
-   const [snapshot] = useCollection(q);
+
+   const [snapshot, loading, error] = useCollection(q);
 
    const loadUser = useCallback(() => {
       const fbUser = {
@@ -33,15 +32,15 @@ export const useUser = (initialUser: any, setLoading: (isLoading: boolean) => vo
 
       if (!deepCompare(user, rawUser)) {
          dispatch(setUser(user));
-         setLoading(false);
       }
+      setLoading(false);
    }, [dispatch, rawUser, setLoading, snapshot?.docs]);
 
    useEffect(() => {
-      if (snapshot?.empty) {
+      if (snapshot?.empty && !loading) {
          setLoading(false);
          return;
       }
       loadUser();
-   }, [dispatch, loadUser, rawUser, setLoading, snapshot?.empty]);
+   }, [dispatch, loadUser, loading, rawUser, setLoading, snapshot?.empty]);
 };

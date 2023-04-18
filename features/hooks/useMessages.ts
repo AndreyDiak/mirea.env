@@ -23,8 +23,6 @@ export function useMessages(chatId: string): UseMessages {
 
    const q = query(createCollection(`${DB_PATHS.CHATS}/${chatId}/messages`), orderBy("timestamp"));
 
-   // const [messages, setMessages] = useState<Message[]>([]);
-
    const [snap, loading, error] = useCollection(q);
 
    const loadMessages = useCallback(() => {

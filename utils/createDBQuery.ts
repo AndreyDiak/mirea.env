@@ -5,7 +5,6 @@ import {
    WhereFilterOp,
    collection,
    doc,
-   orderBy,
    query,
    where,
 } from "firebase/firestore";
@@ -17,10 +16,6 @@ interface WhereParam<T> {
    fieldName: keyof T;
    fieldValue: T[keyof T];
    opStr: WhereFilterOp;
-}
-
-interface OrderByParam<T> {
-   fieldValue: keyof T;
 }
 
 export const createCollection = (name: string) => collection(db, name);
