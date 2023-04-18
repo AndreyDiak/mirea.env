@@ -27,11 +27,10 @@ export function useDisciplines(): UseDisciplines {
    const [loading, setLoading] = useState<boolean>(false);
 
    const loadUserDisciplines = useCallback(
-      async (groupId: string) => {
-         const FBGroup = await getDataById<FBGroup>(groupId, DB_PATHS.GROUPS);
+      async (instituteId: string) => {
          const q = QUERIES.CREATE_SIMPLE_QUERY<FBDiscipline>(DB_PATHS.DISCIPLINES, {
             fieldName: "institute_id",
-            fieldValue: FBGroup.institute_id,
+            fieldValue: instituteId,
             opStr: "==",
          });
          const disciplines = await getAllDataWithFilter<FBDiscipline>(q);
@@ -62,7 +61,7 @@ export function useDisciplines(): UseDisciplines {
          // первичная загрузка
          if (isEmpty(rawDisciplines)) {
             if (user.type === USER_TYPE.STUDENT) {
-               await loadUserDisciplines(user.groupId);
+               await loadUserDisciplines(user.instituteId);
             } else if (user.type === USER_TYPE.TEACHER) {
                await loadTeacherDisciplines(user.disciplinesIds);
             }

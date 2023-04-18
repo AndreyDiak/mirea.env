@@ -1,10 +1,10 @@
-import { collection, getDocs, query } from "firebase/firestore";
+import { getDocs, query } from "firebase/firestore";
 
-import { db } from "../../firebase";
 import { DB_PATHS } from "../../typings/enums";
+import { createCollection } from "../../utils";
 
 export const getAllData = async <T>(collectionName: DB_PATHS): Promise<T[]> => {
-   const q = query(collection(db, collectionName));
+   const q = query(createCollection(collectionName));
    const snap = await getDocs(q);
 
    if (!snap.empty) {
