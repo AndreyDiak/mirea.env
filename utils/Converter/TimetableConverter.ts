@@ -4,7 +4,7 @@ import { getEmptyLessons } from "../admin/getEmpyTimetable";
 import { isEmpty } from "../isEmpty";
 
 export class TimetableConverter {
-   public static toData(lessons: FBLesson[], groupId: string): Timetable {
+   public static toData(lessons: FBLesson[], groupId: string = null): Timetable {
       if (isEmpty(lessons)) {
          return null;
       }

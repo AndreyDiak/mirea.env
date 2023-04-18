@@ -8,20 +8,22 @@ import documentsSlice from "./features/slices/documentsSlice";
 import favoritesSlice from "./features/slices/favoritesSlice";
 import materialsSlice from "./features/slices/materialsSlice";
 import messagesSlice from "./features/slices/messagesSlice";
+import timetableSlice from "./features/slices/timetableSlice";
 import userSlice from "./features/slices/userSlice";
 
 export const store = configureStore({
    reducer: {
       user: userSlice,
       auth: authSlice,
-
+      // главные страницы
       disciplines: disciplinesSlice,
-
+      timetable: timetableSlice,
+      favorites: favoritesSlice,
+      // страница дисциплин
       materials: materialsSlice,
       comments: commentsSlice,
       documents: documentsSlice,
-      favorites: favoritesSlice,
-
+      // страница чата
       chats: chatsSlice,
       messages: messagesSlice,
    },

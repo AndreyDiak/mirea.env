@@ -5,3 +5,5 @@ export * from "./colors";
 export * from "./admin";
 export * from "./Converter";
 export * from "./Patcher";
+
+export { localeSort } from "./localeSort";

@@ -21,7 +21,7 @@ export class TimetablePatcher {
          cabinet: lesson.cabinet.trim(),
          day_index: lesson.dayIndex,
          order_index: lesson.orderIndex,
-         group_id: groupId,
+         groups_ids: [groupId],
          teachers_ids: lesson.teachersIds ?? [],
       };
       return DBLesson;
