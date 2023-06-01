@@ -54,19 +54,13 @@ export function DisciplineScreen() {
             {!isStudent && (
                <View style={tw("")}>
                   <TouchableOpacity
-                     style={tw("flex flex-row justify-end")}
+                     style={tw("flex flex-row justify-center")}
                      onPress={() => setIsFormVisible(!isFormVisible)}
                   >
                      <View style={tw("flex flex-row items-center")}>
                         <Text style={{ color: THEME_MAIN }}>
                            {isFormVisible ? "Закрыть" : "Добавить материалы"}
                         </Text>
-                        <Icon
-                           name={!isFormVisible ? "expand-more" : "expand-less"}
-                           type="material"
-                           color={THEME_MAIN}
-                           size={25}
-                        />
                      </View>
                   </TouchableOpacity>
                   {isFormVisible && (

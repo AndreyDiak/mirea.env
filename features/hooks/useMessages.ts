@@ -40,7 +40,6 @@ export function useMessages(chatId: string): UseMessages {
    }, [chatId, dispatch, rawMessages, snap?.docs]);
 
    useEffect(() => {
-      // if (isFirstLoading) {
       if (snap?.docs.length === 0 || loading) return;
       loadMessages();
    }, [loadMessages, loading, snap]);

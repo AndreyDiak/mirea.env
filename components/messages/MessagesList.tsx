@@ -11,8 +11,9 @@ import { selectUser } from "../../features/slices/userSlice";
 import { useTheme } from "../../hooks";
 import type { Message as MessageType } from "../../typings";
 import { isEmpty } from "../../utils";
-import { CenteredText } from "../common";
+import { CenteredText, MODAL_TYPES, useGlobalModalContext } from "../common";
 import { Message } from "./Message";
+import { MessageModal } from "./MessageModal";
 import { MessagesScrollToBottom } from "./MessagesScrollToBottom";
 
 interface Props {
@@ -37,6 +38,8 @@ export function MessagesList({
    const { THEME_MAIN } = useTheme();
    const [backligthMessage, setBackligntMessage] = useState<string | null>(null);
 
+   const { openModal, closeModal } = useGlobalModalContext();
+
    const scrollToIndex = useCallback(
       (activeMessageIndex: string | null) => {
          if (activeMessageIndex) {
@@ -59,6 +62,10 @@ export function MessagesList({
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
    const onMessagePress = (message: MessageType) => {
       // fast press on message
+      openModal(MODAL_TYPES.SIMPLE_MODAL, {
+         title: message.displayName,
+         children: MessageModal,
+      });
    };
 
    if (loading && isEmpty(messages)) {

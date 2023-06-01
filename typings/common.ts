@@ -17,6 +17,9 @@ export type RootStackParamList = {
    AuthInfo: undefined;
    AuthBio: undefined;
    Main: undefined;
+   User: {
+      userId: string;
+   };
    Discipline: {
       discipline: Discipline;
    };

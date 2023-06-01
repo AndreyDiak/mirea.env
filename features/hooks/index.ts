@@ -7,3 +7,4 @@ export { useComments } from "./useComments";
 export { useDocuments } from "./useDocuments";
 export { useMaterials } from "./useMaterials";
 export { useUser } from "./useUser";
+export { useTimetable } from "./useTimetable";
