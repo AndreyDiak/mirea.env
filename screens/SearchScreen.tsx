@@ -43,11 +43,10 @@ export function SearchScreen() {
             {/*  */}
 
             <View style={tw("flex flex-row flex-wrap justify-between mb-8")}>
-               {institutes?.map((institute, index) => (
+               {institutes?.map((institute) => (
                   <TouchableOpacity onPress={() => onInstitutesChange(institute.id)}>
                      <Label
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={index}
+                        key={institute.id}
                         type={searchInstitutes.has(institute.shortName) ? "user_theme" : "secondary"}
                         content={institute.shortName}
                      />
