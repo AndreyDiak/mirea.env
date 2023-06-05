@@ -10,3 +10,4 @@ export * from "./FavoritesScreen";
 export * from "./LoginScreen";
 export * from "./ProfileScreen";
 export * from "./TimeTableScreen";
+export * from "./SearchScreen";

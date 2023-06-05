@@ -12,11 +12,11 @@ interface UsePreviewLesson {
    loading: boolean;
 }
 
-export function usePreviewLessons(lessons: Lesson[]): UsePreviewLesson {
+export function usePreviewLessons(lessons: Lesson[], userType: USER_TYPE): UsePreviewLesson {
    const [previewLessons, setPreviewLessons] = useState<PreviewLesson[]>(null);
    const [loading, setLoading] = useState(false);
 
-   const userType = useSelector(selectUserType);
+   // const userType = useSelector(selectUserType);
 
    useEffect(() => {
       let active = true;

@@ -38,6 +38,7 @@ export type RootStackParamList = {
 export type TabStackParamList = {
    Profile: undefined;
    Disciplines: undefined;
+   Search: undefined;
    Timetable: undefined;
    Favorites: undefined;
 };

@@ -5,3 +5,5 @@ export * from "./skeletons";
 export * from "./ScreenTemplate";
 export * from "./avatars";
 export * from "./modal";
+
+export { Label } from "./Label";

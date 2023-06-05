@@ -7,7 +7,7 @@ import { Icon } from "@rneui/themed";
 import { useSelector } from "react-redux";
 
 import { selectUser } from "../features/slices/userSlice";
-import { DisciplinesScreen, FavoritesScreen, ProfileScreen, TimeTableScreen } from "../screens";
+import { DisciplinesScreen, FavoritesScreen, ProfileScreen, SearchScreen, TimeTableScreen } from "../screens";
 import { TabStackParamList } from "../typings";
 import { COLORS_400, COLORS_COMMON } from "../utils";
 import { returnAppThemeSecondary, returnHexCode } from "../utils/returnHexCodes";
@@ -79,6 +79,18 @@ function TabNavigator() {
                      </Text>
                   );
                }
+               if (route.name === "Search") {
+                  return (
+                     <Text
+                        style={{
+                           color: focused ? activeColor : disabledColor,
+                           fontSize: 10,
+                        }}
+                     >
+                        Поиск
+                     </Text>
+                  );
+               }
             },
             // eslint-disable-next-line react/no-unstable-nested-components, consistent-return
             tabBarIcon: ({ focused }) => {
@@ -122,11 +134,23 @@ function TabNavigator() {
                      />
                   );
                }
+               if (route.name === "Search") {
+                  return (
+                     <Icon
+                        name="search"
+                        type="material"
+                        color={focused ? activeColor : disabledColor}
+                        size={30}
+                     />
+                  );
+               }
             },
          })}
       >
+         {/* @raymix TODO добавляем экран поиска... */}
          <Tab.Screen name="Disciplines" options={{ headerShown: false }} component={DisciplinesScreen} />
          <Tab.Screen name="Timetable" options={{ headerShown: false }} component={TimeTableScreen} />
+         <Tab.Screen name="Search" options={{ headerShown: false }} component={SearchScreen} />
          <Tab.Screen name="Favorites" options={{ headerShown: false }} component={FavoritesScreen} />
          <Tab.Screen name="Profile" options={{ headerShown: false }} component={ProfileScreen} />
       </Tab.Navigator>

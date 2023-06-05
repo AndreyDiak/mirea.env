@@ -8,6 +8,7 @@ import documentsSlice from "./features/slices/documentsSlice";
 import favoritesSlice from "./features/slices/favoritesSlice";
 import materialsSlice from "./features/slices/materialsSlice";
 import messagesSlice from "./features/slices/messagesSlice";
+import searchSlice from "./features/slices/searchSlice";
 import timetableSlice from "./features/slices/timetableSlice";
 import userSlice from "./features/slices/userSlice";
 
@@ -26,6 +27,8 @@ export const store = configureStore({
       // страница чата
       chats: chatsSlice,
       messages: messagesSlice,
+      // поиск профиля
+      search: searchSlice,
    },
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

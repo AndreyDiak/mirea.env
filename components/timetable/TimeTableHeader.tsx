@@ -54,6 +54,9 @@ export const TimeTableHeader: React.FC<Props> = React.memo(({ dayIndex, setDayIn
                   onPress={() => setDayIndex(index)}
                   style={[
                      tw("flex items-center flex-grow py-2"),
+                     {
+                        minWidth: 50,
+                     },
                      index === dayIndex && {
                         borderBottomColor: THEME_MAIN,
                         borderBottomWidth: 3,

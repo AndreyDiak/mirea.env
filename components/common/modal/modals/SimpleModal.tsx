@@ -17,7 +17,13 @@ export function SimpleModal() {
    } = store;
 
    return (
-      <Dialog isVisible onPressOut={closeModal} overlayStyle={tw("")}>
+      <Dialog
+         isVisible
+         onPressOut={closeModal}
+         overlayStyle={{
+            minWidth: 320,
+         }}
+      >
          <View style={tw("w-full flex flex-col items-center")}>
             <Text style={tw("font-bold text-xl mb-2")}>{title}</Text>
             {children()}

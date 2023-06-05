@@ -34,7 +34,6 @@ export function DisciplineScreen() {
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
-         headerStyle: {},
       });
    }, [discipline, navigation, user.appTheme]);
 

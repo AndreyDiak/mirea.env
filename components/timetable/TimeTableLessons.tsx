@@ -5,24 +5,23 @@ import { View } from "react-native";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { usePreviewLessons } from "../../hooks";
-import { Lesson } from "../../typings";
+import { Lesson, USER_TYPE } from "../../typings";
 import { isEmpty } from "../../utils";
-import { Loader } from "../common";
 import { TimetableLessonRow } from "./TimetableLessonRow/TimetableLessonRow";
 
 interface Props {
    lessons: Lesson[];
-   dayIndex: number;
+   userType: USER_TYPE;
 }
 
-export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons }) => {
+export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons, userType }) => {
    const tw = useTailwind();
 
-   const { previewLessons, loading } = usePreviewLessons(lessons);
+   const { previewLessons, loading } = usePreviewLessons(lessons, userType);
 
-   if (loading) {
-      return <Loader text="Загрузка доп. данных" />;
-   }
+   // if (loading) {
+   //    return <Loader text="Загрузка доп. данных" />;
+   // }
 
    if (isEmpty(previewLessons)) {
       return null;
