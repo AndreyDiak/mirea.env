@@ -1,22 +1,16 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { useSelector } from "react-redux";
-
 import { getDataById } from "../../api";
-import { selectUserType } from "../../features/slices/userSlice";
-import { DB_PATHS, FBGroup, FBTeacher, Lesson, PreviewLesson, USER_TYPE } from "../../typings";
+import { DB_PATHS, FBGroup, FBTeacher, Lesson, PreviewLesson, USER_TYPE, UseCustomHook } from "../../typings";
 import { isEmpty, localeSort } from "../../utils";
 
-interface UsePreviewLesson {
+interface UsePreviewLesson extends UseCustomHook {
    previewLessons: PreviewLesson[];
-   loading: boolean;
 }
 
 export function usePreviewLessons(lessons: Lesson[], userType: USER_TYPE): UsePreviewLesson {
    const [previewLessons, setPreviewLessons] = useState<PreviewLesson[]>(null);
    const [loading, setLoading] = useState(false);
-
-   // const userType = useSelector(selectUserType);
 
    useEffect(() => {
       let active = true;

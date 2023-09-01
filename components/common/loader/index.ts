@@ -1,3 +1,3 @@
 export { AppLoader } from "./AppLoader";
-export { Error } from "./Error";
-export { Loader } from "./Loader";
+export { Error, FullScreenError } from "./Error";
+export { Loader, FullScreenLoader } from "./Loader";

@@ -7,10 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserGroup, selectUserInstitutes, setGroup } from "../../features/slices/authSlice";
-import { useGroups } from "../../hooks/login";
-import { Group } from "../../typings";
-import { LFilter, USER_THEME } from "../../typings/enums";
-import { Error, Loader } from "../common";
+import { useFilteredGroups } from "../../hooks/login";
+import { COLORS_400, Group } from "../../typings";
+import { LFilter } from "../../typings/enums";
+import { isEmpty } from "../../utils";
+import { FullScreenError, FullScreenLoader } from "../common";
 
 interface Props {
    filter: LFilter;
@@ -19,20 +20,21 @@ interface Props {
 export const LoginDialogGroups: React.FC<Props> = React.memo(({ filter }) => {
    const tw = useTailwind();
    const dispatch = useDispatch();
+
    const myInstitutes = useSelector(selectUserInstitutes);
    const myGroup = useSelector(selectUserGroup);
-   const { groups, loading: ILoading } = useGroups(myInstitutes, filter);
+   const { groups, loading: GLoading } = useFilteredGroups(myInstitutes, filter);
 
    const toggleMyGroup = (group: Group) => {
       dispatch(setGroup({ group }));
    };
 
    const renderData = () => {
-      if (ILoading) {
-         return <Loader text="Загрузка доступных групп" theme={USER_THEME.BLUE} />;
+      if (GLoading) {
+         return <FullScreenLoader text="Загрузка доступных групп" theme={COLORS_400.BLUE} />;
       }
-      if (!groups.length) {
-         return <Error text="Группы не найдены" theme={USER_THEME.BLUE} />;
+      if (isEmpty(groups)) {
+         return <FullScreenError text="Группы не найдены" theme={COLORS_400.BLUE} />;
       }
 
       return (
@@ -53,5 +55,5 @@ export const LoginDialogGroups: React.FC<Props> = React.memo(({ filter }) => {
       );
    };
 
-   return <View style={tw("max-h-[350px]")}>{renderData()}</View>;
+   return <View style={tw("max-h-[350px] flex")}>{renderData()}</View>;
 });

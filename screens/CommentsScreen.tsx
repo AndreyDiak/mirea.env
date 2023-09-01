@@ -31,7 +31,7 @@ export function CommentsScreen() {
    const user = useSelector(selectUser);
    const tw = useTailwind();
 
-   const { APP_THEME_BORDER, APP_THEME_TEXT, APP_THEME_SECONDARY } = useTheme();
+   const { APP_THEME_BORDER, APP_THEME_TEXT, APP_THEME_SECONDARY, THEME_MAIN } = useTheme();
 
    const [commentText, setCommentText] = useState<string>("");
    const [loading, setLoading] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export function CommentsScreen() {
    const { comments, loading: MLoading } = useComments(material.id);
 
    if (isEmpty(comments) && MLoading) {
-      return <Loader text="Загрузка комментариев" theme={user.theme} />;
+      return <Loader text="Загрузка комментариев" theme={THEME_MAIN} />;
    }
 
    const addComment = async () => {

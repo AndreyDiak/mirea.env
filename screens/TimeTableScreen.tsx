@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, ScreenTemplate, TimeTableHeader, TimeTableLessons } from "../components";
+import {
+   FullScreenError,
+   FullScreenLoader,
+   ScreenTemplate,
+   TimeTableHeader,
+   TimeTableLessons,
+} from "../components";
 import { useTimetable } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
 import { useTheme } from "../hooks";
@@ -14,16 +20,16 @@ export function TimeTableScreen() {
 
    const user = useSelector(selectUser);
 
-   const { THEME } = useTheme();
+   const { THEME_MAIN } = useTheme();
 
    const { timetable, loading, dayIndex, setDayIndex } = useTimetable(user);
 
    if (isEmpty(timetable) && loading) {
-      return <Loader text="Загрузка расписания" theme={THEME} />;
+      return <FullScreenLoader text="Загрузка расписания" theme={THEME_MAIN} />;
    }
 
    if (isEmpty(timetable)) {
-      return <Error text="Расписание не найдено" theme={THEME} />;
+      return <FullScreenError text="Расписание не найдено" theme={THEME_MAIN} />;
    }
 
    return (

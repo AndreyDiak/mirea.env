@@ -4,14 +4,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getAllDataWithFilter } from "../../api";
 import { RootState } from "../../store";
-import { DB_PATHS, FBAppUser, FBTeacher, Teacher, USER_TYPE } from "../../typings";
-import { QUERIES, UserConverter, debounce, isEmpty } from "../../utils";
+import { DB_PATHS, FBAppUser, FBTeacher, Teacher, USER_TYPE, UseCustomHook } from "../../typings";
+import { QUERIES, UserConverter, isEmpty } from "../../utils";
 import { selectTeachers, setSearchData } from "../slices/searchSlice";
 
-interface UseSearch {
+interface UseSearch extends UseCustomHook {
    search: string;
    searchInstitutes: Set<string>;
-   loading: boolean;
    teachers: Teacher[];
    onChange(search: string): void;
    onInstitutesChange(institute: string): void;
@@ -70,15 +69,18 @@ export function useSearch(): UseSearch {
             if (isInputFilterEnabled && !isInstitutesFilterEnabled) {
                return inputFilter(teacher);
             }
-            if (!isInputFilterEnabled && isInputFilterEnabled) {
+            if (!isInputFilterEnabled && isInstitutesFilterEnabled) {
                return institutesFilter(teacher);
             }
-            return inputFilter(teacher) && institutesFilter(teacher);
+            if (isInputFilterEnabled && isInstitutesFilterEnabled) {
+               return inputFilter(teacher) && institutesFilter(teacher);
+            }
+            return teacher;
          }),
       );
-   }, [inputFilter, institutesFilter, rawTeachers, search.length, searchInstitutes.size]);
+   }, [inputFilter, institutesFilter, rawTeachers, search.length, searchInstitutes]);
 
-   const dFilterTeacher = debounce(filterTeachers, 250);
+   // const dFilterTeacher = debounce(filterTeachers, 250);
 
    const onChangeInstituteHandler = useCallback((institute: string) => {
       setSearchInstitutes((prev) => {
@@ -90,24 +92,20 @@ export function useSearch(): UseSearch {
       });
    }, []);
 
-   // делаем полную загрузку всех преподавателей...
+   // делаем полную загрузку всех преподавателей при первом заходе...
    useEffect(() => {
+      // проверка на наличие
       if (isEmpty(rawTeachers)) {
          loadTeachers();
       }
-   }, [loadTeachers, rawTeachers]);
-
-   // сетаем в фильтр всех преподавателей в начале
-   useEffect(() => {
-      if (isEmpty(filtered)) {
-         filterTeachers();
-      }
-   }, [filterTeachers, filtered, rawTeachers]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
    // при изменении какого-либо фильтра, делаем новую фильтрацию
    useEffect(() => {
-      dFilterTeacher();
-   }, [dFilterTeacher, search, searchInstitutes]);
+      filterTeachers();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [search, searchInstitutes]);
 
    return useMemo(() => {
       return {

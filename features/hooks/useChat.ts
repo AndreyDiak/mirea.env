@@ -8,8 +8,7 @@ import { getAllDataWithFilter } from "../../api/queries/getAllDataWIthFilter";
 import { RootState } from "../../store";
 import type { ChatPreview, FBChat, Group } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
-import { ChatConverter, QUERIES, createCollection } from "../../utils";
-import { isEmpty } from "../../utils/isEmpty";
+import { ChatConverter, QUERIES, createCollection, isEmpty } from "../../utils";
 import { selectChatWithDisciplineId, setChat } from "../slices/chatsSlice";
 import { selectUser } from "../slices/userSlice";
 

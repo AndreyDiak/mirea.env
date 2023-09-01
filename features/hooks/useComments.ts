@@ -1,21 +1,20 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from 'react';
 
-import { FirebaseError } from "firebase/app";
-import { orderBy, query } from "firebase/firestore";
-import { useCollection } from "react-firebase-hooks/firestore";
-import { useDispatch, useSelector } from "react-redux";
+import { FirebaseError } from 'firebase/app';
+import { orderBy, query } from 'firebase/firestore';
+import { useCollection } from 'react-firebase-hooks/firestore';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { RootState } from "../../store";
-import { Comment, FBComment } from "../../typings";
-import { DB_PATHS } from "../../typings/enums";
-import { CommentConverter } from "../../utils";
-import { createCollection } from "../../utils/createDBQuery";
-import { deepCompare } from "../../utils/deepCompare";
-import { selectCommentsByMaterialId, setComments } from "../slices/commentsSlice";
+import { RootState } from '../../store';
+import { Comment, FBComment, UseCustomHook } from '../../typings';
+import { DB_PATHS } from '../../typings/enums';
+import { CommentConverter } from '../../utils';
+import { createCollection } from '../../utils/createDBQuery';
+import { deepCompare } from '../../utils/deepCompare';
+import { selectCommentsByMaterialId, setComments } from '../slices/commentsSlice';
 
-interface UseComments {
+interface UseComments extends UseCustomHook {
    comments: Comment[];
-   loading: boolean;
    error: FirebaseError;
 }
 
@@ -27,7 +26,7 @@ export function useComments(materialId: string): UseComments {
    );
    const rawComments = useSelector(rawCommentsSelector);
 
-   const q = query(createCollection(`${DB_PATHS.MATERIALS}/${materialId}/comments`), orderBy("timestamp"));
+   const q = query(createCollection(`${DB_PATHS.MATERIALS}/${materialId}/comments`), orderBy('timestamp'));
 
    const [snap, loading, error] = useCollection(q);
 

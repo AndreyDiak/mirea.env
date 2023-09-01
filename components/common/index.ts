@@ -1,4 +1,4 @@
-export * from "./CenteredText";
+export { CenteredText, CenteredTextFullScreen } from "./CenteredText";
 export * from "./loader";
 export * from "./ColorBlock";
 export * from "./skeletons";

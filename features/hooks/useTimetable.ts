@@ -9,14 +9,13 @@ import {
    setLessons,
 } from "../../features/slices/timetableSlice";
 import { RootState } from "../../store";
-import { AppUser, FBLesson, Student, Timetable } from "../../typings";
+import { AppUser, FBLesson, Student, Timetable, UseCustomHook } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES, TimetableConverter } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
 
-interface UseTimetable {
+interface UseTimetable extends UseCustomHook {
    timetable: Timetable;
-   loading: boolean;
    dayIndex: number;
    setDayIndex(dayIndex: number): void;
 }

@@ -7,11 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserDisciplines, setDisciplines } from "../../features/slices/authSlice";
-import { useDisciplines, useInstitutes } from "../../hooks/login";
-import type { Discipline } from "../../typings";
+import { useFilteredDisciplines, useInstitutes } from "../../hooks/login";
+import { COLORS_400, Discipline } from "../../typings";
 import { LFilter, USER_THEME } from "../../typings/enums";
 import { returnHexCode } from "../../utils/returnHexCodes";
-import { Error, Loader } from "../common";
+import { FullScreenError, FullScreenLoader } from "../common";
 
 interface Props {
    filter: LFilter;
@@ -22,7 +22,7 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
    const dispatch = useDispatch();
 
    const { institutes, loading: ILoading } = useInstitutes();
-   const { disciplines, loading: DLoading } = useDisciplines(institutes, filter);
+   const { disciplines, loading: DLoading } = useFilteredDisciplines(institutes, filter);
    const myDisciplines = useSelector(selectUserDisciplines);
 
    const toggleMyDisciplines = (discipline: Discipline) => {
@@ -36,11 +36,11 @@ export const LoginDialogDisciplines: React.FC<Props> = React.memo(({ filter }) =
 
    const renderData = () => {
       if (ILoading || DLoading) {
-         return <Loader text="Загрузка доступных дисциплин" theme={USER_THEME.BLUE} />;
+         return <FullScreenLoader text="Загрузка доступных дисциплин" theme={COLORS_400.BLUE} />;
       }
 
       if (totalDisciplinesCount === 0) {
-         return <Error text="Дисциплины не найдены" theme={USER_THEME.BLUE} />;
+         return <FullScreenError text="Дисциплины не найдены" theme={COLORS_400.BLUE} />;
       }
 
       return (

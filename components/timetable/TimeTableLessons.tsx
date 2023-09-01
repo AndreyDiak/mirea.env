@@ -1,12 +1,13 @@
 import React from "react";
 
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import { useTailwind } from "tailwind-rn/dist";
 
-import { usePreviewLessons } from "../../hooks";
+import { usePreviewLessons, useTheme } from "../../hooks";
 import { Lesson, USER_TYPE } from "../../typings";
 import { isEmpty } from "../../utils";
+import { Loader } from "../common";
 import { TimetableLessonRow } from "./TimetableLessonRow/TimetableLessonRow";
 
 interface Props {
@@ -19,12 +20,14 @@ export const TimeTableLessons: React.FC<Props> = React.memo(({ lessons, userType
 
    const { previewLessons, loading } = usePreviewLessons(lessons, userType);
 
-   // if (loading) {
-   //    return <Loader text="Загрузка доп. данных" />;
-   // }
+   const { THEME_MAIN } = useTheme();
+
+   if (loading) {
+      return <Loader text="Загрузка доп. данных" theme={THEME_MAIN} />;
+   }
 
    if (isEmpty(previewLessons)) {
-      return null;
+      return <Text>уроков нет</Text>;
    }
 
    return (

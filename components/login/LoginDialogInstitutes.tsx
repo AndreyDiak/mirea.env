@@ -8,8 +8,9 @@ import { useTailwind } from "tailwind-rn/dist";
 
 import { selectUserInstitutes, setInstitutes } from "../../features/slices/authSlice";
 import { useInstitutes } from "../../hooks/login";
-import { Institute, USER_THEME } from "../../typings";
-import { Loader } from "../common";
+import { COLORS_400, Institute, USER_THEME } from "../../typings";
+import { isEmpty } from "../../utils";
+import { FullScreenError, FullScreenLoader } from "../common";
 
 export const LoginDialogInstitutes: React.FC = React.memo(() => {
    const { institutes, loading } = useInstitutes();
@@ -25,7 +26,10 @@ export const LoginDialogInstitutes: React.FC = React.memo(() => {
 
    const renderData = () => {
       if (loading) {
-         return <Loader text="Загрузка доступных институтов" theme={USER_THEME.BLUE} />;
+         return <FullScreenLoader text="Загрузка доступных институтов" theme={COLORS_400.BLUE} />;
+      }
+      if (isEmpty(institutes)) {
+         return <FullScreenError text="Институты не найдены" theme={COLORS_400.BLUE} />;
       }
       return (
          <FlatList
