@@ -6,18 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getDataById } from "../../api";
 import { RootState } from "../../store";
-import type { Discipline, FBFavorite, FBMaterial, PreviewFavorite } from "../../typings";
+import type { Discipline, FBFavorite, FBMaterial, PreviewFavorite, UseCustomHook } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
-import { MaterialConverter } from "../../utils/Converter/MaterialConverter";
-import { QUERIES } from "../../utils/createDBQuery";
-import { deepCompare } from "../../utils/deepCompare";
-import { isEmpty } from "../../utils/isEmpty";
+import { MaterialConverter, QUERIES, deepCompare, isEmpty } from "../../utils";
 import { selectFavorites, setFavorites } from "../slices/favoritesSlice";
 import { selectUser } from "../slices/userSlice";
 
-interface UseFavorites {
+interface UseFavorites extends UseCustomHook {
    favorites: PreviewFavorite[];
-   loading: boolean;
    error: FirebaseError;
 }
 

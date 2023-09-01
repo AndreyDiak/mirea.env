@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 import { Card, Input } from "@rneui/themed";
 import { addDoc, updateDoc } from "firebase/firestore";
 
-import { useInstitutes, useTeachers } from "../../../hooks/login";
+import { useFilteredTeachers, useInstitutes } from "../../../hooks/login";
 import { Institute, Teacher } from "../../../typings";
 import { DB_PATHS } from "../../../typings/enums";
 import { DOCS, DisciplinePatcher, createCollection, isEmpty } from "../../../utils";
@@ -25,7 +25,7 @@ export function DisciplineForm() {
 
    const { institutes } = useInstitutes();
 
-   const { teachers, loading: TLoading } = useTeachers(selectedInstitute);
+   const { teachers, loading: TLoading } = useFilteredTeachers(selectedInstitute);
 
    const addDiscipline = async () => {
       if (isEmpty(disciplineName) || isEmpty(selectedInstitute)) {
@@ -41,7 +41,7 @@ export function DisciplineForm() {
       await addDoc(createCollection(DB_PATHS.DISCIPLINES), {
          ...FBDiscipline,
       }).then(async (response) => {
-         if (teachers.length !== 0) {
+         if (!isEmpty(teachers)) {
             await Promise.all(
                teachers.map(async (teacher) => {
                   await updateDoc(DOCS.CREATE_DOC(DB_PATHS.USERS, teacher.id), {
@@ -77,7 +77,6 @@ export function DisciplineForm() {
             {/* Teachers CheckList... */}
             {selectedInstitute && !TLoading && (
                <>
-                  {/* <Text style={tw("mb-2 text-center")}>{selectedInstitute.shortName}</Text> */}
                   <CheckListMulitple
                      title="Добавить преподавателей"
                      list={teachers}

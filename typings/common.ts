@@ -12,6 +12,10 @@ export interface Timestamp {
    nanoseconds: number;
 }
 
+export interface UseCustomHook {
+   loading: boolean;
+}
+
 export type RootStackParamList = {
    Login: undefined;
    AuthInfo: undefined;
@@ -38,6 +42,7 @@ export type RootStackParamList = {
 export type TabStackParamList = {
    Profile: undefined;
    Disciplines: undefined;
+   Search: undefined;
    Timetable: undefined;
    Favorites: undefined;
 };

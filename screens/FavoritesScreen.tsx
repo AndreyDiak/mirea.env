@@ -5,7 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, MaterialCard, ScreenTemplate } from "../components";
+import { FullScreenError, Loader, MaterialCard, ScreenTemplate } from "../components";
 import { useFavorites } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
 import { useTheme } from "../hooks";
@@ -37,7 +37,7 @@ export function FavoritesScreen() {
       return <Loader text="Загрузка избранных материалов" theme={user?.theme} />;
    }
    if (isEmpty(favorites)) {
-      return <Error text="У вас нет избранных материалов" theme={user?.theme} />;
+      return <FullScreenError text="У вас нет избранных материалов" theme={user?.theme} />;
    }
 
    return (

@@ -2,15 +2,23 @@ import React from "react";
 
 import { Icon } from "@rneui/themed";
 
-import { USER_THEME } from "../../../typings";
-import { returnHexCode } from "../../../utils/returnHexCodes";
-import { CenteredText } from "../CenteredText";
+import { COLORS_400 } from "../../../typings";
+import { CenteredText, CenteredTextFullScreen } from "../CenteredText";
 
-export const Error: React.FC<{ text: string; theme?: USER_THEME }> = React.memo(({ text, theme }) => (
-   <CenteredText
-      text={text}
-      Icon={
-         <Icon name="sentiment-very-dissatisfied" type="material" color={returnHexCode(theme)} size={30} />
-      }
-   />
-));
+export const FullScreenError: React.FC<{ text: string; theme: COLORS_400 }> = React.memo(
+   ({ text, theme }) => (
+      <CenteredTextFullScreen
+         text={text}
+         Icon={<Icon name="sentiment-very-dissatisfied" type="material" color={theme} size={30} />}
+      />
+   ),
+);
+
+export const Error: React.FC<{ text: string; theme: COLORS_400 }> = React.memo(({ text, theme }) => {
+   return (
+      <CenteredText
+         text={text}
+         Icon={<Icon name="sentiment-very-dissatisfied" type="material" color={theme} size={30} />}
+      />
+   );
+});

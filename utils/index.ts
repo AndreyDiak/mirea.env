@@ -7,3 +7,5 @@ export * from "./Converter";
 export * from "./Patcher";
 
 export { localeSort } from "./localeSort";
+export { debounce } from "./debounce";
+export { deepCompare } from "./deepCompare";

@@ -1,5 +1,5 @@
-export { useDisciplines } from "./useDisciplines";
-export { useGroups } from "./useGroups";
-export { useInstitutes } from "./useInstitutes";
+export { useFilteredDisciplines } from "./useFilteredDisciplines";
+export { useFilteredGroups } from "./useFilteredGroups";
+export { useInstitutes } from "../../features/hooks/useInstitutes";
 export { useDialogLoader } from "./useDialogLoader";
-export { useTeachers } from "./useTeachers";
+export { useFilteredTeachers } from "./useFilteredTeachers";

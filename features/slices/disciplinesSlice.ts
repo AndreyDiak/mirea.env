@@ -10,7 +10,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-   disciplines: null,
+   disciplines: [],
 };
 
 export const disciplinesSlice = createSlice({

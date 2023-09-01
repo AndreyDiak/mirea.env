@@ -116,6 +116,11 @@
 			"marginBottom": 48
 		}
 	},
+	"mb-8": {
+		"style": {
+			"marginBottom": 32
+		}
+	},
 	"mr-4": {
 		"style": {
 			"marginRight": 16
@@ -169,11 +174,6 @@
 	"mb-5": {
 		"style": {
 			"marginBottom": 20
-		}
-	},
-	"mt-24": {
-		"style": {
-			"marginTop": 96
 		}
 	},
 	"mt-1": {

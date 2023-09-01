@@ -8,23 +8,24 @@ import {
    selectLessonsForTeacher,
    setLessons,
 } from "../../features/slices/timetableSlice";
-import { selectUser } from "../../features/slices/userSlice";
 import { RootState } from "../../store";
-import { FBLesson, Student, Timetable } from "../../typings";
+import { AppUser, FBLesson, Student, Timetable, UseCustomHook } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { QUERIES, TimetableConverter } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
 
-interface UseTimetable {
+interface UseTimetable extends UseCustomHook {
    timetable: Timetable;
-   loading: boolean;
+   dayIndex: number;
+   setDayIndex(dayIndex: number): void;
 }
 
-export function useTimetable(): UseTimetable {
+export function useTimetable(user: AppUser): UseTimetable {
    const dispatch = useDispatch();
-   const user = useSelector(selectUser);
+   // const user = useSelector(selectUser);
 
    const [loading, setLoading] = useState<boolean>(false);
+   const [dayIndex, setDayIndex] = useState(0);
 
    const rawStudentLessonsSelector = useCallback(
       (s: RootState) => selectLessonsForStudent(s, (user as Student).groupId ?? ""),
@@ -95,6 +96,8 @@ export function useTimetable(): UseTimetable {
       return {
          timetable,
          loading,
+         dayIndex,
+         setDayIndex,
       };
-   }, [loading, rawStudentLessons, rawTeacherLessons, user]);
+   }, [loading, rawStudentLessons, rawTeacherLessons, user, dayIndex, setDayIndex]);
 }

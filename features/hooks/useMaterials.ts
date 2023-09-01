@@ -5,15 +5,14 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../store";
-import type { FBMaterial, Material } from "../../typings";
+import type { FBMaterial, Material, UseCustomHook } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { MaterialConverter, QUERIES } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
 import { selectMaterialsByDisciplineId, setMaterials } from "../slices/materialsSlice";
 
-interface UseMaterials {
+interface UseMaterials extends UseCustomHook {
    materials: Material[];
-   loading: boolean;
    error: FirebaseError;
 }
 

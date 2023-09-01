@@ -3,12 +3,11 @@ import React, { useLayoutEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Icon } from "@rneui/themed";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
-import { Error, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
+import { FullScreenError, Loader, MaterialCard, MaterialForm, ScreenTemplate } from "../components";
 import { useMaterials } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
 import { useTheme } from "../hooks";
@@ -34,18 +33,17 @@ export function DisciplineScreen() {
    useLayoutEffect(() => {
       navigation.setOptions({
          headerTitle: discipline.name,
-         headerStyle: {},
       });
    }, [discipline, navigation, user.appTheme]);
 
    const isStudent = user.type === USER_TYPE.STUDENT;
 
    if (isEmpty(materials) && loading) {
-      return <Loader text="Загрузка материалов" theme={user.theme} />;
+      return <Loader text="Загрузка материалов" theme={THEME_MAIN} />;
    }
 
    if (isEmpty(materials) && !loading && isStudent) {
-      return <Error text="Тут пока нет материалов..." theme={user.theme} />;
+      return <FullScreenError text="Тут пока нет материалов..." theme={THEME_MAIN} />;
    }
 
    return (

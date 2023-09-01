@@ -6,8 +6,10 @@ import commentsSlice from "./features/slices/commentsSlice";
 import disciplinesSlice from "./features/slices/disciplinesSlice";
 import documentsSlice from "./features/slices/documentsSlice";
 import favoritesSlice from "./features/slices/favoritesSlice";
+import institutesSlice from "./features/slices/institutesSlice";
 import materialsSlice from "./features/slices/materialsSlice";
 import messagesSlice from "./features/slices/messagesSlice";
+import searchSlice from "./features/slices/searchSlice";
 import timetableSlice from "./features/slices/timetableSlice";
 import userSlice from "./features/slices/userSlice";
 
@@ -15,6 +17,7 @@ export const store = configureStore({
    reducer: {
       user: userSlice,
       auth: authSlice,
+      institutes: institutesSlice,
       // главные страницы
       disciplines: disciplinesSlice,
       timetable: timetableSlice,
@@ -26,6 +29,8 @@ export const store = configureStore({
       // страница чата
       chats: chatsSlice,
       messages: messagesSlice,
+      // поиск профиля
+      search: searchSlice,
    },
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

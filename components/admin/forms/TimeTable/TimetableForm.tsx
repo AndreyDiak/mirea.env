@@ -6,7 +6,7 @@ import { Card } from "@rneui/themed";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { useTimetable } from "../../../../hooks/admin";
-import { useGroups, useInstitutes } from "../../../../hooks/login";
+import { useFilteredGroups, useInstitutes } from "../../../../hooks/login";
 import { Day, Group, Institute } from "../../../../typings";
 import { LFilter } from "../../../../typings/enums";
 import { isEmpty } from "../../../../utils";
@@ -35,7 +35,7 @@ export function TimetableForm() {
    // const [loading, setLoading] = useState<boolean>(false);
 
    const { institutes } = useInstitutes();
-   const { groups } = useGroups([institute], LFilter.GROUPS);
+   const { groups } = useFilteredGroups([institute], LFilter.GROUPS);
 
    return (
       <Card>

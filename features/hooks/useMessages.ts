@@ -5,14 +5,13 @@ import { useCollection } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
 
 import { RootState } from "../../store";
-import { DB_PATHS, FBMessage, Message } from "../../typings";
+import { DB_PATHS, FBMessage, Message, UseCustomHook } from "../../typings";
 import { MessageConverter, createCollection } from "../../utils";
 import { deepCompare } from "../../utils/deepCompare";
 import { selectMessagesWithChatId, setMessages } from "../slices/messagesSlice";
 
-interface UseMessages {
+interface UseMessages extends UseCustomHook {
    messages: Message[];
-   loading: boolean;
 }
 
 export function useMessages(chatId: string): UseMessages {

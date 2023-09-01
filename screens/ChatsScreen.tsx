@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useTailwind } from "tailwind-rn/dist";
 
 import { addMessage } from "../api";
-import { Loader, ScreenTemplate } from "../components";
+import { FullScreenLoader, ScreenTemplate } from "../components";
 import { CustomInputField } from "../components/common/form/CustomInputField";
 import { useChats } from "../features/hooks";
 import { selectUser } from "../features/slices/userSlice";
@@ -58,7 +58,7 @@ export function ChatsScreen() {
    };
 
    if (Dloading) {
-      return <Loader text="Загрузка чатов" theme={user.theme} />;
+      return <FullScreenLoader text="Загрузка чатов" theme={THEME_MAIN} />;
    }
 
    return (

@@ -4,16 +4,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { getAllDataWithFilter, getDataById } from "../../api";
 import { RootState } from "../../store";
-import type { Discipline, FBDiscipline, FBGroup } from "../../typings";
+import type { Discipline, FBDiscipline, UseCustomHook } from "../../typings";
 import { DB_PATHS, USER_TYPE } from "../../typings/enums";
 import { DisciplineConverter, QUERIES } from "../../utils";
 import { isEmpty } from "../../utils/isEmpty";
 import { selectDisciplines, setDisciplines } from "../slices/disciplinesSlice";
 import { selectUser } from "../slices/userSlice";
 
-interface UseDisciplines {
+interface UseDisciplines extends UseCustomHook {
    disciplines: Discipline[];
-   loading: boolean;
 }
 
 export function useDisciplines(): UseDisciplines {

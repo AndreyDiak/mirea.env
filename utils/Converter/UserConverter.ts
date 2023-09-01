@@ -1,4 +1,4 @@
-import { APP_THEME, AppUser, FBAppUser, Student, Teacher, USER_TYPE } from "../../typings";
+import { APP_THEME, FBAppUser, Student, Teacher, USER_TYPE } from "../../typings";
 import { FBStudent, FBTeacher } from "../../typings/types/user";
 
 type ConvertUserFromApi<T> = Omit<FBAppUser, "app_theme"> & {

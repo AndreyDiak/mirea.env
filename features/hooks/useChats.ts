@@ -5,15 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataById } from "../../api";
 import { getAllDataWithFilter } from "../../api/queries";
 import { RootState } from "../../store";
-import type { ChatPreview, FBChat, Group } from "../../typings";
+import type { ChatPreview, FBChat, Group, UseCustomHook } from "../../typings";
 import { DB_PATHS } from "../../typings/enums";
 import { QUERIES } from "../../utils";
 import { isEmpty } from "../../utils/isEmpty";
 import { selectChatsWithDisciplineId, setChats } from "../slices/chatsSlice";
 
-interface UseChats {
+interface UseChats extends UseCustomHook {
    chats: ChatPreview[];
-   loading: boolean;
 }
 
 export function useChats(disciplineId: string): UseChats {
